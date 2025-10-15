@@ -12,16 +12,11 @@ import Preloader from "../components/common/Preloader.tsx";
 const Index = () => {
     return (
         <React.Fragment>
-            <Routes>
-                <Route>
+            <Suspense fallback={<Preloader/>}>
+                <Routes>
                     {publicRoutes.map((route, idx) => (
-                        <Route path={route.path} element={
-                            <Suspense fallback={<Preloader/>}>{route.element}</Suspense>
-                        } key={idx}/>
+                        <Route path={route.path} element={route.element} key={idx}/>
                     ))}
-                </Route>
-
-                <Route>
                     {authProtectedRoutes.map((route, idx) => (
                         <Route
                             path={route.path}
@@ -35,8 +30,8 @@ const Index = () => {
                             key={idx}
                         />
                     ))}
-                </Route>
-            </Routes>
+                </Routes>
+            </Suspense>
         </React.Fragment>
     );
 };

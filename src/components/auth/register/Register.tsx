@@ -1,14 +1,15 @@
-import {useCheckPhoneNumber} from "../../api/auth/useAuth.ts";
+import {useOtpPhoneNumber} from "../../../api/auth/useAuth.ts";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import Spinner from "../common/Spinner.tsx";
+import Spinner from "../../common/Spinner.tsx";
+import {Link} from "react-router-dom";
 
 
-export default function LoginForm() {
+export default function Register() {
 
-    const {mutateAsync, isPending} = useCheckPhoneNumber();
+    const {mutate, isPending} = useOtpPhoneNumber();
 
 
     const formik = useFormik({
@@ -21,7 +22,7 @@ export default function LoginForm() {
                 .length(13, "Telefon raqami xato kiritildi!"),
         }),
         onSubmit: async (values) => {
-            await mutateAsync({phoneNumber: values.phone});
+            await mutate({phoneNumber: values.phone, url: '/user-info'});
         },
     });
 
@@ -39,7 +40,7 @@ export default function LoginForm() {
                                 }}
                                 className={'login'}
                             >
-                                <h4 className="login_register_title">Xush kelibsiz</h4>
+                                <h4 className="login_register_title">Ro'yhatdan o'tish</h4>
                                 <div className={'form-group mb-5'}>
                                     <label htmlFor="phone" className="form-label">
                                         Telefon raqamingiz
@@ -67,6 +68,7 @@ export default function LoginForm() {
                                         }
                                     </button>
                                 </div>
+                                <p><Link to="/register">Ro'yhatdan o'tish</Link></p>
                             </form>
 
                         </div>

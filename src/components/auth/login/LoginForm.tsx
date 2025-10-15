@@ -1,12 +1,12 @@
-import {useCheckPhoneNumber} from "../../api/auth/useAuth.ts";
+import {useCheckPhoneNumber} from "../../../api/auth/useAuth.ts";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import Spinner from "../common/Spinner.tsx";
+import Spinner from "../../common/Spinner.tsx";
 
 
-export default function ForgotPassword() {
+export default function LoginForm() {
 
     const {mutateAsync, isPending} = useCheckPhoneNumber();
 
@@ -39,7 +39,7 @@ export default function ForgotPassword() {
                                 }}
                                 className={'login'}
                             >
-                                <h4 className="login_register_title">Parolni tiklash</h4>
+                                <h4 className="login_register_title">Xush kelibsiz</h4>
                                 <div className={'form-group mb-5'}>
                                     <label htmlFor="phone" className="form-label">
                                         Telefon raqamingiz

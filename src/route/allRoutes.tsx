@@ -1,13 +1,18 @@
 import {Navigate} from 'react-router-dom';
-import Login from "../components/login";
-import Register from "../components/register";
-import Error from "../components/error";
-import Dashboard from "../components/dashboard";
-import Users from "../components/users";
-import Statistic from "../components/statistic";
-import Lessons from "../components/lessons";
-import Password from "../components/password";
-import ForgotPassword from "../components/forgot-password";
+import {lazy} from "react";
+
+const Login = lazy(() => import("../components/auth/login"));
+const Register = lazy(() => import("../components/auth/register"));
+const Error = lazy(() => import("../components/error"));
+const Dashboard = lazy(() => import("../components/dashboard"));
+const Users = lazy(() => import("../components/users"));
+const Statistic = lazy(() => import("../components/statistic"));
+const Lessons = lazy(() => import("../components/lessons"));
+const Password = lazy(() => import("../components/auth/password"));
+const ForgotPassword = lazy(() => import("../components/auth/forgot-password"));
+const VerifyCode = lazy(() => import("../components/auth/sms-code"));
+const NewPassword = lazy(() => import("../components/auth/new-password"));
+const UserForm = lazy(() => import("../components/auth/user"));
 
 const authProtectedRoutes = [
     {path: "/dashboard", element: <Dashboard/>, title: "Dashboard"},
@@ -40,8 +45,11 @@ const authProtectedRoutes = [
 const publicRoutes = [
     {path: "/login", element: <Login/>},
     {path: "/register", element: <Register/>},
+    {path: "/user-info", element: <UserForm/>},
     {path: "/password", element: <Password/>},
     {path: "/forgot-password", element: <ForgotPassword/>},
+    {path: "/verify-code", element: <VerifyCode/>},
+    {path: "/new-password", element: <NewPassword/>},
 ];
 
 export {authProtectedRoutes, publicRoutes};

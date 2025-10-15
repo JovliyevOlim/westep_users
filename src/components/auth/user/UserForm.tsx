@@ -1,10 +1,16 @@
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useEffect, useState} from "react";
+import {useRegister} from "../../../api/auth/useAuth.ts";
+import Spinner from "../../common/Spinner.tsx";
 
 
-export default function RegisterForm() {
+export default function UserForm() {
+
+    const {mutate, isPending} = useRegister();
+    const location = useLocation();
+    const {phoneNumber} = location.state;
 
     const [isYoung, setIsYoung] = useState<boolean>(false);
 
@@ -44,8 +50,7 @@ export default function RegisterForm() {
             })
         }),
         onSubmit: (values) => {
-            // await mutateAsync({phoneNumber: values.phone});
-            console.log(values);
+            mutate({phoneNumber: phoneNumber, ...values});
         },
     });
 
@@ -222,7 +227,11 @@ export default function RegisterForm() {
                                     ) : null}
                                 </div>
                                 <div className="form-group col-lg-12">
-                                    <button className="bg_btn bt" type="submit" name="submit">Registratsiya</button>
+                                    <button className="bg_btn bt" type="submit" name="submit">
+                                        {
+                                            isPending ? <Spinner/> : "Registratsiya"
+                                        }
+                                    </button>
                                 </div>
                                 <p>Akkountingiz bormi? <Link to="/login">Login</Link></p>
                             </form>

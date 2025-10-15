@@ -1,6 +1,15 @@
 // src/hooks/useAuth.ts
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
-import {checkPhoneNumber, getCurrentUser, login, logout, register} from "./authApi.ts";
+import {
+    checkPhoneNumber,
+    createNewPassword,
+    getCurrentUser,
+    login,
+    logout,
+    register,
+    sendOtpCode,
+    verifyCode
+} from "./authApi.ts";
 import {useNavigate} from "react-router-dom";
 
 export const useUser = () =>
@@ -27,11 +36,14 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
+    const navigate = useNavigate();
     const qc = useQueryClient();
     return useMutation({
         mutationFn: register,
-        onSuccess: () => {
+        onSuccess: (user) => {
             qc.invalidateQueries({queryKey: ["currentUser"]});
+            qc.setQueryData(["currentUser"], user);
+            navigate("/dashboard");
         },
     });
 };
@@ -56,6 +68,46 @@ export const useCheckPhoneNumber = () => {
         onError: (error) => {
             console.log(error);
             navigate("/register"); // success -> password sahifasiga o‘tish
+        },
+    });
+};
+
+export const useOtpPhoneNumber = () => {
+    const navigate = useNavigate();
+    return useMutation({
+        mutationFn: sendOtpCode,
+        onSuccess: (_, body: { phoneNumber: string, url: string }) => {
+            navigate("/verify-code", {state: {phoneNumber: body.phoneNumber, url: body.url}});
+        },
+        onError: (error) => {
+            return error
+        },
+    });
+};
+
+export const useVerifyCode = () => {
+    const navigate = useNavigate();
+    return useMutation({
+        mutationFn: verifyCode,
+        onSuccess: (_, body: { phoneNumber: string, otp: string, url: string }) => {
+            navigate(body.url, {state: {phoneNumber: body.phoneNumber}});
+        },
+        onError: (error) => {
+            return error
+        },
+    });
+};
+
+export const useCreateNewPassword = () => {
+    const navigate = useNavigate();
+    return useMutation({
+        mutationFn: createNewPassword,
+        onSuccess: () => {
+            console.log('createNewPassword');
+            navigate("/login");
+        },
+        onError: (error) => {
+            return error
         },
     });
 };
