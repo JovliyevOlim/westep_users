@@ -14,14 +14,12 @@ import BlogHomeOne from './BlogHomeOne'
 import FooterOne from '../../../layouts/footers/FooterOne'
 import ScrollToTop from '../../common/ScrollToTop'
 import ScrollTop from '../../common/ScrollTop'
-import Preloader from '../../common/Preloader'
 
 
 export default function HomeOne() {
 
   return (
     <>
-      <Preloader />
       <HeroHomeOne />
       <FeatureHomeOne />
       <AboutHomeOne />

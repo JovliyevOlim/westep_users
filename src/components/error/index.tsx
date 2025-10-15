@@ -3,13 +3,11 @@ import Breadcrumb from "../common/Breadcrumb";
 import FooterOne from "../../layouts/footers/FooterOne";
 import ScrollToTop from "../common/ScrollToTop";
 import ScrollTop from "../common/ScrollTop";
-import Preloader from "../common/Preloader";
 
  
 export default function Error() {
   return (
     <>
-      <Preloader />
       <Breadcrumb title="Error" subtitle="Error" />
       <section className="page_not_found">
         <div className="container">

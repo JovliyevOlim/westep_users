@@ -1,8 +1,9 @@
-
 import { useState, useEffect } from 'react';
+import {useLocation} from "react-router-dom";
 
 export default function Preloader() {
   const [isVisible, setIsVisible] = useState(true);
+  const {pathname} = useLocation();
 
   useEffect(() => {
     // Set a timer to hide the preloader after 10 seconds
@@ -12,7 +13,8 @@ export default function Preloader() {
 
     // Clean up the timer when the component is unmounted
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]);
+
 
   if (!isVisible) return null;
 

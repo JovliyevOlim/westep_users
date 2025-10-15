@@ -26,7 +26,7 @@ export const useLogin = () => {
         mutationFn: login,
         onSuccess: (user) => {
             qc.setQueryData(["currentUser"], user);
-            navigate("/dashboard");
+            navigate("/");
 
         },
         onError: (error) => {
@@ -43,7 +43,7 @@ export const useRegister = () => {
         onSuccess: (user) => {
             qc.invalidateQueries({queryKey: ["currentUser"]});
             qc.setQueryData(["currentUser"], user);
-            navigate("/dashboard");
+            navigate("/");
         },
     });
 };
