@@ -38,8 +38,8 @@ apiClient.interceptors.response.use(
                 apiClient.defaults.headers.Authorization = `Bearer ${data.accessToken}`;
                 return apiClient(originalRequest);
             } catch (err) {
-                // removeItem("accessToken");
-                // removeItem("refreshToken");
+                removeItem("accessToken");
+                removeItem("refreshToken");
                 return Promise.reject(err);
             }
         }

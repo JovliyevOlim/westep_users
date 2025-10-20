@@ -2,7 +2,6 @@ import {useVerifyCode} from "../../../api/auth/useAuth.ts";
 import 'react-phone-number-input/style.css';
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {useLocation} from "react-router-dom";
 import Button from "../../../ui/Button.tsx";
 import {useEffect, useState} from "react";
 import moment from "moment";
@@ -10,9 +9,8 @@ import moment from "moment";
 
 export default function VerifyForm() {
 
-    const location = useLocation();
     // const {phoneNumber, url} = location.state;
-    const {mutate, isPending} = useVerifyCode();
+    const {isPending} = useVerifyCode();
     const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
     const [remainingTime, setRemainingTime] = useState(3 * 60);
 
@@ -54,7 +52,7 @@ export default function VerifyForm() {
                 .required("Parolni kiriting!")
                 .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak!"),
         }),
-        onSubmit: async (values) => {
+        onSubmit: async () => {
             // await mutate({phoneNumber: phoneNumber, otp: values.otp, url: url})
         },
     });
@@ -73,7 +71,7 @@ export default function VerifyForm() {
         return () => clearInterval(interval); // Komponent unmounted bo'lsa, intervalni to'xtatish
     }, []);
 
-    const formatTime = (seconds: any) => {
+    const formatTime = (seconds: number) => {
         const duration = moment.duration(seconds, "seconds");
         const minutes = Math.floor(duration.asMinutes());
         const secs = duration.seconds();

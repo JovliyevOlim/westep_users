@@ -2,7 +2,6 @@ import {useLogin} from "../../../api/auth/useAuth.ts";
 import 'react-phone-number-input/style.css';
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import Spinner from "../../common/Spinner.tsx";
 import {Link, useLocation} from "react-router-dom";
 import Button from "../../../ui/Button.tsx";
 

@@ -103,15 +103,15 @@ export default function Register() {
                             <InputField placeholder={'Ism'} formik={formik}
                                         type='text'
                                         name={"firstName"}
-                                        id="firstName"/>
+                                        />
                             <InputField placeholder={'Familiya'} formik={formik}
                                         type='text'
                                         name={"lastName"}
-                                        id="lastName"/>
+                                        />
                             <InputField placeholder={"Tug'ilgan kun"} formik={formik}
                                         type='date'
                                         name={"birthday"}
-                                        id="birthday"/>
+                                        />
                             {
                                 !isYoung &&
                                 <>
@@ -150,7 +150,7 @@ export default function Register() {
                                             </div>
                                         </label>
                                     </div>
-                                    <PhoneNumberInput name={"parentNumber"} formik={formik} className={''}/>
+                                    <PhoneNumberInput  name={"parentNumber"} formik={formik} className={''}/>
                                 </>
                             }
                             <div className="form-group col-lg-12">

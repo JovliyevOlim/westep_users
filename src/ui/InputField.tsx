@@ -2,25 +2,39 @@ import dateIcon from "../assets/icon/date.svg"
 import eye from "../assets/icon/eye.svg"
 import eyeSlash from "../assets/icon/eye-slash.svg"
 import {useState} from "react";
-const InputField = ({
-                        label = "",
-                        type = "text",
-                        name,
-                        formik,
-                        placeholder,
-                        icon = null,
-                        className = "",
-                        ...rest
-                    }) => {
+import {FormikProps} from "formik";
 
 
-   const  [changeType,setChangeType] = useState(type);
+type InputFieldProps<T> = {
+    label?: string;
+    type?: string;
+    name: keyof T;
+    formik: FormikProps<T>;
+    placeholder?: string;
+    icon?: React.ReactNode;
+    className?: string;
+};
+
+
+const InputField = <T extends Record<string, any>>({
+                                                       label = "",
+                                                       type = "text",
+                                                       name,
+                                                       formik,
+                                                       placeholder,
+                                                       icon = null,
+                                                       className = "",
+                                                       ...rest
+                                                   }: InputFieldProps<T>) => {
+
+
+    const [changeType, setChangeType] = useState<string>(type);
 
     console.log(changeType);
     return (
         <div className={`${className} form-group mb-2`}>
             {label && (
-                <label htmlFor={name} className="form-label fw-medium">
+                <label htmlFor={name as string} className="form-label fw-medium">
                     {label}
                 </label>
             )}
@@ -28,8 +42,8 @@ const InputField = ({
             <div className="position-relative">
                 <input
                     type={changeType}
-                    id={name}
-                    name={name}
+                    id={name as string}
+                    name={name as string}
                     value={formik.values[name]}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -40,7 +54,7 @@ const InputField = ({
                 {(type === "date" || icon) && (
                     <span
                         className="position-absolute top-50 end-0 translate-middle-y me-5 text-secondary"
-                        style={{ pointerEvents: "none"}}
+                        style={{pointerEvents: "none"}}
                     >
             {icon || <img src={dateIcon} width={24} height={24} alt="date_icon"/>}
           </span>
@@ -49,13 +63,16 @@ const InputField = ({
                     <span
                         className="position-absolute top-50 end-0 translate-middle-y me-5 text-secondary"
                     >
-            {type === "password" && changeType === "text" && <img onClick={()=>setChangeType('password')} src={eye} width={24} height={24} alt="date_icon"/>}
-            {type === "password" && changeType === "password" && <img onClick={()=>setChangeType('text')} src={eyeSlash} width={24} height={24} alt="date_icon"/>}
+            {type === "password" && changeType === "text" &&
+                <img onClick={() => setChangeType('password')} src={eye} width={24} height={24} alt="date_icon"/>}
+                        {type === "password" && changeType === "password" &&
+                            <img onClick={() => setChangeType('text')} src={eyeSlash} width={24} height={24}
+                                 alt="date_icon"/>}
           </span>
                 )}
             </div>
             {formik.errors[name] && formik.touched[name] ? (
-                <p className={'text-start d-flex text-danger m-0 ps-4'}>{formik.errors[name]}</p>
+                <p className={'text-start d-flex text-danger m-0 ps-4'}>{formik.errors[name] as string}</p>
             ) : null}
         </div>
     );

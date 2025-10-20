@@ -1,9 +1,8 @@
 export interface User {
-    firstName: string,
-    lastName: string,
-    birthday?: string,
-    parent?: string,
-    parentNumber?: string,
+    firstname: string,
+    lastname: string,
+    birthDate: string,
+    gender: string,
     password: string,
     phone:string
 }

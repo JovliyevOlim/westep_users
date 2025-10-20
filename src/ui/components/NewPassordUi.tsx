@@ -65,7 +65,7 @@ export default function NewPassword({mutate, isPending}: Props) {
                             }}
                         >
                             <h4 className="login_register_title">{text}</h4>
-                            <InputField name="password" label="" placeholder={'Yangi parol'} type="password"
+                            <InputField name="password"  label="" placeholder={'Yangi parol'} type="password"
                                         key='passwords' formik={formik}/>
                             <InputField name="confirmPassword" label="" placeholder={'Parol tasdig’i'} type="password"
                                         key='password' formik={formik}/>
