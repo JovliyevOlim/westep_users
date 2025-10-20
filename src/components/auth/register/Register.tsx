@@ -11,7 +11,7 @@ export default function Register() {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const {phoneNumber} = location.state;
+    const phoneNumber = location.state?.phoneNumber;
 
     const [isYoung, setIsYoung] = useState<boolean>(false);
     const [isPending, setIsPending] = useState<boolean>(false);

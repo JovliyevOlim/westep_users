@@ -1,8 +1,10 @@
 import NewPassword from "../../../ui/components/NewPassordUi.tsx";
 import {useRegister} from "../../../api/auth/useAuth.ts";
+import {useRequireState} from "../../../hooks/UseRequireState.ts";
 
 function Index() {
 
+    useRequireState('phoneNumber')
     const {mutate,isPending} = useRegister()
 
     return (

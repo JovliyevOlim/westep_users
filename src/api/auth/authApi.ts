@@ -9,7 +9,6 @@ const user: { name: string } = {
 }
 
 export const login = async (body: { phoneNumber: string; password: string }) => {
-    console.log('ewfwefwewf')
     try {
         const {data} = await apiClient.post("/auth/login",{},{
             params:{
