@@ -40,7 +40,7 @@ const menu_data: DataType[] = [
             {link: "/cart", title: "Cart"},
             {link: "/checkout", title: "Checkout"},
             {link: "/login", title: "Login"},
-            {link: "/user", title: "Register"},
+            {link: "/register", title: "Register"},
             {link: "/about", title: "About"},
             {link: "/instructors", title: "Instructors"},
             {link: "/erorr", title: "404 || Error"},

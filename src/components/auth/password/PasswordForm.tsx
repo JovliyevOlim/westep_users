@@ -4,6 +4,7 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import Spinner from "../../common/Spinner.tsx";
 import {Link, useLocation} from "react-router-dom";
+import Button from "../../../ui/Button.tsx";
 
 
 export default function PasswordForm() {
@@ -35,18 +36,17 @@ export default function PasswordForm() {
             <section className="login_register section-padding">
                 <div className="container">
                     <div className="row align-items-center">
-                        <div className="col-lg-6 col-xs-12 wow fadeIn">
+                        <div className="col-lg-12 wow fadeIn">
                             <form
                                 onSubmit={(e) => {
                                     e.preventDefault();
                                     formik.handleSubmit();
                                     return false;
                                 }}
-                                className={'login'}
                             >
                                 <h4 className="login_register_title">Kirish</h4>
-                                <div className={'form-group mb-5'}>
-                                    <label htmlFor="phone" className="form-label">
+                                <div className={'form-group mb-4'}>
+                                    <label htmlFor="phone" className="form-label text-dark">
                                         Parolni kiriting!
                                     </label>
                                     <input type="password" placeholder="Parol" id="password"
@@ -60,20 +60,10 @@ export default function PasswordForm() {
 
                                 </div>
                                 <div className="form-group col-lg-12">
-                                    <button className="bg_btn bt" disabled={isPending} type="submit"
-                                            name="submit">
-                                        {
-                                            isPending ? <Spinner/> : "Davom Etish"
-                                        }
-                                    </button>
+                                    <Button isPending={isPending}/>
                                 </div>
-                                <p><Link to="/forgot-password">Parolni unutdingizmi?</Link></p>
+                                <p className={'mt-2'}><Link to="/forgot-password">Parolni unutdingizmi?</Link></p>
                             </form>
-                        </div>
-                        <div className="col-lg-6 col-xs-12 wow fadeIn">
-                            <div className="login d-none d-lg-block">
-                                <img src="assets/img/about.png" height={'100%'} alt="ewfef"/>
-                            </div>
                         </div>
                     </div>
                 </div>

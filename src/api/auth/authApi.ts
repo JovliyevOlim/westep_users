@@ -1,6 +1,7 @@
-// src/api/authApi.ts
-// import apiClient from "../apiClient";
+import apiClient from "../apiClient";
 import {User} from "../../types/types.ts";
+import {AxiosError} from "axios";
+import {setItem} from "../../utils/utils.ts";
 
 const user: { name: string } = {
     name: "olim"
@@ -8,34 +9,40 @@ const user: { name: string } = {
 }
 
 export const login = async (body: { phoneNumber: string; password: string }) => {
-    // const {data} = await apiClient.post("/auth/login", body);
-    await new Promise((r) => setTimeout(r, 800)); // test uchun delay
-    localStorage.setItem("accessToken", "accessToken");
-    localStorage.setItem("refreshToken", "refreshToken");
+    console.log('ewfwefwewf')
     try {
-        if (body.phoneNumber === "+998901248664" && body.password === "123456") {
-            return user
-        }
+        const {data} = await apiClient.post("/auth/login",{},{
+            params:{
+                phone:body.phoneNumber,
+                password:body.password,
+            }
+        });
+        setItem<string>("accessToken", data.accessToken)
+        setItem<string>("refreshToken", data.refreshToken)
     } catch (error) {
-        return error;
+        const err = error as AxiosError<{ message: string }>;
+        const message = err.response?.data?.message;
+        throw new Error(message);
     }
 };
 
 export const register = async (body: User) => {
-        // const {data} = await apiClient.post("/auth/register", body);
         try {
-            if (body) {
-                return user
-            }
+            const {data} = await apiClient.post("/auth/register", body);
+            setItem<string>("accessToken", data.accessToken)
+            setItem<string>("refreshToken", data.refreshToken)
         } catch (error) {
-            return error;
+            const err = error as AxiosError<{ message: string }>;
+            const message = err.response?.data?.message;
+             throw new Error(message);
         }
     }
 ;
 
 export const getCurrentUser = async () => {
-    // const {data} = await apiClient.get("/auth/me");
-    return user;
+    const {data} = await apiClient.get("/user/me");
+    localStorage.setItem("user", JSON.stringify(data));
+    return data;
 };
 
 export const logout = async () => {
@@ -44,12 +51,9 @@ export const logout = async () => {
 };
 
 export const checkPhoneNumber = async (body: { phoneNumber: string }) => {
-    // const {data} = await apiClient.post("/auth/login", body);
-    await new Promise((r) => setTimeout(r, 800)); // test uchun delay
-    if (body.phoneNumber === "+998901248664") {
-        return body.phoneNumber; // success
-    } else {
-        throw new Error("Telefon raqami topilmadi!");
+    const {data} = await apiClient.post("/auth/check-phone", {phone: body.phoneNumber});
+    if (data.status === "NOT_FOUND") {
+        throw new Error(data.message);
     }
 };
 

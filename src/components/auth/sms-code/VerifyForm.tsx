@@ -2,16 +2,48 @@ import {useVerifyCode} from "../../../api/auth/useAuth.ts";
 import 'react-phone-number-input/style.css';
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import Spinner from "../../common/Spinner.tsx";
-import {Link, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
+import Button from "../../../ui/Button.tsx";
+import {useEffect, useState} from "react";
+import moment from "moment";
 
 
 export default function VerifyForm() {
 
     const location = useLocation();
-    const {phoneNumber, url} = location.state;
+    // const {phoneNumber, url} = location.state;
     const {mutate, isPending} = useVerifyCode();
+    const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+    const [remainingTime, setRemainingTime] = useState(3 * 60);
 
+
+    const getInputElement = (index: number): HTMLInputElement | null => {
+        return document.getElementById(`digit${index}-input`) as HTMLInputElement | null;
+    };
+
+    // KeyUp hodisasi
+    const moveToNext = (index: number, value: string) => {
+        const newOtp = [...otp];
+        newOtp[index] = value;
+        setOtp(newOtp);
+        // Agar qiymat uzunligi 1 bo'lsa, keyingi inputga o'tadi
+        if (value.length === 1) {
+            if (index < 5) {
+                const nextInput = getInputElement(index + 1);
+                nextInput?.focus();
+            } else {
+                // Oxirgi inputdan keyin submit qilish
+                console.log("Submit code:", newOtp.join(""));
+            }
+        }
+    };
+
+    const handleBackspace = (index: number, value: string) => {
+        if (value === "" && index > 0) {
+            const prevInput = getInputElement(index - 1);
+            prevInput?.focus();
+        }
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -23,55 +55,92 @@ export default function VerifyForm() {
                 .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak!"),
         }),
         onSubmit: async (values) => {
-            await mutate({phoneNumber: phoneNumber, otp: values.otp, url: url})
+            // await mutate({phoneNumber: phoneNumber, otp: values.otp, url: url})
         },
     });
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRemainingTime((prevTime) => {
+                if (prevTime <= 1) {
+                    clearInterval(interval); // Taymer tugadi
+                    return 0;
+                }
+                return prevTime - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(interval); // Komponent unmounted bo'lsa, intervalni to'xtatish
+    }, []);
+
+    const formatTime = (seconds: any) => {
+        const duration = moment.duration(seconds, "seconds");
+        const minutes = Math.floor(duration.asMinutes());
+        const secs = duration.seconds();
+        return `${minutes}:${secs.toString().padStart(2, "0")}`; // 2 xonali ko'rinish
+    };
+
     return (
         <>
-            <section className="login_register section-padding">
-                <div className="container">
-                    <div className="row align-items-center">
-                        <div className="col-lg-6 col-xs-12 wow fadeIn">
-                            <form
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    formik.handleSubmit();
-                                    return false;
-                                }}
-                                className={'login'}
-                            >
-                                <h4 className="login_register_title">Tekshirish</h4>
-                                <div className={'form-group mb-5'}>
-                                    <label htmlFor="phone" className="form-label">
-                                        Sms-kodni kiriting!
-                                    </label>
-                                    <input type="password" placeholder="Parol" id="otp"
-                                           className="form-control m-0" name="otp"
-                                           value={formik.values.otp}
-                                           onChange={formik.handleChange}
-                                           onBlur={formik.handleBlur}/>
-                                    {formik.errors.otp && formik.touched.otp ? (
-                                        <p className={'text-start d-flex text-danger m-0'}>{formik.errors.otp}</p>
-                                    ) : null}
-
+            <section>
+                <div className="row align-items-center">
+                    <div className="col-12 wow fadeIn">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                formik.handleSubmit();
+                                return false;
+                            }}
+                        >
+                            <h3 className={'text-center'}>Raqamni tasdiqlash</h3>
+                            <p className='login_register_title'>Parol 99820 008 08 08 raqamga yuborildi</p>
+                            <div className="row justify-content-center">
+                                <div className='col-10 d-flex justify-content-between'>
+                                    {otp.map((digit, index) => (
+                                        <input
+                                            type="number"
+                                            className={'otp-input'}
+                                            maxLength={1}
+                                            id={`digit${index}-input`}
+                                            value={digit}
+                                            onChange={(e) => moveToNext(index, e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Backspace") {
+                                                    handleBackspace(index, e.currentTarget.value);
+                                                }
+                                            }}
+                                            onInput={(e) => {
+                                                // Faqat bir raqamli qiymat qoldirish
+                                                const value = e.currentTarget.value;
+                                                if (value.length > 1) {
+                                                    e.currentTarget.value = value[0]; // Faqat birinchi raqamni qoldiradi
+                                                }
+                                            }}
+                                            key={`digit${index}-input`}
+                                        />
+                                    ))}
                                 </div>
-                                <div className="form-group col-lg-12">
-                                    <button className="bg_btn bt" disabled={isPending} type="submit"
-                                            name="submit">
-                                        {
-                                            isPending ? <Spinner/> : "Davom Etish"
-                                        }
-                                    </button>
-                                </div>
-                                <p><Link to="/forgot-password">Parolni unutdingizmi?</Link></p>
-                            </form>
-                        </div>
-                        <div className="col-lg-6 col-xs-12 wow fadeIn">
-                            <div className="login d-none d-lg-block">
-                                <img src="assets/img/about.png" height={'100%'} alt="ewfef"/>
                             </div>
-                        </div>
+                            <div className="row mt-3 mb-2 justify-content-center">
+                                <div className={'col-10 d-flex justify-content-between'}>
+                                    {remainingTime > 0 ? (
+                                        <p className={'m-0 text-secondary'}>{formatTime(remainingTime)}</p>
+                                    ) : (
+                                        <p onClick={() => {
+                                            // dispatch(refreshVerifyCode())
+                                        }} className="text-primary cursor-pointer">Qaytadan yuborish</p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="row mt-5 justify-content-center">
+                                <div className="col-10 d-flex justify-content-between">
+                                    <div className="form-group w-100">
+                                        <Button isPending={isPending}/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
             </section>

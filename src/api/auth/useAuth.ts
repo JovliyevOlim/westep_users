@@ -11,11 +11,17 @@ import {
     verifyCode
 } from "./authApi.ts";
 import {useNavigate} from "react-router-dom";
+import {getItem} from "../../utils/utils.ts";
 
 export const useUser = () =>
     useQuery({
         queryKey: ["currentUser"],
-        queryFn: getCurrentUser,
+        queryFn: async () => {
+            const token = getItem<string>('accessToken');
+            console.log(token,'token');
+            if (!token) throw new Error("No token");
+            return await getCurrentUser();
+        },
         retry: false,
     });
 
@@ -24,13 +30,13 @@ export const useLogin = () => {
     const qc = useQueryClient();
     return useMutation({
         mutationFn: login,
-        onSuccess: (user) => {
+        onSuccess: async () => {
+            const user = await getCurrentUser();
             qc.setQueryData(["currentUser"], user);
             navigate("/");
-
         },
         onError: (error) => {
-            alert(error);
+            console.log(error);
         },
     });
 };
@@ -40,11 +46,14 @@ export const useRegister = () => {
     const qc = useQueryClient();
     return useMutation({
         mutationFn: register,
-        onSuccess: (user) => {
-            qc.invalidateQueries({queryKey: ["currentUser"]});
+        onSuccess: async () => {
+            const user = await getCurrentUser();
             qc.setQueryData(["currentUser"], user);
             navigate("/");
         },
+        onError: (error) => {
+            alert(error.message);
+        }
     });
 };
 
@@ -59,18 +68,19 @@ export const useLogout = () => {
 };
 
 export const useCheckPhoneNumber = () => {
-    const navigate = useNavigate();
-    return useMutation({
-        mutationFn: checkPhoneNumber,
-        onSuccess: (_, body: { phoneNumber: string }) => {
-            navigate("/password", {state: {phoneNumber: body.phoneNumber}});
-        },
-        onError: (error) => {
-            console.log(error);
-            navigate("/register"); // success -> password sahifasiga o‘tish
-        },
-    });
-};
+        const navigate = useNavigate();
+        return useMutation({
+            mutationFn: checkPhoneNumber,
+            onSuccess: (_, body: { phoneNumber: string }) => {
+                navigate("/password", {state: {phoneNumber: body.phoneNumber}});
+            },
+            onError: (error, body: { phoneNumber: string }) => {
+                console.log(error);
+                navigate("/register", {state: {phoneNumber: body.phoneNumber}}); // success -> password sahifasiga o‘tish
+            },
+        });
+    }
+;
 
 export const useOtpPhoneNumber = () => {
     const navigate = useNavigate();

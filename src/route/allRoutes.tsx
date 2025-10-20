@@ -15,7 +15,6 @@ const Checkout = lazy(() => import("../components/checkout"));
 const Instructors = lazy(() => import("../components/instructors"));
 const Contact = lazy(() => import("../components/contact"));
 const Login = lazy(() => import("../components/auth/login"));
-const Register = lazy(() => import("../components/auth/register"));
 const Error = lazy(() => import("../components/error"));
 const Users = lazy(() => import("../components/users"));
 const Statistic = lazy(() => import("../components/statistic"));
@@ -24,7 +23,8 @@ const Password = lazy(() => import("../components/auth/password"));
 const ForgotPassword = lazy(() => import("../components/auth/forgot-password"));
 const VerifyCode = lazy(() => import("../components/auth/sms-code"));
 const NewPassword = lazy(() => import("../components/auth/new-password"));
-const UserForm = lazy(() => import("../components/auth/user"));
+const CreatePassword = lazy(() => import("../components/auth/createPassword"));
+const Register = lazy(() => import("../components/auth/register"));
 
 const authProtectedRoutes = [
     {path: "/", element: <HomeOne/>, title: "Home"},
@@ -57,11 +57,11 @@ const authProtectedRoutes = [
 const publicRoutes = [
     {path: "/login", element: <Login/>},
     {path: "/register", element: <Register/>},
-    {path: "/user-info", element: <UserForm/>},
     {path: "/password", element: <Password/>},
     {path: "/forgot-password", element: <ForgotPassword/>},
     {path: "/verify-code", element: <VerifyCode/>},
     {path: "/new-password", element: <NewPassword/>},
+    {path: "/create-password", element: <CreatePassword/>},
 ];
 
 export {authProtectedRoutes, publicRoutes};

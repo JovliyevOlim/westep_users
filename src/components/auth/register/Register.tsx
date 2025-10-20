@@ -1,85 +1,167 @@
-import {useOtpPhoneNumber} from "../../../api/auth/useAuth.ts";
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import Spinner from "../../common/Spinner.tsx";
-import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import Button from "../../../ui/Button.tsx";
+import InputField from "../../../ui/InputField.tsx";
+import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
 
 
 export default function Register() {
 
-    const {mutate, isPending} = useOtpPhoneNumber();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const {phoneNumber} = location.state;
 
+    const [isYoung, setIsYoung] = useState<boolean>(false);
+    const [isPending, setIsPending] = useState<boolean>(false);
+
+    console.log(phoneNumber)
 
     const formik = useFormik({
         initialValues: {
-            phone: ''
+            firstName: '',
+            lastName: '',
+            birthday: '',
+            gender: 'MALE',
+            parentNumber: '',
+            password: '',
+            confirmPassword: '',
         },
         validationSchema: Yup.object().shape({
-            phone: Yup.string()
-                .required("Telefon raqami xato kiritildi!")
-                .length(13, "Telefon raqami xato kiritildi!"),
+            firstName: Yup.string().required('Ism kiriting!'),
+            lastName: Yup.string().required('Familiyani kiriting!'),
+            birthday: Yup.string().required("Tu'gilgan sanani tanlang!"),
+            // password: Yup.string()
+            //     .required("Parolni kiriting!")
+            //     .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak!"),
+            // confirmPassword: Yup.string()
+            //     .required("Parolni kiriting!")
+            //     .oneOf([Yup.ref("password")], "Parollar bir xil bo‘lishi kerak!"),
+            parentNumber: Yup.string().when([], {
+                is: () => !isYoung,
+                then: (schema) =>
+                    schema
+                        .required("Telefon raqamni kiriting!").test(
+                        "is-valid-uz-number",
+                        "Telefon raqami xato kiritildi!",
+                        (value) => {
+                            if (!value) return false;
+                            // raqamdan faqat sonlarni ajratamiz
+                            const digits = value.replace(/\D/g, "");
+                            // faqat 998 bilan boshlanadigan va jami 12 ta raqam bo‘lishi kerak
+                            return digits.startsWith("998") && digits.length === 12;
+                        }
+                    ), otherwise: (schema) => schema.notRequired(),
+            })
         }),
-        onSubmit: async (values) => {
-            await mutate({phoneNumber: values.phone, url: '/user-info'});
+        onSubmit: (values) => {
+            setIsPending(true);
+            setTimeout(() => {
+                navigate('/create-password', {state: {...values, phoneNumber: phoneNumber, text: 'Parol yaratish'}})
+                setIsPending(false)
+            }, 1000)
         },
     });
 
+    function isOlderThan20(birthDateString: string): boolean {
+        const today = new Date();
+        const birthDate = new Date(birthDateString);
+
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        return age >= 20;
+    }
+
+    useEffect(() => {
+        if (formik.values.birthday) {
+            setIsYoung(isOlderThan20(formik.values.birthday));
+        }
+    }, [formik.values.birthday]);
+
+    console.log(formik.values)
+
+
     return (
         <>
-            <section className="login_register section-padding">
-                <div className="container">
-                    <div className="row align-items-center">
-                        <div className="col-lg-6 col-xs-12 wow fadeIn">
-                            <form
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    formik.handleSubmit();
-                                    return false;
-                                }}
-                                className={'login'}
-                            >
-                                <h4 className="login_register_title">Ro'yhatdan o'tish</h4>
-                                <div className={'form-group mb-5'}>
-                                    <label htmlFor="phone" className="form-label">
-                                        Telefon raqamingiz
-                                    </label>
-                                    <PhoneInput
-                                        defaultCountry="UZ"
-                                        value={formik.values.phone}
-                                        onChange={(e) => {
-                                            formik.setFieldValue("phone", e)
-                                        }}
-                                        international
-                                        countryCallingCodeEditable={false}
-                                        onBlur={formik.handleBlur}
-                                    />
-                                    {formik.errors.phone && formik.touched.phone ? (
-                                        <p className={'text-start text-danger'}>{formik.errors.phone}</p>
-                                    ) : null}
+            <section>
+                <div className="row d-flex align-items-center justify-content-between">
+                    <div className="col-lg col-xs-12 wow fadeIn">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                formik.handleSubmit();
+                                return false;
+                            }}>
+                            <h3 className={'text-center mb-0'}>Ro'yxatdan o'tish</h3>
+                            <p className="login_register_title">Bilimingizni yangi bosqichga olib chiqing!</p>
+                            <InputField placeholder={'Ism'} formik={formik}
+                                        type='text'
+                                        name={"firstName"}
+                                        id="firstName"/>
+                            <InputField placeholder={'Familiya'} formik={formik}
+                                        type='text'
+                                        name={"lastName"}
+                                        id="lastName"/>
+                            <InputField placeholder={"Tug'ilgan kun"} formik={formik}
+                                        type='date'
+                                        name={"birthday"}
+                                        id="birthday"/>
+                            {
+                                !isYoung &&
+                                <>
+                                    <div className="form-group mb-2 d-flex align-items-center justify-content-between">
+                                        <label className="d-flex align-items-center gap-2 col-5">
+                                            <div
+                                                className={'form-control d-flex justify-content-center align-items-center gap-3'}>
+                                                <p className={"m-0"}>
+                                                    Ayol
+                                                </p>
+                                                <input
+                                                    type="radio"
+                                                    name="gender"
+                                                    value="FEMALE"
+                                                    style={{transform: "scale(1.8)"}}
+                                                    checked={formik.values.gender === 'FEMALE'}
+                                                    onChange={formik.handleChange}
+                                                />
+                                            </div>
+                                        </label>
 
-                                </div>
-                                <div className="form-group col-lg-12">
-                                    <button className="bg_btn bt" disabled={isPending} type="submit"
-                                            name="submit">
-                                        {
-                                            isPending ? <Spinner/> : "Davom Etish"
-                                        }
-                                    </button>
-                                </div>
-                                <p><Link to="/register">Ro'yhatdan o'tish</Link></p>
-                            </form>
-
-                        </div>
-                        <div className="col-lg-6 col-xs-12 wow fadeIn">
-                            <div className="login d-none d-lg-block">
-                                <img src="assets/img/about.png" height={'100%'} alt="ewfef"/>
+                                        <label className="d-flex align-items-center gap-2 col-5">
+                                            <div
+                                                className={'form-control d-flex justify-content-center align-items-center gap-3'}>
+                                                <p className={"m-0"}>
+                                                    Erkak
+                                                </p>
+                                                <input
+                                                    type="radio"
+                                                    name="gender"
+                                                    value="MALE"
+                                                    style={{transform: "scale(1.8)"}}
+                                                    checked={formik.values.gender === 'MALE'}
+                                                    onChange={formik.handleChange}
+                                                />
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <PhoneNumberInput name={"parentNumber"} formik={formik} className={''}/>
+                                </>
+                            }
+                            <div className="form-group col-lg-12">
+                                <Button isPending={isPending}/>
                             </div>
-                        </div>
+                            <p className={'text-center text-dark mt-1'}>Akkountingiz bormi? <Link
+                                className={"text-primary"} to="/login">Login</Link></p>
+                        </form>
                     </div>
                 </div>
             </section>
         </>
-    );
+    )
 }

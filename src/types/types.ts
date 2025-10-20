@@ -1,8 +1,9 @@
 export interface User {
-    fullName: string,
-    birthday: string,
+    firstName: string,
+    lastName: string,
+    birthday?: string,
     parent?: string,
     parentNumber?: string,
     password: string,
-    phoneNumber:string
+    phone:string
 }
