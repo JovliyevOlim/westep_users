@@ -1,7 +1,7 @@
 import apiClient from "../apiClient";
 import {User} from "../../types/types.ts";
 import {AxiosError} from "axios";
-import {setItem} from "../../utils/utils.ts";
+import {getItem, setItem} from "../../utils/utils.ts";
 
 const user: { name: string } = {
     name: "olim"
@@ -10,10 +10,10 @@ const user: { name: string } = {
 
 export const login = async (body: { phoneNumber: string; password: string }) => {
     try {
-        const {data} = await apiClient.post("/auth/login",{},{
-            params:{
-                phone:body.phoneNumber,
-                password:body.password,
+        const {data} = await apiClient.post("/auth/login", {}, {
+            params: {
+                phone: body.phoneNumber,
+                password: body.password,
             }
         });
         setItem<string>("accessToken", data.accessToken)
@@ -33,7 +33,7 @@ export const register = async (body: User) => {
         } catch (error) {
             const err = error as AxiosError<{ message: string }>;
             const message = err.response?.data?.message;
-             throw new Error(message);
+            throw new Error(message);
         }
     }
 ;
@@ -45,6 +45,12 @@ export const getCurrentUser = async () => {
 };
 
 export const logout = async () => {
+    const refreshToken: string | null = getItem<string>("refreshToken");
+    await apiClient.post("/auth/logout", refreshToken, {
+        headers: {
+            "Content-Type": "text/plain"
+        }
+    });
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 };
