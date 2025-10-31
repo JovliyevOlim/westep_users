@@ -1,0 +1,170 @@
+// _working-instructors.scss - Working process and instructors
+.working-process {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.working-process:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #002935;
+    opacity: .87;
+    z-index: -1;
+}
+
+.single-work {
+    text-align: center;
+    color: #fff;
+    margin-top: 20px;
+    position: relative;
+}
+
+.single-work::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    right: -100px;
+    background-image: url(../img/shapes/working-arrow.svg);
+    width: 170px;
+    height: 40px;
+    background-repeat: no-repeat;
+}
+
+.single-work h4 {
+    font-size: 24px;
+    color: #fff;
+}
+
+.wicon {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    background: #0D5FF9;
+    display: inline-block;
+    margin-bottom: 45px;
+    border: 3px solid #fff;
+    border-radius: 8px;
+    transform: rotate(50deg);
+}
+
+.single-instructor {
+    box-shadow: 0 6px 26px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f5f5f5;
+    border-radius: 8px;
+    text-align: center;
+    overflow: hidden;
+    padding-top: 35px;
+    transition: .5s;
+    margin-bottom: 30px;
+}
+
+.single-instructor h3 a {
+    transition: .5s;
+}
+
+.single-instructor h3 a:hover,
+.single-instructor h3 a:focus {
+    color: #0D5FF9;
+}
+
+.inimage {
+    position: relative;
+    width: 245px;
+    margin: 0 auto;
+    margin-bottom: 25px;
+}
+
+.single-instructor h3 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.single-instructor h3 a {
+    color: #222;
+}
+
+.single-instructor .designation {
+    font-size: 15px;
+    color: #0D5FF9;
+    font-weight: 500;
+}
+
+.single-instructor .social-link {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-1000%);
+    transition: .5s;
+    z-index: 1;
+}
+
+.single-instructor:hover .social-link {
+    transform: translateX(-50%);
+}
+
+.single-instructor .sicon {
+    position: absolute;
+    bottom: 25px;
+    right: 36px;
+    transition: .5s;
+}
+
+.single-instructor:hover .sicon {
+    transform: translateX(1000%);
+}
+
+.single-instructor .social-link ul {
+    list-style-type: none;
+}
+
+.single-instructor .social-link ul li {
+    display: inline-block;
+    margin: 0 3px;
+}
+
+.sicon a,
+.social-link ul li a {
+    width: 32px;
+    height: 32px;
+    line-height: 35px;
+    color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    font-size: 15px;
+}
+
+.sicon a {
+    background: #0D5FF9;
+    color: #fff;
+}
+
+.inmeta {
+    border-top: 1px solid #f5f5f5;
+    padding-top: 10px;
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow: hidden;
+}
+
+.inmeta span p,
+.inmeta span i {
+    display: inline-block;
+    color: #555;
+}
+
+.inmeta span i {
+    margin-right: 5px;
+}
+
+.inmeta span {
+    color: #7F7F7F;
+    font-weight: 500;
+    font-size: 16px;
+}

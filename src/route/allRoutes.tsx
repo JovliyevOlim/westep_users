@@ -1,5 +1,7 @@
 import {Navigate} from 'react-router-dom';
 import {lazy} from "react";
+import MainPage from "../pages/MainPage.tsx";
+import Logout from "../components/auth/Logout.tsx";
 
 const HomeOne = lazy(() => import("../components/homes/home"));
 const HomeTwo = lazy(() => import("../components/homes/home-2"));
@@ -27,7 +29,7 @@ const CreatePassword = lazy(() => import("../components/auth/createPassword"));
 const Register = lazy(() => import("../components/auth/register"));
 
 const authProtectedRoutes = [
-    {path: "/", element: <HomeOne/>, title: "Home"},
+    {path: "/", element: <MainPage/>, title: "Home"},
     {path: "/users", element: <Users/>, title: "Users"},
     {path: "/lessons", element: <Lessons/>, title: "Lessons"},
     {path: "/statistic", element: <Statistic/>, title: "Statistics"},
@@ -62,6 +64,7 @@ const publicRoutes = [
     {path: "/verify-code", element: <VerifyCode/>},
     {path: "/new-password", element: <NewPassword/>},
     {path: "/create-password", element: <CreatePassword/>},
+    {path: "/logout", element: <Logout/>},
 ];
 
 export {authProtectedRoutes, publicRoutes};

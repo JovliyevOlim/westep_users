@@ -5,9 +5,9 @@
 body {
     color: #555;
     font-family: 'Urbanist', sans-serif;
-    font-size: 17px;
-    line-height: 1.9;
-    font-weight: 400;
+    /*font-size: 17px;*/
+    /*line-height: 1.9;*/
+    /*font-weight: 400;*/
     overflow-x: hidden;
     position: relative;
 }
@@ -30,15 +30,15 @@ h6 {
 }
 
 a {
-    color: #444;
-    text-decoration: none;
-    transition: all 0.2s ease 0s;
+    color: #444 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease 0s !important;
 }
 
 a:hover,
 a:focus {
-    text-decoration: none;
-    color: #0D5FF9;
+    text-decoration: none !important;
+    color: #0D5FF9 !important;
 }
 
 p {
@@ -323,23 +323,11 @@ img {
 
 
 #navigation {
-    position: relative;
     padding: 20px 20px;
-    z-index: 99;
+    height: 100px;
+    box-shadow: 0px 1px 2px 0px #0000001A;
 }
 
-#navigation::after {
-    position: absolute;
-    content: '';
-    height: 100%;
-    width: 30%;
-    background-image: url(../img/shapes/header.svg);
-    right: 0;
-    top: 0;
-    z-index: -1;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
 
 .site-logo {
     display: inline-block;
@@ -933,7 +921,7 @@ img {
     height: 70px;
     padding: 10px 50px;
     position: relative;
-    background-image: url(../img/icons/search-2.svg);
+    background-image: url(../../assets/img/icons/search-2.svg);
     background-repeat: no-repeat;
     background-position: 27px;
 }
@@ -1246,6 +1234,8 @@ img {
 .single-course {
     box-shadow: 0 6px 26px rgba(0, 0, 0, 0.03);
     margin-bottom: 30px;
+    border-radius: 30px;
+    overflow: hidden;
 }
 
 .course-img {
@@ -1254,7 +1244,8 @@ img {
 
 .course-img img {
     width: 100%;
-    border-radius: 8px;
+    height: 200px;
+    object-fit: cover;
 }
 
 .cprice,
@@ -1272,7 +1263,7 @@ img {
 }
 
 .course_content {
-    padding: 30px;
+    padding: 16px;
 }
 
 .crating i {
@@ -1312,7 +1303,7 @@ img {
 .cmeta .smeta {
     display: inline-block;
     margin-right: 10px;
-    font-size: 16px;
+    font-size: 10px;
 }
 
 .cmeta .smeta i {
@@ -1617,7 +1608,7 @@ img {
     position: absolute;
     top: 18px;
     right: -100px;
-    background-image: url(../img/shapes/working-arrow.svg);
+    background-image: url(../../assets/img/shapes/working-arrow.svg);
     width: 170px;
     height: 40px;
     background-repeat: no-repeat;
@@ -1807,7 +1798,7 @@ img {
 
 .instyle-2 .inimage::after {
     content: '';
-    background-image: url(../img/shapes/talent-shape.svg);
+    background-image: url(../../assets/img/shapes/talent-shape.svg);
     background-repeat: no-repeat;
     position: absolute;
     left: 24px;
@@ -1850,7 +1841,7 @@ img {
 .video-area::after {
     content: '';
     position: absolute;
-    background-image: url(../img/shapes/video.svg);
+    background-image: url(../../assets/img/shapes/video.svg);
     width: 991px;
     height: 522px;
     background-repeat: no-repeat;
@@ -2591,7 +2582,7 @@ svg#play_icon:hover #triangle {
 
 .footer-title::after {
     content: '';
-    background-image: url(../img/shapes/footer-title.svg);
+    background-image: url(../../assets/img/shapes/footer-title.svg);
     position: absolute;
     width: 50px;
     height: 3px;
@@ -3008,7 +2999,7 @@ svg#play_icon:hover #triangle {
     top: 10px;
     width: 40px;
     height: 24px;
-    background-image: url(../img/icons/check.svg);
+    background-image: url(../../assets/img/icons/check.svg);
     background-repeat: no-repeat;
 }
 
@@ -3414,27 +3405,52 @@ svg#play_icon:hover #triangle {
     outline: none;
 }
 
-.form-control {
+.form-control-input {
     background-color: transparent;
-    border: 1px solid var(--auth-button-gray);
-    border-radius: var(--input-border-radius);
+    border: 1px solid var(--bs-secondary);
+    border-radius: 100px;
     color: #000000;
     font-size: 18px;
-    height: calc(2.25rem + 27px);
+    height: 54px;
     outline: 0;
-    padding: var(--input-padding);
+    padding: 14px 30px;
     width: 100%;
 }
 
-.form-control option {
+.form-control-input option {
     font-weight: 400;
 }
 
-.form-control:focus {
+.form-control-input:focus {
     outline: none;
     box-shadow: inherit;
-    border-color: var(--auth-button-primary);
+    border-color: var(--bs-primary);
     background: transparent;
+}
+
+@media (max-width: 768px) {
+    .form-control-input {
+        background-color: transparent;
+        border: 1px solid var(--bs-secondary);
+        border-radius: 100px;
+        color: #000000;
+        padding: 8px 16px;
+        font-size: 16px;
+        height: 52px;
+        outline: 0;
+        width: 100%;
+    }
+
+    .form-control-input option {
+        font-weight: 400;
+    }
+
+    .form-control-input:focus {
+        outline: none;
+        box-shadow: inherit;
+        border-color: var(--bs-primary);
+        background: transparent;
+    }
 }
 
 textarea.form-control {
@@ -4577,4 +4593,3 @@ li.comment {
     margin-bottom: 40px;
 }
 
-/* Contact PHP */

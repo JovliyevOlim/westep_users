@@ -4,6 +4,7 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import {Link, useLocation} from "react-router-dom";
 import Button from "../../../ui/Button.tsx";
+import InputField from "../../../ui/InputField.tsx";
 
 
 export default function PasswordForm() {
@@ -32,38 +33,27 @@ export default function PasswordForm() {
 
     return (
         <>
-            <section className="login_register section-padding">
-                <div className="container">
-                    <div className="row align-items-center">
-                        <div className="col-lg-12 wow fadeIn">
-                            <form
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    formik.handleSubmit();
-                                    return false;
-                                }}
-                            >
-                                <h4 className="login_register_title">Kirish</h4>
-                                <div className={'form-group mb-4'}>
-                                    <label htmlFor="phone" className="form-label text-dark">
-                                        Parolni kiriting!
-                                    </label>
-                                    <input type="password" placeholder="Parol" id="password"
-                                           className="form-control m-0" name="password"
-                                           value={formik.values.password}
-                                           onChange={formik.handleChange}
-                                           onBlur={formik.handleBlur}/>
-                                    {formik.errors.password && formik.touched.password ? (
-                                        <p className={'text-start d-flex text-danger m-0'}>{formik.errors.password}</p>
-                                    ) : null}
+            <section>
+                <div className="row align-items-center">
+                    <div className="col-lg-12 wow fadeIn">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                formik.handleSubmit();
+                                return false;
+                            }}
+                        >
+                            <p className="login_register_title">Kirish</p>
+                            <div className={'form-group mb-4'}>
+                                <InputField name={'password'} formik={formik} placeholder={'Parol'}
+                                            type={'password'}/>
 
-                                </div>
-                                <div className="form-group col-lg-12">
-                                    <Button isPending={isPending}/>
-                                </div>
-                                <p className={'mt-2'}><Link to="/forgot-password">Parolni unutdingizmi?</Link></p>
-                            </form>
-                        </div>
+                            </div>
+                            <div className="form-group col-lg-12">
+                                <Button isPending={isPending} type="submit" height={'54px'} children={'Kirish'}/>
+                            </div>
+                            <p className={'mt-2 text-center'}><Link to="/forgot-password">Parolni unutdingizmi?</Link></p>
+                        </form>
                     </div>
                 </div>
             </section>

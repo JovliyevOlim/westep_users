@@ -1,0 +1,78 @@
+// _buttons.scss - Button styles and effects
+.wborder_btn {
+    border: 2px solid #fff;
+    color: #fff;
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.white-btn {
+    background: #fff;
+    color: #222;
+    border: 2px solid #fff;
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.white-btn:before,
+.wborder_btn:before,
+.bg_btn:before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin: -15px 0 0 1px;
+    width: 15%;
+    height: 30px;
+    border-radius: 50%;
+    -webkit-transform-origin: 100% 50%;
+    transform-origin: 100% 50%;
+    -webkit-transform: scale3d(1, 2, 1);
+    transform: scale3d(1, 2, 1);
+    -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
+    -webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.9, 1);
+    transition-timing-function: cubic-bezier(0.7, 0, 0.9, 1);
+}
+
+.bg_btn:before {
+    background: #fff;
+}
+
+.wborder_btn:before {
+    background-color: #0D5FF9;
+}
+
+.white-btn:before {
+    background: #0F2B5A;
+}
+
+.wborder_btn:hover::before,
+.white-btn:hover::before {
+    -webkit-transform: scale3d(9, 9, 1);
+    transform: scale3d(9, 9, 1);
+}
+
+.bg_btn:focus {
+    color: #222;
+    border-color: #0D5FF9;
+}
+
+.white-btn:hover,
+.white-btn:focus {
+    color: #fff;
+    border-color: #fff;
+}
+
+.wborder_btn:hover,
+.wborder_btn:focus {
+    color: #fff;
+    border-color: #fff;
+}

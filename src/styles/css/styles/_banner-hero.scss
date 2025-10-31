@@ -1,0 +1,95 @@
+// _banner-hero.scss - Home banner and hero styles
+.home-banner {
+    background-size: cover;
+    background-color: #002935;
+    color: #fff;
+    position: relative;
+    height: 750px;
+}
+
+.banner-content {
+    height: 750px;
+    position: relative;
+    z-index: 1;
+}
+
+.banner-content .subtitle {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.banner-content .title {
+    font-size: 60px;
+    color: #fff;
+    line-height: 86px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.bbtns {
+    display: inline-block;
+    margin-top: 25px;
+}
+
+.banner-content .title span {
+    color: #0D5FF9;
+}
+
+.banner-content .bg_btn {
+    margin-right: 23px;
+}
+
+.banner-content .sinfo {
+    margin-left: 15px;
+    display: inline-block;
+    position: relative;
+    top: -22px;
+}
+
+.banner_img {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+    z-index: 1;
+}
+
+.banner_img img {
+    width: 470px;
+}
+
+.total_students_badge {
+    display: inline-block;
+    text-align: center;
+    background-color: #fff;
+    color: #444;
+    padding: 22px 20px;
+    border-radius: 8px;
+    box-shadow: 0 9px 65px rgba(255, 255, 255, 0.25);
+}
+
+.total_students_badge h4 {
+    font-size: 25px;
+    margin-bottom: 0px;
+}
+
+.total_course_badge {
+    box-shadow: 0 35px 65px rgba(0, 0, 0, 0.1);
+}
+
+.total_course_badge span,
+.total_students_badge span {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* decorative shapes */
+.circle_shape {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+    background: #0D5FF9;
+    top: 35px;
+    right: 85px;
+}

@@ -1,13 +1,37 @@
 import Spinner from "../components/common/Spinner.tsx";
+import {Button} from "react-bootstrap";
 
-function Button({isPending}: { isPending: boolean }) {
+
+type Props = {
+    isPending?: boolean;
+    variant?: string;
+    type?: "button" | "submit" | "reset";
+    children: React.ReactNode;
+    className?: string;
+    height?: string;
+};
+
+function Index({
+                   isPending = false,
+                   variant = "primary",
+                   type = "submit",
+                   children = "Davom etish",
+                   className,
+                   height = "54px",
+               }: Props) {
     return (
-        <button className="auth_btn-primary bt" disabled={isPending} type="submit"
-                name="submit">
+        <Button
+            style={{height: height}}
+            variant={variant}
+            type={type}
+            className={`w-100 rounded-pill ${className ?? ""}`}
+            disabled={isPending}
+        >
             {
-                isPending ? <Spinner/> : "Davom Etish"
+                isPending ? <Spinner/> : children
             }
-        </button>);
+        </Button>
+    );
 }
 
-export default Button;
+export default Index;

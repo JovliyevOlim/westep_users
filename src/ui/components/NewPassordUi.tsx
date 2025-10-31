@@ -70,7 +70,7 @@ export default function NewPassword({mutate, isPending}: Props) {
                             <InputField name="confirmPassword" label="" placeholder={'Parol tasdig’i'} type="password"
                                         key='password' formik={formik}/>
                             <div className="form-group col-lg-12">
-                                <Button isPending={isPending}/>
+                                <Button isPending={isPending} children={'Davom etish'}/>
                             </div>
                         </form>
 

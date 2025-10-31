@@ -24,11 +24,11 @@
     width: 100%;
     line-height: 1.42857143;
     color: #000000;
-    border-radius: var(--input-border-radius);
+    border-radius: 100px;
     background-color: transparent;
-    border: 1px solid var(--auth-button-gray);
+    border: 1px solid var(--bs-secondary);
     font-size: 18px;
-    height: calc(2.25rem + 27px);
+    height: 54px;
     outline: 0;
     padding: 14px 30px;
     margin-bottom: 0;
@@ -36,7 +36,7 @@
 }
 
 .PhoneInput--focus {
-    border-color: var(--auth-button-primary);
+    border-color: var(--bs-primary);
     background: transparent;
     outline: 0;
 }
@@ -180,6 +180,7 @@ input[type="number"]::-webkit-inner-spin-button {
     padding: 30px !important;
     position: relative;
 }
+
 /* pastki chiziqcha */
 .otp-input::after {
     content: "";
@@ -202,3 +203,35 @@ input[type="number"]::-webkit-inner-spin-button {
 /*.otp-input:focus::after {*/
 /*    background-color: #3b82f6; !* pastki chiziq ham ko‘k *!*/
 /*}*/
+
+
+@media (max-width: 768px) {
+    .PhoneInput {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        padding: 8px 16px;
+        font-size: 16px;
+        height: 52px;
+        gap: 0.4rem;
+    }
+
+    .PhoneInputCountry {
+        margin-right: 0.4rem;
+    }
+
+    .PhoneInputCountryIcon {
+        height: 18px;
+    }
+
+    .PhoneInputInput {
+        width: 100%;
+        padding: 6px 0;
+    }
+
+    .PhoneInputCountrySelectArrow {
+        width: 6px;
+        height: 6px;
+        margin-left: 4px;
+    }
+}

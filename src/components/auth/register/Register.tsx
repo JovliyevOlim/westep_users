@@ -103,22 +103,22 @@ export default function Register() {
                             <InputField placeholder={'Ism'} formik={formik}
                                         type='text'
                                         name={"firstName"}
-                                        />
+                            />
                             <InputField placeholder={'Familiya'} formik={formik}
                                         type='text'
                                         name={"lastName"}
-                                        />
+                            />
                             <InputField placeholder={"Tug'ilgan kun"} formik={formik}
                                         type='date'
                                         name={"birthday"}
-                                        />
+                            />
                             {
                                 !isYoung &&
                                 <>
                                     <div className="form-group mb-2 d-flex align-items-center justify-content-between">
                                         <label className="d-flex align-items-center gap-2 col-5">
                                             <div
-                                                className={'form-control d-flex justify-content-center align-items-center gap-3'}>
+                                                className={'form-control-input d-flex justify-content-center align-items-center gap-3'}>
                                                 <p className={"m-0"}>
                                                     Ayol
                                                 </p>
@@ -135,7 +135,7 @@ export default function Register() {
 
                                         <label className="d-flex align-items-center gap-2 col-5">
                                             <div
-                                                className={'form-control d-flex justify-content-center align-items-center gap-3'}>
+                                                className={'form-control-input d-flex justify-content-center align-items-center gap-3'}>
                                                 <p className={"m-0"}>
                                                     Erkak
                                                 </p>
@@ -150,11 +150,11 @@ export default function Register() {
                                             </div>
                                         </label>
                                     </div>
-                                    <PhoneNumberInput  name={"parentNumber"} formik={formik} className={''}/>
+                                    <PhoneNumberInput name={"parentNumber"} formik={formik} className={''}/>
                                 </>
                             }
                             <div className="form-group col-lg-12">
-                                <Button isPending={isPending}/>
+                                <Button isPending={isPending} children={'Davom etish'}/>
                             </div>
                             <p className={'text-center text-dark mt-1'}>Akkountingiz bormi? <Link
                                 className={"text-primary"} to="/login">Login</Link></p>

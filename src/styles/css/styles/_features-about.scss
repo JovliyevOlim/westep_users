@@ -1,0 +1,155 @@
+// _features-about.scss - Features, about and counters
+.feature-item {
+    border: 2px solid #F5F5F5;
+    padding: 80px 30px 50px;
+    text-align: center;
+    position: relative;
+    transition: .5s;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.feature-item:hover {
+    border-radius: 8px 60px 8px 8px;
+    background-color: #fff;
+    border-color: #0D5FF9;
+}
+
+.fea-icon {
+    width: 75px;
+    height: 75px;
+    line-height: 75px;
+    background: #E5F8F8;
+    text-align: center;
+    border-radius: 50%;
+    margin-bottom: 25px;
+    display: inline-block;
+    transition: .5s;
+}
+
+.feature-item:hover svg path {
+    fill: #fff;
+}
+
+.feature-item:hover .fea-icon {
+    background: #0D5FF9;
+}
+
+.fea-icon svg {
+    width: 40px;
+}
+
+.fea-icon svg path {
+    fill: #0D5FF9;
+}
+
+.feature-item h3 {
+    font-size: 24px;
+    transition: .5s;
+}
+
+.feature-item p {
+    transition: .5s;
+    margin-bottom: 0;
+}
+
+.fnumber {
+    background: #0D5FF9;
+    color: #fff;
+    border-radius: 0 0 7px 7px;
+    padding: 0 8px;
+    display: inline-block;
+    position: absolute;
+    top: -2px;
+    left: 31px;
+    line-height: 33px;
+}
+
+/* About */
+.about-title {
+    margin-bottom: 30px;
+}
+
+.single_about {
+    margin-bottom: 45px;
+}
+
+.single_about .aicon {
+    float: left;
+    margin-right: 20px;
+}
+
+.single_about .aicon svg {
+    width: 50px;
+}
+
+/* Counter */
+.counter-title {
+    margin-bottom: 70px;
+}
+
+.counter-title h2 {
+    font-size: 28px;
+    position: relative;
+    display: inline-block;
+}
+
+.counter-title h2::before {
+    content: '';
+    width: 80px;
+    position: absolute;
+    height: 2px;
+    background: #0D5FF9;
+    left: -140px;
+    top: 17px;
+}
+
+.counter-title h2:after {
+    content: '';
+    width: 80px;
+    position: absolute;
+    height: 2px;
+    background: #0D5FF9;
+    right: -140px;
+    top: 17px;
+}
+
+@media (max-width: 767px) {
+    .counter-title h2::before,
+    .counter-title h2::after {
+        content: none;
+    }
+}
+
+.counter-title h2 span {
+    color: #0D5FF9;
+}
+
+.counter-item {
+    border: 2px dashed #E9EEF4;
+    border-radius: 8px;
+    text-align: center;
+    padding: 25px;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.counter-item .cicon {
+    width: 65px;
+    height: 65px;
+    line-height: 65px;
+    background-color: #E5F8F8;
+    text-align: center;
+    border-radius: 50%;
+    position: absolute;
+    top: -28px;
+    left: -17px;
+}
+
+.counter-item .cicon svg {
+    width: 35px;
+}
+
+.counter-item h4 {
+    font-size: 40px;
+}

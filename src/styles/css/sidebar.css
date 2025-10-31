@@ -1,0 +1,35 @@
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #EFF6FF;
+    color: #f8f9fa;
+    overflow: auto;
+    z-index: 999;
+    height: 100vh;
+    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+}
+
+.sidebar.open {
+    width: 150px;
+    transform: translateX(0);
+}
+
+.sidebar.closed {
+    width: 0;
+    transform: translateX(-100%);
+}
+
+@media (min-width: 768px) {
+    .sidebar.open {
+        position: static !important;
+        transform: none !important;
+        width: 150px !important;
+    }
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    position: relative;
+}

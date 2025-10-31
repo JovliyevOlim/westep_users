@@ -133,7 +133,7 @@ export default function VerifyForm() {
                             <div className="row mt-5 justify-content-center">
                                 <div className="col-10 d-flex justify-content-between">
                                     <div className="form-group w-100">
-                                        <Button isPending={isPending}/>
+                                        <Button isPending={isPending} children={'Davom etish'}/>
                                     </div>
                                 </div>
                             </div>

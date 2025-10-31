@@ -13,15 +13,11 @@
 }
 
 .auth_btn-primary {
-    background-color: var(--auth-button-primary);
-    border: 2px solid var(--auth-button-primary);
     color: #fff;
     transition: .5s;
 }
 
 .auth_btn-primary:disabled {
-    background-color: var(--auth-button-gray);
-    border: 2px solid var(--auth-button-gray);
     color: #fff;
     transition: .5s;
 }

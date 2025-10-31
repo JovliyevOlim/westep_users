@@ -39,7 +39,7 @@ export default function LoginForm() {
                             <p className="login_register_title">Bilimingizni yangi bosqichga olib chiqing!</p>
                             <PhoneNumberInput name={'phone'} formik={formik} className={''}/>
                             <div className="form-group col-lg-12 mt-5">
-                                <Button isPending={isPending}/>
+                                <Button isPending={isPending} children={'Davom etish'}/>
                             </div>
                         </form>
                     </div>

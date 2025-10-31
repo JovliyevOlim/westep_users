@@ -1,0 +1,16 @@
+.dashboard-card {
+  //width: 100%;
+  border-radius: 18px;
+  padding: 16px 26px;
+
+  .icon {
+    border-radius: 16px;
+    padding: 10px;
+    background: #EFF6FF;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
