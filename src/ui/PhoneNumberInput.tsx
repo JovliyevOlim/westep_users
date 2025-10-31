@@ -10,11 +10,11 @@ interface IPhoneNumberInputProps<T> {
 }
 
 const PhoneNumberInput = <T extends Record<string, any>>({
-                              label = "",
-                              name,
-                              formik,
-                              className = "",
-                          }: IPhoneNumberInputProps<T>) => {
+                                                             label = "",
+                                                             name,
+                                                             formik,
+                                                             className = "",
+                                                         }: IPhoneNumberInputProps<T>) => {
 
 
     return (
@@ -26,9 +26,9 @@ const PhoneNumberInput = <T extends Record<string, any>>({
             )}
             <PhoneInput
                 defaultCountry="UZ"
-                value={formik.values[name] as string}
+                value={formik.values[name] ? `+${formik.values[name] as string}` : ""}
                 onChange={(e) => {
-                    formik.setFieldValue(name as string, e)
+                    formik.setFieldValue(name as string, e?.replace("+", ""));
                 }}
                 international
                 countryCallingCodeEditable={false}

@@ -17,7 +17,7 @@ export default function LoginForm() {
         validationSchema: Yup.object().shape({
             phone: Yup.string()
                 .required("Telefon raqami xato kiritildi!")
-                .length(13, "Telefon raqami xato kiritildi!"),
+                .length(12, "Telefon raqami xato kiritildi!"),
         }),
         onSubmit: async (values) => {
             await mutateAsync({phoneNumber: values.phone});
