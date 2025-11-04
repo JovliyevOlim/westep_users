@@ -28,7 +28,7 @@ function Index() {
                 <p>Keling biz bilan birga yangi bilimlarga yo’l oling</p>
             </div>
             <section>
-                <div className="row p-0 g-4">
+                <div className="row p-0 g-2 g-md-4 align-items-stretch">
                     {
                         dashboardInfo.map((item) =>
                             <DashboardCart item={item}/>

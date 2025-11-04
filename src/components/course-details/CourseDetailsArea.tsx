@@ -80,9 +80,9 @@ export default function CourseDetailsArea() {
                                     <p>
                                         <a href="#">
                       <span className="rev_icons">
-                       {Array.from({length: course.rating}).map((_, i) => (
-                           <i key={i} className="bx bxs-star"></i>
-                       ))}
+                       {/*{Array.from({length: course.rating}).map((_, i) => (*/}
+                       {/*    <i key={i} className="bx bxs-star"></i>*/}
+                       {/*))}*/}
                       </span>
                                             <span className="rev_content">
                                             {course?.rating}

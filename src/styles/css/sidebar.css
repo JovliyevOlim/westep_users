@@ -1,12 +1,9 @@
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
     background-color: #EFF6FF;
     color: #f8f9fa;
     overflow: auto;
-    z-index: 999;
     height: 100vh;
+    width: 150px;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 
@@ -20,11 +17,26 @@
     transform: translateX(-100%);
 }
 
-@media (min-width: 768px) {
+.showSidebar {
+    width: 100%;
+    /*width: calc(100% - 150px);*/
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        z-index: 999;
+        width: 0;
+    }
+
     .sidebar.open {
-        position: static !important;
-        transform: none !important;
-        width: 150px !important;
+        width: 200px;
+    }
+
+    .showSidebar {
+        width: 100%;
     }
 }
 

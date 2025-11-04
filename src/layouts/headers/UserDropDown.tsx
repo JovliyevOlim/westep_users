@@ -2,6 +2,7 @@ import {Dropdown} from "react-bootstrap";
 import person from "../../assets/icon/person.svg"
 import arrow from "../../assets/icon/arrow-down.svg"
 import {useUser} from "../../api/auth/useAuth.ts";
+import NavMenu from "./NavMenu.tsx";
 
 function UserDropDown() {
 
@@ -10,7 +11,7 @@ function UserDropDown() {
     return (
         <div className='d-flex align-items-center gap-3'>
             <div className="avatar">
-                <img src={person} alt="person"/>
+                <img src={person} className='object-fit-cover' alt="person"/>
             </div>
             <div className={'d-none d-lg-block'}>
                 <h5 className='m-0'>{user?.firstname} {user?.lastname}</h5>
@@ -25,9 +26,9 @@ function UserDropDown() {
                 <Dropdown.Menu>
                     <Dropdown.Item href="/profile">Profile</Dropdown.Item>
                     <Dropdown.Item href="/logout">Logout</Dropdown.Item>
-                    {/*<Dropdown.Item href="/login">*/}
-                    {/*    <NavMenu/>*/}
-                    {/*</Dropdown.Item>*/}
+                    <Dropdown.Item>
+                        <NavMenu/>
+                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
         </div>

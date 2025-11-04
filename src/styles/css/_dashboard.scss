@@ -2,6 +2,7 @@
   //width: 100%;
   border-radius: 18px;
   padding: 16px 26px;
+  height: 100%;
 
   .icon {
     border-radius: 16px;
@@ -13,4 +14,15 @@
       height: 24px;
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 10px 16px;
+    p {
+      font-size: 14px;
+    }
+    span {
+      font-size: 12px;
+    }
+  }
 }
+

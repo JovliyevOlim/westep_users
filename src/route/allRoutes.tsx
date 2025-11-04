@@ -2,6 +2,7 @@ import {Navigate} from 'react-router-dom';
 import {lazy} from "react";
 import MainPage from "../pages/MainPage.tsx";
 import Logout from "../components/auth/Logout.tsx";
+import LessonPage from "../pages/LessonPage.tsx";
 
 const HomeOne = lazy(() => import("../components/homes/home"));
 const HomeTwo = lazy(() => import("../components/homes/home-2"));
@@ -20,7 +21,6 @@ const Login = lazy(() => import("../components/auth/login"));
 const Error = lazy(() => import("../components/error"));
 const Users = lazy(() => import("../components/users"));
 const Statistic = lazy(() => import("../components/statistic"));
-const Lessons = lazy(() => import("../components/lessons"));
 const Password = lazy(() => import("../components/auth/password"));
 const ForgotPassword = lazy(() => import("../components/auth/forgot-password"));
 const VerifyCode = lazy(() => import("../components/auth/sms-code"));
@@ -31,7 +31,7 @@ const Register = lazy(() => import("../components/auth/register"));
 const authProtectedRoutes = [
     {path: "/", element: <MainPage/>, title: "Home"},
     {path: "/users", element: <Users/>, title: "Users"},
-    {path: "/lessons", element: <Lessons/>, title: "Lessons"},
+    {path: "/lessons", element: <LessonPage/>, title: "Lessons"},
     {path: "/statistic", element: <Statistic/>, title: "Statistics"},
 
     {path: "/home-1", element: <HomeOne/>},

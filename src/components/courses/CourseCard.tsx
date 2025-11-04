@@ -5,7 +5,7 @@ import Button from "../../ui/Button.tsx";
 function CourseCard({course}: { course: any }) {
     return (
         <>
-            <div key={course.id} className="col-xl-4 col-md-6 col-12 wow fadeIn">
+            <div key={course.id} className="col-lg-6 col-xl-4">
                 <div className="single-course border border-primary">
                     <div className="course-img">
                         <img src={courseImg} alt="course image"/>

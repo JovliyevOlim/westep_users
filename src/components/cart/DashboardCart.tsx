@@ -11,7 +11,7 @@ type DashboardCartProps = {
 export default function DashboardCart({item}: { item: DashboardCartProps }) {
     return (
         <>
-            <div className="col-xl-3 col-lg-4 col-md-6 col-12">
+            <div className="col-xl-3 col-lg-4 col-md-6 col-6 col-sm-6">
                 <div className="dashboard-card border border-primary">
                     <div className="d-flex align-items-center justify-content-between">
                         <div className={'icon'}>

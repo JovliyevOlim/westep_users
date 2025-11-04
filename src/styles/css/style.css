@@ -212,122 +212,18 @@ img {
 
 /* Header */
 
-/* #navigation {
-	position: relative;
-	padding: 20px 20px;
-}
-#navigation::after {
-	position: absolute;
-	content: '';
-	height: 100%;
-	width: 30%;
-	background-image: url(../img/shapes/header.svg);
-	right: 0;
-	top: 0;
-	z-index: -1;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-.site-logo{
-	display: inline-block;
-	position: relative;
-	z-index: 11;
-	padding-right: 12px;
-}
-.course_cat{
-	display: inline-block;
-}
-.cat_list {
-	border: 1px solid #ACB5C5;
-	border-radius: 30px;
-	padding: 8px 26px;
-	font-weight: 600;
-	width: 194px;
-}
-.cat_list li > a{
-	display: block;
-	color: #222;
-}
-.cat_list li > a i {
-	float: right;
-	padding-top: 5px;
-	font-size: 21px;
-	color: #222;
-}
-.cat_list a{
-	color: #222;
-}
-.course_cat ul{
-	list-style-type: none;
-}
-.course_cat ul li{
-	position: relative;
-}
-.cat_list .sub-menu{
-	background: #fff;
-	-webkit-box-shadow: 0 0 10px 3px rgba(0,0,0,.05);
-	box-shadow: 0 0 10px 3px rgba(0,0,0,.05);
-	left: -27px;
-	list-style: outside none none;
-	margin: 0;
-	opacity: 0;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	padding: 20px;
-	position: absolute;
-	text-align: left;
-	top: 120%;
-	-webkit-transition: all 0.5s ease 0s;
-	-o-transition: all 0.5s ease 0s;
-	transition: all 0.5s ease 0s;
-	visibility: hidden;
-	width: 194px;
-	z-index: 999;
-	border-radius: 4px;
-	border: 1px solid #E9EEF4;
-}
-.course_cat ul li li{
-	border-bottom: 1px solid rgba(0,0,0,0.03);
-	padding-bottom: 8px;
-	margin-bottom: 8px;
-}
-.course_cat ul li li a{
-	transition: .5s;
-}
-.course_cat ul li li a:hover,
-.course_cat ul li li a:focus{
-	color: #0D5FF9;
-}
-.course_cat ul li li:last-child{
-	border-bottom: none;
-	padding-bottom: 0px;
-	margin-bottom: 0px;
-}
-.course_cat ul li:hover ul{
-	left: -27px;
-	opacity: 1;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	visibility: visible;
-	top: 110%;
-}
-.course_cat ul li li i{
-	color: #555;
-}
-.header-2{}
-.header-2:after{
-	display: none;
-}
-
-.header-2 .searchcart path{
-	fill: #222;
-} */
-
-
 #navigation {
     padding: 20px 20px;
     height: 100px;
     box-shadow: 0px 1px 2px 0px #0000001A;
 }
 
+@media (max-width: 768px) {
+    #navigation {
+        height: 80px;
+        padding-left: 10px;
+    }
+}
 
 .site-logo {
     display: inline-block;

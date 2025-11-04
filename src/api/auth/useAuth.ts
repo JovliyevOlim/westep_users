@@ -18,7 +18,6 @@ export const useUser = () =>
         queryKey: ["currentUser"],
         queryFn: async () => {
             const token = getItem<string>('accessToken');
-            console.log(token,'token');
             if (!token) throw new Error("No token");
             return await getCurrentUser();
         },

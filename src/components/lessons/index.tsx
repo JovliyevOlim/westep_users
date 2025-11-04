@@ -1,10 +1,11 @@
-import Table from "../common/Table.tsx";
+import LessonBar from "./LessonBar.tsx";
+import LessonActions from "./LessonActions.tsx";
 
 function Index() {
     return (
-        <div>
-            <h2>Lessons</h2>
-            <Table/>
+        <div className='d-flex align-items-top justify-content-between'>
+            <LessonBar/>
+            <LessonActions/>
         </div>
     );
 }

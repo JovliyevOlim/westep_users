@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-table": "^8.21.3",
+    "@vidstack/react": "^1.12.13",
     "axios": "^1.12.2",
     "bootstrap": "^5.3.3",
     "formik": "^2.4.6",

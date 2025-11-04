@@ -1,7 +1,7 @@
 @import "css/variables";
-
+@import '@vidstack/react/player/styles/default/theme.css';
+@import '@vidstack/react/player/styles/default/layouts/video.css';
 @import "swiper/css/bundle";
-@import 'react-modal-video/css/modal-video.css';
 @import "bootstrap/scss/bootstrap";
 
 /* @import "/assets/css/animate.css"; */
@@ -26,6 +26,8 @@
 @import "css/slicknav.css";
 @import "css/dashboard";
 @import "css/course";
+@import "css/lists";
+@import "css/lessons";
 @import "css/jquery-simple-mobilemenu.css";
 
 @import "../assets/fonts/themify-icons.css";
@@ -62,3 +64,7 @@
 //  pointer-events: none;
 //  z-index: 99999;
 //}
+main {
+  overflow-y: scroll;
+  max-height: calc(100vh - 100px);
+}

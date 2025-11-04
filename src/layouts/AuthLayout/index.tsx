@@ -12,6 +12,7 @@ const AuthLayout: React.FC<{ children: ReactNode }> = ({children}) => {
                     {children}
                 </div>
             </div>
+            {/*<div className="reflection"></div>*/}
         </div>
     );
 };

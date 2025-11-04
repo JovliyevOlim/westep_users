@@ -6,7 +6,7 @@ export default function CoursesArea() {
     return (
         <>
             <section className="courses mt-4">
-                <div className="container">
+                <div>
                     <div className="row">
                         <div className="col-12 mb-4 d-flex justify-content-between align-items-center">
                             <h3 className="ccount_result m-0">Darslarim</h3>
