@@ -14,7 +14,13 @@ function HeaderNavMenu() {
 
 
     useEffect(() => {
-        const activeLinkIndex = links.findIndex(item => item.path === location.pathname)
+        const activeLinkIndex = links.findIndex(item => {
+            if (item.path === "/") {
+                return location.pathname === "/";
+            }
+
+            return location.pathname.startsWith(item.path);
+        });
         setActive(activeLinkIndex);
     }, [location.pathname]);
 

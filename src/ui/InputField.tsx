@@ -53,7 +53,7 @@ const InputField = <T extends Record<string, any>>({
                 />
                 {(type === "date" || icon) && (
                     <span
-                        className="position-absolute top-50 end-0 translate-middle-y me-5 text-secondary"
+                        className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary"
                         style={{pointerEvents: "none"}}
                     >
             {icon || <img src={dateIcon} width={24} height={24} alt="date_icon"/>}
@@ -61,7 +61,7 @@ const InputField = <T extends Record<string, any>>({
                 )}
                 {(type === "password" || icon) && (
                     <span
-                        className="position-absolute top-50 end-0 translate-middle-y me-5 text-secondary"
+                        className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary"
                     >
             {type === "password" && changeType === "text" &&
                 <img onClick={() => setChangeType('password')} src={eye} width={24} height={24} alt="date_icon"/>}

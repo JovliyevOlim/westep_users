@@ -32,6 +32,7 @@ const authProtectedRoutes = [
     {path: "/", element: <MainPage/>, title: "Home"},
     {path: "/users", element: <Users/>, title: "Users"},
     {path: "/lessons", element: <LessonPage/>, title: "Lessons"},
+    {path: "/lessons/*", element: <LessonPage/>, title: "Lessons"},
     {path: "/statistic", element: <Statistic/>, title: "Statistics"},
 
     {path: "/home-1", element: <HomeOne/>},

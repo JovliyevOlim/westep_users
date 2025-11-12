@@ -35,7 +35,7 @@ export default function PasswordForm() {
         <>
             <section>
                 <div className="row align-items-center">
-                    <div className="col-lg-12 wow fadeIn">
+                    <div className="col-12">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -44,13 +44,13 @@ export default function PasswordForm() {
                             }}
                         >
                             <p className="login_register_title">Kirish</p>
-                            <div className={'form-group mb-4'}>
+                            <div className={'form-group'}>
                                 <InputField name={'password'} formik={formik} placeholder={'Parol'}
                                             type={'password'}/>
 
                             </div>
-                            <div className="form-group col-lg-12">
-                                <Button isPending={isPending} type="submit" height={'54px'} children={'Kirish'}/>
+                            <div className="form-group col-lg-12 mt-4">
+                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} type="submit" children={'Kirish'}/>
                             </div>
                             <p className={'mt-2 text-center'}><Link to="/forgot-password">Parolni unutdingizmi?</Link></p>
                         </form>

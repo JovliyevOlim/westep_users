@@ -56,7 +56,7 @@ export default function NewPassword({mutate, isPending}: Props) {
         <>
             <section>
                 <div className="row align-items-center">
-                    <div className="col-12 wow fadeIn">
+                    <div className="col-12">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -70,7 +70,7 @@ export default function NewPassword({mutate, isPending}: Props) {
                             <InputField name="confirmPassword" label="" placeholder={'Parol tasdig’i'} type="password"
                                         key='password' formik={formik}/>
                             <div className="form-group col-lg-12">
-                                <Button isPending={isPending} children={'Davom etish'}/>
+                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} children={'Davom etish'}/>
                             </div>
                         </form>
 

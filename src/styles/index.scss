@@ -20,10 +20,10 @@
 @import "css/boxicons.min.css";
 @import "css/sidebar.css";
 @import "css/input.css";
-@import "css/auth.css";
 @import "css/button.css";
 @import "css/slick-theme.css";
 @import "css/slicknav.css";
+@import "css/auth";
 @import "css/dashboard";
 @import "css/course";
 @import "css/lists";
@@ -47,23 +47,23 @@
 }
 
 
-//
-//.debug-container {
-//  display: flex;
-//  justify-content: center;
-//}
-//
-//.debug-container::after {
-//  content: "";
-//  position: fixed;
-//  inset: 0;
-//  margin: 0 auto;
-//  width: 1440px;
-//  border-left: 2px dashed red;
-//  border-right: 2px dashed red;
-//  pointer-events: none;
-//  z-index: 99999;
-//}
+
+.debug-container {
+  display: flex;
+  justify-content: center;
+}
+
+.debug-container::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  margin: 0 auto;
+  width: 1440px;
+  border-left: 2px dashed red;
+  border-right: 2px dashed red;
+  pointer-events: none;
+  z-index: 99999;
+}
 main {
   overflow-y: scroll;
   max-height: calc(100vh - 100px);

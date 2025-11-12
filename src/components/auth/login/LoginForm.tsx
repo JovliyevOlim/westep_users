@@ -28,7 +28,7 @@ export default function LoginForm() {
         <>
             <section>
                 <div className="row align-items-center">
-                    <div className="col-lg-12 col-xs-12 wow fadeIn">
+                    <div className="col-12">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -38,8 +38,8 @@ export default function LoginForm() {
                         >
                             <p className="login_register_title">Bilimingizni yangi bosqichga olib chiqing!</p>
                             <PhoneNumberInput name={'phone'} formik={formik} className={''}/>
-                            <div className="form-group col-lg-12 mt-5">
-                                <Button isPending={isPending} children={'Davom etish'}/>
+                            <div className="form-group col-lg-12 mt-4 mt-md-5">
+                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} children={'Davom etish'}/>
                             </div>
                         </form>
                     </div>

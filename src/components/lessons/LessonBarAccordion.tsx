@@ -115,7 +115,7 @@ function LessonBarAccordion() {
                                             <div>
                                                 <TickCircle/>
                                             </div>
-                                            <div>
+                                            <div className='d-sm-flex d-md-block justify-content-between align-items-center gap-2 w-100'>
                                                 <p>{item.title}</p>
                                                 <p>{item.duration}</p>
                                             </div>

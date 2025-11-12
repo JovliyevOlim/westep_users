@@ -82,7 +82,7 @@ export default function VerifyForm() {
         <>
             <section>
                 <div className="row align-items-center">
-                    <div className="col-12 wow fadeIn">
+                    <div className="col-12">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -90,10 +90,11 @@ export default function VerifyForm() {
                                 return false;
                             }}
                         >
-                            <h3 className={'text-center'}>Raqamni tasdiqlash</h3>
-                            <p className='login_register_title'>Parol 99820 008 08 08 raqamga yuborildi</p>
+                            <h1 className={'text-center login_register_h1'}>Raqamni tasdiqlash</h1>
+                            <p className='login_register_title'>Parol <strong className={'fw-bolder'}>99820 008 08
+                                08</strong> raqamga yuborildi</p>
                             <div className="row justify-content-center">
-                                <div className='col-10 d-flex justify-content-between'>
+                                <div className='col-12 d-flex justify-content-between'>
                                     {otp.map((digit, index) => (
                                         <input
                                             type="number"
@@ -120,24 +121,17 @@ export default function VerifyForm() {
                                 </div>
                             </div>
                             <div className="row mt-3 mb-2 justify-content-center">
-                                <div className={'col-10 d-flex justify-content-between'}>
-                                    {remainingTime > 0 ? (
-                                        <p className={'m-0 text-secondary'}>{formatTime(remainingTime)}</p>
-                                    ) : (
+                                <div className={'col-12 d-flex justify-content-between'}>
+                                        <p className={'m-0 fs-5 text-secondary'}>{formatTime(remainingTime)}</p>
                                         <p onClick={() => {
                                             // dispatch(refreshVerifyCode())
-                                        }} className="text-primary cursor-pointer">Qaytadan yuborish</p>
-                                    )}
+                                        }} className="fs-5 text-secondary cursor-pointer">Qaytadan yuborish</p>
                                 </div>
                             </div>
-                            <div className="row mt-5 justify-content-center">
-                                <div className="col-10 d-flex justify-content-between">
-                                    <div className="form-group w-100">
-                                        <Button isPending={isPending} children={'Davom etish'}/>
-                                    </div>
-                                </div>
+                            <div className="form-group mt-4">
+                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
+                                        children={'Davom etish'}/>
                             </div>
-
                         </form>
                     </div>
                 </div>

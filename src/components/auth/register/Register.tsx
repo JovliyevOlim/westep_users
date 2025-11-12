@@ -91,15 +91,15 @@ export default function Register() {
         <>
             <section>
                 <div className="row d-flex align-items-center justify-content-between">
-                    <div className="col-lg col-xs-12 wow fadeIn">
+                    <div className="col-12">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 formik.handleSubmit();
                                 return false;
                             }}>
-                            <h3 className={'text-center mb-0'}>Ro'yxatdan o'tish</h3>
-                            <p className="login_register_title">Bilimingizni yangi bosqichga olib chiqing!</p>
+                            <h1 className={'login_register_h1 text-center mb-0'}>Ro'yxatdan o'tish</h1>
+                            <p className="login_register_title">Yangi bilimlarga marhamat!</p>
                             <InputField placeholder={'Ism'} formik={formik}
                                         type='text'
                                         name={"firstName"}
@@ -153,8 +153,8 @@ export default function Register() {
                                     <PhoneNumberInput name={"parentNumber"} formik={formik} className={''}/>
                                 </>
                             }
-                            <div className="form-group col-lg-12">
-                                <Button isPending={isPending} children={'Davom etish'}/>
+                            <div className="form-group col-lg-12 mt-4">
+                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} children={'Davom etish'}/>
                             </div>
                             <p className={'text-center text-dark mt-1'}>Akkountingiz bormi? <Link
                                 className={"text-primary"} to="/login">Login</Link></p>

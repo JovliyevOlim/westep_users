@@ -4,10 +4,7 @@
 
 body {
     color: #555;
-    font-family: 'Urbanist', sans-serif;
-    /*font-size: 17px;*/
-    /*line-height: 1.9;*/
-    /*font-weight: 400;*/
+    font-family: 'Urbanist', sans-serif !important;
     overflow-x: hidden;
     position: relative;
 }
@@ -3331,10 +3328,11 @@ svg#play_icon:hover #triangle {
         border-radius: 100px;
         color: #000000;
         padding: 8px 16px;
-        font-size: 16px;
-        height: 52px;
+        height: 48px;
         outline: 0;
         width: 100%;
+        font-weight: 400;
+        font-size: 18px;
     }
 
     .form-control-input option {
@@ -4093,27 +4091,6 @@ li.comment {
 * Login Register
 * ----------------------------------------------------------------------------------------
 */
-
-.login,
-.register {
-    background: transparent;
-    -webkit-box-shadow: 0px 0 30px rgba(1, 41, 112, 0.08);
-    box-shadow: 0px 0 30px rgba(1, 41, 112, 0.08);
-    overflow: hidden;
-    padding: 30px;
-    border: 1px solid #f1f1f1;
-    border-radius: 8px;
-}
-
-.login_register_title {
-    margin-bottom: 30px;
-    text-align: center;
-    text-transform: capitalize;
-    color: #002935;
-    margin-top: 15px;
-    font-size: 18px;
-    line-height: 100%;
-}
 
 
 .login input:focus {
