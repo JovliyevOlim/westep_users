@@ -1,31 +1,15 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {useLocation} from "react-router-dom";
 import InputField from "../InputField.tsx";
 import Button from "../Button.tsx";
+import {useOtpPhoneNumber} from "../../api/auth/useAuth.ts";
 
 
 
-interface mutateProps {
-    firstname: string,
-    lastname: string,
-    birthDate: string,
-    gender: string,
-    password: string,
-    phone:string
-}
+export default function NewPassword() {
 
-interface Props {
-    isPending: boolean;
-    mutate: (variables:mutateProps) => void;
-}
-
-export default function NewPassword({mutate, isPending}: Props) {
-
-    const location = useLocation();
-    const {text, firstName, lastName, phoneNumber, birthday,gender} = location.state
-
-    console.log("phone", location.state);
+    const form = JSON.parse(sessionStorage.getItem('form') as string);
+    const {mutate, isPending} = useOtpPhoneNumber()
 
     const formik = useFormik({
         initialValues: {
@@ -41,14 +25,10 @@ export default function NewPassword({mutate, isPending}: Props) {
                 .oneOf([Yup.ref("password")], "Parollar bir xil bo‘lishi kerak!"),
         }),
         onSubmit: (values) => {
-            mutate({
-                firstname: firstName, lastname: lastName,
-                gender,
-                birthDate: birthday, phone:
-                phoneNumber, password:
-                values.password
-            })
-            ;
+            sessionStorage.setItem('form', JSON.stringify({
+                ...form,password: values.password,
+            }));
+            mutate({phoneNumber: form.phoneNumber, type: 'REGISTER'})
         },
     });
 
@@ -64,13 +44,14 @@ export default function NewPassword({mutate, isPending}: Props) {
                                 return false;
                             }}
                         >
-                            <h4 className="login_register_title">{text}</h4>
-                            <InputField name="password"  label="" placeholder={'Yangi parol'} type="password"
+                            <h4 className="login_register_title">{form?.text}</h4>
+                            <InputField name="password" label="" placeholder={'Yangi parol'} type="password"
                                         key='passwords' formik={formik}/>
                             <InputField name="confirmPassword" label="" placeholder={'Parol tasdig’i'} type="password"
                                         key='password' formik={formik}/>
                             <div className="form-group col-lg-12">
-                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} children={'Davom etish'}/>
+                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
+                                        children={'Davom etish'}/>
                             </div>
                         </form>
 

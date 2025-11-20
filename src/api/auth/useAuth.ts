@@ -85,8 +85,8 @@ export const useOtpPhoneNumber = () => {
     const navigate = useNavigate();
     return useMutation({
         mutationFn: sendOtpCode,
-        onSuccess: (_, body: { phoneNumber: string, url: string }) => {
-            navigate("/verify-code", {state: {phoneNumber: body.phoneNumber, url: body.url}});
+        onSuccess: () => {
+            navigate("/verify-code");
         },
         onError: (error) => {
             return error
@@ -95,11 +95,19 @@ export const useOtpPhoneNumber = () => {
 };
 
 export const useVerifyCode = () => {
-    const navigate = useNavigate();
+    const {mutate} = useRegister();
     return useMutation({
         mutationFn: verifyCode,
-        onSuccess: (_, body: { phoneNumber: string, otp: string, url: string }) => {
-            navigate(body.url, {state: {phoneNumber: body.phoneNumber}});
+        onSuccess: () => {
+            const form = JSON.parse(sessionStorage.getItem("form") as string);
+            mutate({
+                birthDate:form.birthDate,
+                firstname:form.firstName,
+                lastname:form.lastName,
+                password:form.password,
+                gender:form.gender,
+                phone:form.phoneNumber,
+            })
         },
         onError: (error) => {
             return error
@@ -112,8 +120,7 @@ export const useCreateNewPassword = () => {
     return useMutation({
         mutationFn: createNewPassword,
         onSuccess: () => {
-            console.log('createNewPassword');
-            navigate("/login");
+            navigate("/verify-code");
         },
         onError: (error) => {
             return error

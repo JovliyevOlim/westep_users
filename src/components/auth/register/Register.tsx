@@ -58,7 +58,12 @@ export default function Register() {
         onSubmit: (values) => {
             setIsPending(true);
             setTimeout(() => {
-                navigate('/create-password', {state: {...values, phoneNumber: phoneNumber, text: 'Parol yaratish'}})
+                navigate('/create-password')
+                sessionStorage.setItem('form', JSON.stringify({
+                    ...values,
+                    phoneNumber: phoneNumber,
+                    text: 'Parol yaratish'
+                }));
                 setIsPending(false)
             }, 1000)
         },
@@ -83,8 +88,6 @@ export default function Register() {
             setIsYoung(isOlderThan20(formik.values.birthday));
         }
     }, [formik.values.birthday]);
-
-    console.log(formik.values)
 
 
     return (
@@ -154,7 +157,8 @@ export default function Register() {
                                 </>
                             }
                             <div className="form-group col-lg-12 mt-4">
-                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} children={'Davom etish'}/>
+                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
+                                        children={'Davom etish'}/>
                             </div>
                             <p className={'text-center text-dark mt-1'}>Akkountingiz bormi? <Link
                                 className={"text-primary"} to="/login">Login</Link></p>

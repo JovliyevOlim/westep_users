@@ -62,22 +62,29 @@ export const checkPhoneNumber = async (body: { phoneNumber: string }) => {
     }
 };
 
-export const sendOtpCode = async (body: { phoneNumber: string, url: string }) => {
-    // const {data} = await apiClient.post("/auth/login", body);
-    await new Promise((r) => setTimeout(r, 800)); // test uchun delay
-    if (body.phoneNumber === "+998901248664") {
-        return body.phoneNumber; // success
-    } else {
-        throw new Error("Telefon raqami topilmadi!");
+export const sendOtpCode = async (body: { phoneNumber: string, type: string }) => {
+    try {
+        await apiClient.post("/sms/send", {
+            phone: body.phoneNumber,
+            type: body.type,
+        });
+    } catch (error) {
+        const err = error as AxiosError<{ message: string }>;
+        const message = err.response?.data?.message;
+        throw new Error(message);
     }
 };
-export const verifyCode = async (body: { phoneNumber: string, otp: string, url: string }) => {
-    // const {data} = await apiClient.post("/auth/login", body);
-    await new Promise((r) => setTimeout(r, 800)); // test uchun delay
-    if (body.phoneNumber === "+998901248664" && body.otp === "123456") {
-        return user
-    } else {
-        throw new Error("Telefon raqami topilmadi!");
+export const verifyCode = async (body: { phoneNumber: string, code: string, type: string }) => {
+    try {
+        await apiClient.post("/sms/verify", {
+            phone: body.phoneNumber,
+            code: body.code,
+            type: body.type,
+        });
+    } catch (error) {
+        const err = error as AxiosError<{ message: string }>;
+        const message = err.response?.data?.message;
+        throw new Error(message);
     }
 };
 export const createNewPassword = async (body: { phoneNumber: string, password: string }) => {

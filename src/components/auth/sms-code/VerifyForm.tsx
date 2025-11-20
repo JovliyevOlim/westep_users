@@ -1,18 +1,23 @@
-import {useVerifyCode} from "../../../api/auth/useAuth.ts";
+import {useOtpPhoneNumber, useVerifyCode} from "../../../api/auth/useAuth.ts";
 import 'react-phone-number-input/style.css';
-import {useFormik} from "formik";
-import * as Yup from "yup";
 import Button from "../../../ui/Button.tsx";
 import {useEffect, useState} from "react";
 import moment from "moment";
+import {formatUzPhone} from "../../../utils/utils.ts";
 
 
 export default function VerifyForm() {
+    const form = JSON.parse(sessionStorage.getItem('form') as string)
 
-    // const {phoneNumber, url} = location.state;
-    const {isPending} = useVerifyCode();
+    const {mutate} = useOtpPhoneNumber()
+    const {isPending, mutate: verifyCode, isError} = useVerifyCode();
     const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
     const [remainingTime, setRemainingTime] = useState(3 * 60);
+    const [error, setError] = useState<boolean>(isError);
+
+    useEffect(() => {
+        setError(isError);
+    }, [isError]);
 
 
     const getInputElement = (index: number): HTMLInputElement | null => {
@@ -21,6 +26,7 @@ export default function VerifyForm() {
 
     // KeyUp hodisasi
     const moveToNext = (index: number, value: string) => {
+        setError(false);
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
@@ -43,19 +49,6 @@ export default function VerifyForm() {
         }
     };
 
-    const formik = useFormik({
-        initialValues: {
-            otp: ''
-        },
-        validationSchema: Yup.object().shape({
-            otp: Yup.string()
-                .required("Parolni kiriting!")
-                .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak!"),
-        }),
-        onSubmit: async () => {
-            // await mutate({phoneNumber: phoneNumber, otp: values.otp, url: url})
-        },
-    });
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -69,7 +62,7 @@ export default function VerifyForm() {
         }, 1000);
 
         return () => clearInterval(interval); // Komponent unmounted bo'lsa, intervalni to'xtatish
-    }, []);
+    }, [remainingTime]);
 
     const formatTime = (seconds: number) => {
         const duration = moment.duration(seconds, "seconds");
@@ -78,27 +71,23 @@ export default function VerifyForm() {
         return `${minutes}:${secs.toString().padStart(2, "0")}`; // 2 xonali ko'rinish
     };
 
+
+
     return (
         <>
             <section>
                 <div className="row align-items-center">
                     <div className="col-12">
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                formik.handleSubmit();
-                                return false;
-                            }}
-                        >
                             <h1 className={'text-center login_register_h1'}>Raqamni tasdiqlash</h1>
-                            <p className='login_register_title'>Parol <strong className={'fw-bolder'}>99820 008 08
-                                08</strong> raqamga yuborildi</p>
+                            <p className='login_register_title'>Parol <strong
+                                className={'fw-bolder'}> {formatUzPhone(form?.phoneNumber)}</strong> raqamga yuborildi
+                            </p>
                             <div className="row justify-content-center">
                                 <div className='col-12 d-flex justify-content-between'>
                                     {otp.map((digit, index) => (
                                         <input
                                             type="number"
-                                            className={'otp-input'}
+                                            className={`otp-input ${error ? 'border-danger text-danger' : ''}`}
                                             maxLength={1}
                                             id={`digit${index}-input`}
                                             value={digit}
@@ -122,17 +111,31 @@ export default function VerifyForm() {
                             </div>
                             <div className="row mt-3 mb-2 justify-content-center">
                                 <div className={'col-12 d-flex justify-content-between'}>
-                                        <p className={'m-0 fs-5 text-secondary'}>{formatTime(remainingTime)}</p>
+                                    <p className={'m-0 fs-5 text-secondary'}>{formatTime(remainingTime)}</p>
+                                    {
+                                        remainingTime === 0
+                                        &&
                                         <p onClick={() => {
-                                            // dispatch(refreshVerifyCode())
+                                            mutate({
+                                                phoneNumber: form.phoneNumber,
+                                                type: "REGISTER"
+                                            })
+                                            setRemainingTime(180)
                                         }} className="fs-5 text-secondary cursor-pointer">Qaytadan yuborish</p>
+                                    }
+
                                 </div>
                             </div>
                             <div className="form-group mt-4">
-                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
+                                <Button onClick={() => {
+                                    verifyCode({
+                                        phoneNumber: form.phoneNumber,
+                                        type: "REGISTER",
+                                        code: otp.join(''),
+                                    })
+                                }} type={'button'} height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
                                         children={'Davom etish'}/>
                             </div>
-                        </form>
                     </div>
                 </div>
             </section>

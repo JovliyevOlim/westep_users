@@ -30,7 +30,6 @@ const InputField = <T extends Record<string, any>>({
 
     const [changeType, setChangeType] = useState<string>(type);
 
-    console.log(changeType);
     return (
         <div className={`${className} form-group mb-2`}>
             {label && (
