@@ -49,6 +49,7 @@ export const useRegister = () => {
             const user = await getCurrentUser();
             qc.setQueryData(["currentUser"], user);
             navigate("/");
+            sessionStorage.removeItem("form");
         },
         onError: (error) => {
             alert(error.message);
