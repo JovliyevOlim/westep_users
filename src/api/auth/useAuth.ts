@@ -33,6 +33,7 @@ export const useLogin = () => {
             const user = await getCurrentUser();
             qc.setQueryData(["currentUser"], user);
             navigate("/");
+            sessionStorage.removeItem("form");
         },
         onError: (error) => {
             console.log(error);
