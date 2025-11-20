@@ -20,6 +20,7 @@ export default function LoginForm() {
                 .length(12, "Telefon raqami xato kiritildi!"),
         }),
         onSubmit: async (values) => {
+            sessionStorage.setItem("form", JSON.stringify({phoneNumber: values.phone}));
             await mutateAsync({phoneNumber: values.phone});
         },
     });

@@ -3,7 +3,7 @@ import {useRequireState} from "../../../hooks/UseRequireState.ts";
 
 
 export default function Login() {
-     useRequireState('phoneNumber')
+    useRequireState('phoneNumber');
     return (
         <>
             <VerifyForm/>
