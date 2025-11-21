@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import Button from "../../../ui/Button.tsx";
 import InputField from "../../../ui/InputField.tsx";
 import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
+import AuthDatePicker from "../../../ui/AuthDatePicker.tsx";
 
 
 export default function Register() {
@@ -16,7 +17,6 @@ export default function Register() {
     const [isYoung, setIsYoung] = useState<boolean>(false);
     const [isPending, setIsPending] = useState<boolean>(false);
 
-    console.log(phoneNumber)
 
     const formik = useFormik({
         initialValues: {
@@ -24,21 +24,13 @@ export default function Register() {
             lastName: '',
             birthday: '',
             gender: 'MALE',
-            parentNumber: '',
-            password: '',
-            confirmPassword: '',
+            parentPhone: '',
         },
         validationSchema: Yup.object().shape({
             firstName: Yup.string().required('Ism kiriting!'),
             lastName: Yup.string().required('Familiyani kiriting!'),
             birthday: Yup.string().required("Tu'gilgan sanani tanlang!"),
-            // password: Yup.string()
-            //     .required("Parolni kiriting!")
-            //     .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak!"),
-            // confirmPassword: Yup.string()
-            //     .required("Parolni kiriting!")
-            //     .oneOf([Yup.ref("password")], "Parollar bir xil bo‘lishi kerak!"),
-            parentNumber: Yup.string().when([], {
+            parentPhone: Yup.string().when([], {
                 is: () => !isYoung,
                 then: (schema) =>
                     schema
@@ -89,7 +81,7 @@ export default function Register() {
         }
     }, [formik.values.birthday]);
 
-
+    console.log(formik.values);
     return (
         <>
             <section>
@@ -111,12 +103,18 @@ export default function Register() {
                                         type='text'
                                         name={"lastName"}
                             />
-                            <InputField placeholder={"Tug'ilgan kun"} formik={formik}
-                                        type='date'
-                                        name={"birthday"}
-                            />
+                            <AuthDatePicker id={'birthday'} placeholder={"Tug'ilgan kun"}  onChange={(e: Date[]) => {
+                                const date = new Date(e[0]);
+                                const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+                                    .toISOString()
+                                    .split("T")[0];
+                                formik.setFieldValue('birthday', localDate);
+                            }}/>
+                            {formik.errors.birthday && formik.touched.birthday ? (
+                                <p className={'text-start d-flex text-danger m-0 ps-4'}>{formik.errors.birthday as string}</p>
+                            ) : null}
                             {
-                                !isYoung &&
+                                !isYoung && formik.values.birthday &&
                                 <>
                                     <div className="form-group mb-2 d-flex align-items-center justify-content-between">
                                         <label className="d-flex align-items-center gap-2 col-5">
@@ -153,7 +151,7 @@ export default function Register() {
                                             </div>
                                         </label>
                                     </div>
-                                    <PhoneNumberInput name={"parentNumber"} formik={formik} className={''}/>
+                                    <PhoneNumberInput name={"parentPhone"} formik={formik} className={''}/>
                                 </>
                             }
                             <div className="form-group col-lg-12 mt-4">
