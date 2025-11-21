@@ -11,7 +11,7 @@ function Alert({variant, message, title}: { variant: string, message?: string, t
                 {/*<small>11 mins ago</small>*/}
             </Toast.Header>
             {
-                message && <Toast.Body className={variant === 'Dark' && 'text-white'}>{message}</Toast.Body>
+                message && <Toast.Body >{message}</Toast.Body>
             }
         </Toast>
     );
