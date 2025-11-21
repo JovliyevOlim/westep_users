@@ -1,5 +1,5 @@
-import NewPassword from "../../../ui/components/NewPassordUi.tsx";
 import {useRequireState} from "../../../hooks/UseRequireState.ts";
+import NewPassword from "./NewPassword.tsx";
 
 function Index() {
 

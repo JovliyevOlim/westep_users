@@ -1,8 +1,7 @@
-// src/hooks/useAuth.ts
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {
     checkPhoneNumber,
-    createNewPassword,
+    resetPassword,
     getCurrentUser,
     login,
     logout,
@@ -12,6 +11,7 @@ import {
 } from "./authApi.ts";
 import {useNavigate} from "react-router-dom";
 import {getItem} from "../../utils/utils.ts";
+import {useToast} from "../../hooks/useToast.tsx";
 
 export const useUser = () =>
     useQuery({
@@ -27,6 +27,7 @@ export const useUser = () =>
 export const useLogin = () => {
     const navigate = useNavigate();
     const qc = useQueryClient();
+    const toast = useToast();
     return useMutation({
         mutationFn: login,
         onSuccess: async () => {
@@ -37,6 +38,7 @@ export const useLogin = () => {
         },
         onError: (error) => {
             console.log(error);
+            toast.error(error.message);
         },
     });
 };
@@ -83,7 +85,8 @@ export const useCheckPhoneNumber = () => {
     }
 ;
 
-export const useOtpPhoneNumber = () => {
+export const useOtpPhoneNumber = (type:string) => {
+    sessionStorage.setItem("otpType", JSON.stringify(type));
     const navigate = useNavigate();
     return useMutation({
         mutationFn: sendOtpCode,
@@ -98,18 +101,28 @@ export const useOtpPhoneNumber = () => {
 
 export const useVerifyCode = () => {
     const {mutate} = useRegister();
+    const {mutate:resetPassword} = useResetPassword();
+    const otpType = JSON.parse(sessionStorage.getItem('otpType') as string);
     return useMutation({
         mutationFn: verifyCode,
         onSuccess: () => {
             const form = JSON.parse(sessionStorage.getItem("form") as string);
-            mutate({
-                birthDate:form.birthDate,
-                firstname:form.firstName,
-                lastname:form.lastName,
-                password:form.password,
-                gender:form.gender,
-                phone:form.phoneNumber,
-            })
+            if (otpType === "REGISTER") {
+                mutate({
+                    birthDate:form.birthDate,
+                    firstname:form.firstName,
+                    lastname:form.lastName,
+                    password:form.password,
+                    gender:form.gender,
+                    phone:form.phoneNumber,
+                })
+            }
+            else{
+                resetPassword({
+                    password:form.password,
+                    phoneNumber:form.phoneNumber,
+                });
+            }
         },
         onError: (error) => {
             return error
@@ -117,12 +130,12 @@ export const useVerifyCode = () => {
     });
 };
 
-export const useCreateNewPassword = () => {
+export const useResetPassword = () => {
     const navigate = useNavigate();
     return useMutation({
-        mutationFn: createNewPassword,
+        mutationFn: resetPassword,
         onSuccess: () => {
-            navigate("/verify-code");
+            navigate("/login");
         },
         onError: (error) => {
             return error

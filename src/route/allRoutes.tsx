@@ -24,7 +24,7 @@ const Statistic = lazy(() => import("../components/statistic"));
 const Password = lazy(() => import("../components/auth/password"));
 const ForgotPassword = lazy(() => import("../components/auth/forgot-password"));
 const VerifyCode = lazy(() => import("../components/auth/sms-code"));
-const NewPassword = lazy(() => import("../components/auth/new-password"));
+const ResetPassword = lazy(() => import("../components/auth/reset-password"));
 const CreatePassword = lazy(() => import("../components/auth/createPassword"));
 const Register = lazy(() => import("../components/auth/register"));
 
@@ -63,7 +63,7 @@ const publicRoutes = [
     {path: "/password", element: <Password/>},
     {path: "/forgot-password", element: <ForgotPassword/>},
     {path: "/verify-code", element: <VerifyCode/>},
-    {path: "/new-password", element: <NewPassword/>},
+    {path: "/reset-password", element: <ResetPassword/>},
     {path: "/create-password", element: <CreatePassword/>},
     {path: "/logout", element: <Logout/>},
 ];

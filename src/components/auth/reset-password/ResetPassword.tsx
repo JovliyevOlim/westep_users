@@ -1,4 +1,4 @@
-import {useCreateNewPassword} from "../../../api/auth/useAuth.ts";
+import {useOtpPhoneNumber} from "../../../api/auth/useAuth.ts";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useLocation} from "react-router-dom";
@@ -6,9 +6,11 @@ import Button from "../../../ui/Button.tsx";
 import InputField from "../../../ui/InputField.tsx";
 
 
-export default function NewPassword() {
+export default function ResetPassword() {
 
-    const {mutate, isPending} = useCreateNewPassword();
+    const {mutate, isPending} = useOtpPhoneNumber('RESET_PASSWORD')
+    const form = JSON.parse(sessionStorage.getItem('form') as string);
+
     const location = useLocation();
     const phone = location.state?.phoneNumber;
 
@@ -27,7 +29,10 @@ export default function NewPassword() {
                 .oneOf([Yup.ref("password")], "Parollar bir xil bo‘lishi kerak!"),
         }),
         onSubmit: async (values) => {
-            await mutate({phoneNumber: phone, password: values.password});
+            sessionStorage.setItem('form', JSON.stringify({
+                ...form,password: values.password,
+            }));
+            mutate({phoneNumber: form.phoneNumber, type: 'RESET_PASSWORD'});
         },
     });
 

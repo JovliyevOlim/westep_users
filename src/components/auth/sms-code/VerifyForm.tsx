@@ -8,8 +8,8 @@ import {formatUzPhone} from "../../../utils/utils.ts";
 
 export default function VerifyForm() {
     const form = JSON.parse(sessionStorage.getItem('form') as string)
-
-    const {mutate} = useOtpPhoneNumber()
+    const otpType = JSON.parse(sessionStorage.getItem('otpType') as string);
+    const {mutate} = useOtpPhoneNumber(otpType)
     const {isPending, mutate: verifyCode, isError} = useVerifyCode();
     const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
     const [remainingTime, setRemainingTime] = useState(3 * 60);
@@ -118,7 +118,7 @@ export default function VerifyForm() {
                                         <p onClick={() => {
                                             mutate({
                                                 phoneNumber: form.phoneNumber,
-                                                type: "REGISTER"
+                                                type: otpType
                                             })
                                             setRemainingTime(180)
                                         }} className="fs-5 text-secondary cursor-pointer">Qaytadan yuborish</p>
@@ -130,7 +130,7 @@ export default function VerifyForm() {
                                 <Button onClick={() => {
                                     verifyCode({
                                         phoneNumber: form.phoneNumber,
-                                        type: "REGISTER",
+                                        type: otpType,
                                         code: otp.join(''),
                                     })
                                 }} type={'button'} height={{desktop: '54px', mobile: '48px'}} isPending={isPending}

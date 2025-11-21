@@ -2,11 +2,13 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
 import Button from "../../../ui/Button.tsx";
+import {useNavigate} from "react-router-dom";
 
 
 export default function ForgotPassword() {
 
 
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -15,9 +17,11 @@ export default function ForgotPassword() {
         validationSchema: Yup.object().shape({
             phone: Yup.string()
                 .required("Telefon raqami xato kiritildi!")
-                .length(13, "Telefon raqami xato kiritildi!"),
+                .length(12, "Telefon raqami xato kiritildi!"),
         }),
-        onSubmit: async () => {
+        onSubmit: async (values) => {
+            sessionStorage.setItem("form", JSON.stringify({phoneNumber: values.phone}));
+            navigate("/reset-password");
         },
     });
 

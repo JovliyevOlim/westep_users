@@ -1,15 +1,14 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import InputField from "../InputField.tsx";
-import Button from "../Button.tsx";
-import {useOtpPhoneNumber} from "../../api/auth/useAuth.ts";
-
+import {useOtpPhoneNumber} from "../../../api/auth/useAuth.ts";
+import InputField from "../../../ui/InputField.tsx";
+import Button from "../../../ui/Button.tsx";
 
 
 export default function NewPassword() {
 
     const form = JSON.parse(sessionStorage.getItem('form') as string);
-    const {mutate, isPending} = useOtpPhoneNumber()
+    const {mutate, isPending} = useOtpPhoneNumber('REGISTER')
 
     const formik = useFormik({
         initialValues: {
