@@ -21,6 +21,9 @@ export default function PasswordForm() {
         validationSchema: Yup.object().shape({
             password: Yup.string()
                 .required("Parolni kiriting!")
+                .matches(/[A-Z]/, "Kamida bitta katta harf bo‘lishi kerak")
+                .matches(/[a-z]/, "Kamida bitta kichik harf bo‘lishi kerak")
+                .matches(/\d/, "Kamida bitta raqam bo‘lishi kerak")
                 .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak!"),
         }),
         onSubmit: async (values) => {

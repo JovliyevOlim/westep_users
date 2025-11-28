@@ -25,6 +25,8 @@ export default function AuthDatePicker({
                                            className="",
                                        }: PropsType) {
     useEffect(() => {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
         const flatPickr = flatpickr(`#${id}`, {
             mode: mode || "single",
             static: false,
@@ -32,6 +34,9 @@ export default function AuthDatePicker({
             dateFormat: "Y-m-d",
             defaultDate,
             onChange,
+            disableMobile:true,
+            allowInput: !isMobile, // Mobilda faqat kalendar ochilsin
+            clickOpens: true,
         });
 
         return () => {
@@ -48,12 +53,13 @@ export default function AuthDatePicker({
             <div className="position-relative">
                 <input
                     id={id}
+                    type={'text'}
                     placeholder={placeholder}
-                    className="form-control-input rounded-pill"
+                    className="form-control-input"
+
                 />
 
-                <span
-                    className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary">
+                <span className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary">
           <img src={dateIcon} alt={label}/>
         </span>
             </div>

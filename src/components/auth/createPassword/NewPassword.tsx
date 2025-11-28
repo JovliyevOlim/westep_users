@@ -18,7 +18,10 @@ export default function NewPassword() {
         validationSchema: Yup.object().shape({
             password: Yup.string()
                 .required("Parolni kiriting!")
-                .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak!"),
+                .matches(/[A-Z]/, "Kamida bitta katta harf bo‘lishi kerak")
+                .matches(/[a-z]/, "Kamida bitta kichik harf bo‘lishi kerak")
+                .matches(/\d/, "Kamida bitta raqam bo‘lishi kerak")
+                .min(6, "Parol kamida 6 ta belgidan iborat bo‘lishi kerak"),
             confirmPassword: Yup.string()
                 .required("Parolni kiriting!")
                 .oneOf([Yup.ref("password")], "Parollar bir xil bo‘lishi kerak!"),
