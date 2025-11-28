@@ -3310,6 +3310,11 @@ svg#play_icon:hover #triangle {
     width: 100%;
 }
 
+input[type="password"]:not(:placeholder-shown) {
+    font-size:25px !important;
+    font-weight: 800;
+}
+
 .form-control-input option {
     font-weight: 400;
 }
