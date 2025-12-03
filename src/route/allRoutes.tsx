@@ -3,6 +3,7 @@ import {lazy} from "react";
 import MainPage from "../pages/MainPage.tsx";
 import Logout from "../components/auth/Logout.tsx";
 import LessonPage from "../pages/LessonPage.tsx";
+import Success from "../components/auth/Success.tsx";
 
 const HomeOne = lazy(() => import("../components/homes/home"));
 const HomeTwo = lazy(() => import("../components/homes/home-2"));
@@ -65,6 +66,7 @@ const publicRoutes = [
     {path: "/verify-code", element: <VerifyCode/>},
     {path: "/reset-password", element: <ResetPassword/>},
     {path: "/create-password", element: <CreatePassword/>},
+    {path: "/success", element: <Success/>},
     {path: "/logout", element: <Logout/>},
 ];
 

@@ -12,6 +12,7 @@ type Props = {
     className?: string;
     height?: ResponsiveHeight;
     onClick?: () => void;
+    disabled?: boolean;
 };
 
 function Index({
@@ -22,6 +23,7 @@ function Index({
                    className,
                    height = "54px",
                    onClick,
+                   disabled,
                }: Props) {
 
 
@@ -33,11 +35,11 @@ function Index({
     return (
         <Button
             style={{height: getHeight()}}
-            variant={variant}
+            variant={disabled ? 'secondary' : variant}
             type={type}
             onClick={onClick}
-            className={`w-100 fw-bold d-flex justify-content-center align-items-center rounded-pill ${className ?? ""}`}
-            disabled={isPending}
+            className={`w-100 fw-bold d-flex justify-content-center align-items-center rounded-pill text-white ${className ?? ""}`}
+            disabled={disabled}
         >
             {
                 isPending ? <Spinner/> : children

@@ -51,8 +51,9 @@ export default function NewPassword() {
                                         key='passwords' formik={formik}/>
                             <InputField name="confirmPassword" label="" placeholder={'Parol tasdig’i'} type="password"
                                         key='password' formik={formik}/>
-                            <div className="form-group col-lg-12">
+                            <div className="form-group col-lg-12 mt-4">
                                 <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
+                                        disabled={!(formik.isValid && formik.dirty)}
                                         children={'Davom etish'}/>
                             </div>
                         </form>

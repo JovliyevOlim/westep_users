@@ -45,13 +45,10 @@ export const useLogin = () => {
 
 export const useRegister = () => {
     const navigate = useNavigate();
-    const qc = useQueryClient();
     return useMutation({
         mutationFn: register,
         onSuccess: async () => {
-            const user = await getCurrentUser();
-            qc.setQueryData(["currentUser"], user);
-            navigate("/");
+            navigate("/success");
             sessionStorage.removeItem("form");
         },
         onError: (error) => {

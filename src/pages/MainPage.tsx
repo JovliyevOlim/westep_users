@@ -7,7 +7,7 @@ import Courses from "../components/courses";
 export default function MainPage() {
 
     return (
-        <div className={'px-3 py-3 px-md-5'}>
+        <div className={'px-3 py-3 px-md-3'}>
             <Dashboard/>
             <Courses/>
             <ScrollToTop/>

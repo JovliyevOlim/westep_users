@@ -42,6 +42,7 @@ export default function ForgotPassword() {
                             <PhoneNumberInput name={'phone'} formik={formik} className={''}/>
                             <div className="form-group col-lg-12 mt-4 mt-md-5">
                                 <Button height={{desktop: '54px', mobile: '48px'}} isPending={false}
+                                        disabled={!(formik.isValid && formik.dirty)}
                                         children={'Davom etish'}/>
                             </div>
                         </form>

@@ -3,6 +3,7 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import Button from "../../../ui/Button.tsx";
 import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
+import logo from "../../../assets/logo.svg";
 
 
 export default function LoginForm() {
@@ -27,6 +28,9 @@ export default function LoginForm() {
 
     return (
         <>
+            <div className='d-flex justify-content-center'>
+                <img src={logo} width={220} alt="logo"/>
+            </div>
             <section>
                 <div className="row align-items-center">
                     <div className="col-12">
@@ -40,7 +44,9 @@ export default function LoginForm() {
                             <p className="login_register_title">Bilimingizni yangi bosqichga olib chiqing!</p>
                             <PhoneNumberInput name={'phone'} formik={formik} className={''}/>
                             <div className="form-group col-lg-12 mt-4 mt-md-5">
-                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} children={'Davom etish'}/>
+                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
+                                        disabled={!(formik.isValid && formik.dirty)}
+                                        children={'Davom etish'}/>
                             </div>
                         </form>
                     </div>

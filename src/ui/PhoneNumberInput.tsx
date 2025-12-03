@@ -18,7 +18,7 @@ const PhoneNumberInput = <T extends Record<string, any>>({
 
 
     return (
-        <div className={`${className} form-group mb-2`}>
+        <div className={`form-group mb-2`}>
             {label && (
                 <label htmlFor={name as string} className="form-label fw-medium">
                     {label}
@@ -32,6 +32,7 @@ const PhoneNumberInput = <T extends Record<string, any>>({
                 }}
                 international
                 countryCallingCodeEditable={false}
+                className={`${className}`}
             />
             {formik.errors[name] && formik.touched[name] ? (
                 <p className={'text-start text-danger m-0'}>{formik.errors[name] as string}</p>

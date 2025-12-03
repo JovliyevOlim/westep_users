@@ -47,7 +47,9 @@ const InputField = <T extends Record<string, any>>({
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder={placeholder}
-                    className="form-control-input rounded-pill"
+                    className={`form-control-input rounded-pill ${
+                        formik.values[name] ? "input-filled" : ""
+                    }`}
                     {...rest}
                 />
                 {(type === "date" || icon) && (

@@ -60,6 +60,7 @@ export default function ResetPassword() {
                                         key='password' formik={formik}/>
                             <div className="form-group col-lg-12 mt-4">
                                 <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
+                                        disabled={!(formik.isValid && formik.dirty)}
                                         children={'Davom etish'}/>
                             </div>
                         </form>

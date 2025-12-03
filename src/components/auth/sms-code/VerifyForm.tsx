@@ -1,7 +1,7 @@
 import {useOtpPhoneNumber, useVerifyCode} from "../../../api/auth/useAuth.ts";
 import 'react-phone-number-input/style.css';
 import Button from "../../../ui/Button.tsx";
-import {useEffect, useState} from "react";
+import {useEffect,useState} from "react";
 import moment from "moment";
 import {formatUzPhone} from "../../../utils/utils.ts";
 
@@ -14,6 +14,7 @@ export default function VerifyForm() {
     const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
     const [remainingTime, setRemainingTime] = useState(3 * 60);
     const [error, setError] = useState<boolean>(isError);
+
 
     useEffect(() => {
         setError(isError);
@@ -87,6 +88,9 @@ export default function VerifyForm() {
                                     {otp.map((digit, index) => (
                                         <input
                                             type="number"
+                                            inputMode="numeric"
+                                            pattern="[0-9]*"
+                                            autoComplete="one-time-code"
                                             className={`otp-input ${error ? 'border-danger text-danger' : ''}`}
                                             maxLength={1}
                                             id={`digit${index}-input`}
@@ -98,11 +102,9 @@ export default function VerifyForm() {
                                                 }
                                             }}
                                             onInput={(e) => {
-                                                // Faqat bir raqamli qiymat qoldirish
-                                                const value = e.currentTarget.value;
-                                                if (value.length > 1) {
-                                                    e.currentTarget.value = value[0]; // Faqat birinchi raqamni qoldiradi
-                                                }
+                                                // faqat bitta raqam qoldiradi
+                                                const v = e.currentTarget.value.replace(/\D/g, "");
+                                                e.currentTarget.value = v.slice(0, 1);
                                             }}
                                             key={`digit${index}-input`}
                                         />

@@ -18,6 +18,7 @@ import {ReactComponent as RotateRight} from "./rotate-right.svg?react";
 import {ReactComponent as Pause} from "./pause.svg?react";
 import {ReactComponent as Replay} from "./replay.svg?react";
 import {ReactComponent as Star} from "./star.svg?react";
+import {ReactComponent as SuccessIcon} from "./success.svg?react";
 
 export {
     Book,
@@ -37,5 +38,5 @@ export {
     RotateRight,
     VolumeLow,
     Mute,
-    Pause, Replay, Star
+    Pause, Replay, Star,SuccessIcon
 }

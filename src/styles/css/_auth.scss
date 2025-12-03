@@ -72,7 +72,7 @@
 
     .auth-glass {
       width: 100%;
-      padding: 1rem;
+      padding: 1.5rem;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(202, 227, 255, 0.4);
       -webkit-backdrop-filter: blur(3px) saturate(110%);
@@ -84,4 +84,17 @@
       }
     }
   }
+}
+.phone-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  transform: translateY(-10px);
+}
+
+.phone-wrapper.open {
+  max-height: 200px; /* input balandligi */
+  opacity: 1;
+  transform: translateY(0);
 }

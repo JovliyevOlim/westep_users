@@ -13,6 +13,7 @@ type PropsType = {
     label?: string;
     placeholder?: string;
     className?: string;
+    value?: string;
 };
 
 export default function AuthDatePicker({
@@ -22,7 +23,8 @@ export default function AuthDatePicker({
                                            label,
                                            defaultDate,
                                            placeholder,
-                                           className="",
+                                           className = "",
+                                           value,
                                        }: PropsType) {
     useEffect(() => {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -34,7 +36,7 @@ export default function AuthDatePicker({
             dateFormat: "Y-m-d",
             defaultDate,
             onChange,
-            disableMobile:true,
+            disableMobile: true,
             allowInput: !isMobile, // Mobilda faqat kalendar ochilsin
             clickOpens: true,
         });
@@ -54,9 +56,11 @@ export default function AuthDatePicker({
                 <input
                     id={id}
                     type={'text'}
+                    value={value}
                     placeholder={placeholder}
-                    className="form-control-input"
-
+                    className={`form-control-input rounded-pill ${
+                        value ? "input-filled" : ""
+                    }`}
                 />
 
                 <span className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary">

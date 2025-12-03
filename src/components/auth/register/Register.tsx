@@ -57,7 +57,7 @@ export default function Register() {
                     text: 'Parol yaratish'
                 }));
                 setIsPending(false)
-            }, 1000)
+            }, 500)
         },
     });
 
@@ -85,7 +85,7 @@ export default function Register() {
     return (
         <>
             <section>
-                <div className="row d-flex align-items-center justify-content-between">
+                <div className="row d-flex align-items-center">
                     <div className="col-12">
                         <form
                             onSubmit={(e) => {
@@ -103,25 +103,31 @@ export default function Register() {
                                         type='text'
                                         name={"lastName"}
                             />
-                            <AuthDatePicker id={'birthday'} placeholder={"Tug'ilgan kun"}  onChange={(e: Date[]) => {
-                                const date = new Date(e[0]);
-                                const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-                                    .toISOString()
-                                    .split("T")[0];
-                                formik.setFieldValue('birthday', localDate);
-                            }}/>
+                            <AuthDatePicker id={'birthday'} placeholder={"Tug'ilgan kun"} value={formik.values.birthday}
+                                            onChange={(e: Date[]) => {
+                                                const date = new Date(e[0]);
+                                                const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+                                                    .toISOString()
+                                                    .split("T")[0];
+                                                formik.setFieldValue('birthday', localDate);
+                                            }}/>
                             {formik.errors.birthday && formik.touched.birthday ? (
                                 <p className={'text-start d-flex text-danger m-0 ps-4'}>{formik.errors.birthday as string}</p>
                             ) : null}
                             {
                                 !isYoung && formik.values.birthday &&
                                 <>
-                                    <div className="form-group mb-2 d-flex align-items-center justify-content-between">
-                                        <label className="d-flex align-items-center gap-2 col-5">
+                                    <div
+                                        className="form-group mb-2 d-flex align-items-center justify-content-between flex-column gap-3">
+                                        <label
+                                            className={`${formik.values.gender === 'FEMALE' ? 'border-primary' : 'border-0'} col-12 border  overflow-hidden`}
+                                            style={{
+                                                borderRadius: "26px",
+                                            }}>
                                             <div
-                                                className={'form-control-input d-flex justify-content-center align-items-center gap-3'}>
+                                                className={`${formik.values.gender === 'FEMALE' ? 'border-primary border-top-0' : 'border-secondary'} form-control-input d-flex  justify-content-between align-items-center gap-3`}>
                                                 <p className={"m-0"}>
-                                                    Ayol
+                                                    Onam
                                                 </p>
                                                 <input
                                                     type="radio"
@@ -132,13 +138,27 @@ export default function Register() {
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
+                                            <div
+                                                className={`phone-wrapper ${formik.values.gender === "FEMALE" ? "open" : ""}`}
+                                            >
+                                                <PhoneNumberInput
+                                                    name="parentPhone"
+                                                    formik={formik}
+                                                    className={"border-0"}
+                                                />
+                                            </div>
                                         </label>
 
-                                        <label className="d-flex align-items-center gap-2 col-5">
+                                        <label
+                                            className={`${formik.values.gender === 'MALE' ? 'border-primary' : 'border-0'} col-12 border  overflow-hidden`}
+                                            style={{
+                                                borderRadius: "26px",
+                                            }}
+                                        >
                                             <div
-                                                className={'form-control-input d-flex justify-content-center align-items-center gap-3'}>
+                                                className={`${formik.values.gender === 'MALE' ? 'border-primary border-top-0' : 'border-secondary'} form-control-input d-flex  justify-content-between align-items-center gap-3`}>
                                                 <p className={"m-0"}>
-                                                    Erkak
+                                                    Otam
                                                 </p>
                                                 <input
                                                     type="radio"
@@ -149,14 +169,22 @@ export default function Register() {
                                                     onChange={formik.handleChange}
                                                 />
                                             </div>
+                                            <div
+                                                className={`phone-wrapper ${formik.values.gender === "MALE" ? "open" : ""}`}
+                                            >
+                                                <PhoneNumberInput
+                                                    name="parentPhone"
+                                                    formik={formik}
+                                                    className={"border-0"}
+                                                />
+                                            </div>
                                         </label>
                                     </div>
-                                    <PhoneNumberInput name={"parentPhone"} formik={formik} className={''}/>
                                 </>
                             }
                             <div className="form-group col-lg-12 mt-4">
                                 <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
-                                        children={'Davom etish'}/>
+                                        children={'Davom etish'} disabled={!(formik.isValid && formik.dirty)}/>
                             </div>
                             <p className={'text-center text-dark mt-1'}>Akkountingiz bormi? <Link
                                 className={"text-primary"} to="/login">Login</Link></p>
