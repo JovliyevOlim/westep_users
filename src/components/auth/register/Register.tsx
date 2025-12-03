@@ -125,7 +125,7 @@ export default function Register() {
                                                 borderRadius: "26px",
                                             }}>
                                             <div
-                                                className={`${formik.values.gender === 'FEMALE' ? 'border-primary border-top-0' : 'border-secondary'} form-control-input d-flex  justify-content-between align-items-center gap-3`}>
+                                                className={`${formik.values.gender === 'FEMALE' ? 'border-primary border-0 border-bottom' : 'border-secondary'} form-control-input d-flex  justify-content-between align-items-center gap-3`}>
                                                 <p className={"m-0"}>
                                                     Onam
                                                 </p>
@@ -156,7 +156,7 @@ export default function Register() {
                                             }}
                                         >
                                             <div
-                                                className={`${formik.values.gender === 'MALE' ? 'border-primary border-top-0' : 'border-secondary'} form-control-input d-flex  justify-content-between align-items-center gap-3`}>
+                                                className={`${formik.values.gender === 'MALE' ? 'border-primary border-0 border-bottom' : 'border-secondary'} form-control-input d-flex  justify-content-between align-items-center gap-3`}>
                                                 <p className={"m-0"}>
                                                     Otam
                                                 </p>
