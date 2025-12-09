@@ -1,38 +1,45 @@
-import {Link} from "react-router-dom";
-import courseImg from "../../assets/img/courses/7.png"
-import Button from "../../ui/Button.tsx";
+import Image from "../../ui/Image"
+import {Course} from "../../types/types.ts";
+import Spinner from "../../ui/Spinner.tsx";
+import {useUser} from "../../api/auth/useAuth.ts";
+import {useSetStudentCourseById} from "../../api/courses/useCourse.ts";
 
-function CourseCard({course}: { course: any }) {
+interface CourseCard {
+    course: Course;
+}
+
+function CourseCard({course}: CourseCard) {
+
+    const {data: user} = useUser()
+    const {mutate, isPending} = useSetStudentCourseById()
+
+
+    function handleCourse(id: string) {
+        mutate({
+            studentId: user.id,
+            courseId: id,
+        })
+    }
+
     return (
         <>
-            <div key={course.id} className="col-lg-6 col-xl-4">
-                <div className="single-course border border-primary">
-                    <div className="course-img">
-                        <img src={courseImg} alt="course image"/>
-                        {/*              <span className="cprice">*/}
-                        {/*  {course.isFree ? "Free" : course.price}*/}
-                        {/*</span>*/}
-                    </div>
-
-                    <div className="course_content">
-                        <h6 style={{
-                            height: "50px"
-                        }} className={'fw-bold'}>
-                            <Link to="/course-details"
-                                  state={{course: course}}
-                            >{course.title}</Link>
-                        </h6>
-
-                        <div className="d-flex gap-3">
-                            <p className={'p-0'} style={{fontSize: '10px'}}>65% o’rgandingiz </p>
-                            <p className={'p-0'} style={{fontSize: '10px'}}>Oxirgi marta 2 kun oldin kirgansiz</p>
-                        </div>
-                        <div>
-                            <Button isPending={false} type="button" height={'40px'}>
-                                Davom etish
-                            </Button>
+            <div className={'border border-blue-200 rounded-3xl overflow-hidden h-full flex flex-col'}>
+                <div className="w-full h-[180px]">
+                    <Image id={course.attachmentId}/>
+                </div>
+                <div className={'p-4 flex flex-col justify-between flex-1'}>
+                    <div>
+                        <h3 className={'text-md font-medium break-all'}>{course?.name}</h3>
+                        <div className={'flex items-center gap-3 mt-2 justify-start flex-wrap'}>
+                            <p className={'text-xs font-light break-all'}>{course?.description}</p>
                         </div>
                     </div>
+                    <button
+                        onClick={() => handleCourse(course.id)}
+                        className={'w-full h-[40px] mt-3 bg-blue-50 text-blue-400 border border-blue-400 rounded-full p-1 text-center'}>
+                        {isPending && <Spinner/>}
+                        Boshlash
+                    </button>
                 </div>
             </div>
         </>

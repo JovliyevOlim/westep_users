@@ -3,8 +3,9 @@ import 'react-phone-number-input/style.css';
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {Link, useLocation} from "react-router-dom";
-import Button from "../../../ui/Button.tsx";
 import InputField from "../../../ui/InputField.tsx";
+import CommonButton from "../../../ui/CommonButton.tsx";
+import AuthText from "../../../ui/AuthText.tsx";
 
 
 export default function PasswordForm() {
@@ -36,28 +37,39 @@ export default function PasswordForm() {
 
     return (
         <>
-            <section>
-                <div className="row align-items-center">
-                    <div className="col-12">
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                formik.handleSubmit();
-                                return false;
-                            }}
-                        >
-                            <p className="login_register_title">Kirish</p>
-                            <div className={'form-group'}>
-                                <InputField name={'password'} formik={formik} placeholder={'Parol'}
-                                            type={'password'}/>
+            <section className="flex items-center justify-center w-full">
+                <div className="w-full max-w-lg animate-fadeIn">
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            formik.handleSubmit();
+                            return false;
+                        }}
+                        className="bg-transparent"
+                    >
+                        <AuthText title={'Kirish'}/>
+                        <div className="grid grid-cols-1 mt-2">
+                            <InputField
+                                placeholder="Parolni kiriting!"
+                                formik={formik}
+                                type="password"
+                                name="password"
+                            />
+                        </div>
 
-                            </div>
-                            <div className="form-group col-lg-12 mt-4">
-                                <Button height={{desktop:'54px',mobile:'48px'}} isPending={isPending} type="submit" children={'Kirish'}/>
-                            </div>
-                            <p className={'mt-2 text-center'}><Link to="/forgot-password">Parolni unutdingizmi?</Link></p>
-                        </form>
-                    </div>
+                        <div className="mt-8 w-full">
+                            <CommonButton
+                                type="submit"
+                                children={"Kirish"}
+                                variant="primary"
+                                isPending={isPending}
+                                disabled={!(formik.isValid && formik.dirty)}
+
+                            />
+                        </div>
+                    </form>
+                    <p className={'text-center text-gray-900 mt-2'}><Link
+                        className={"text-gray-800"} to="/forgot-password">Parolni unutdingizmi?</Link></p>
                 </div>
             </section>
         </>

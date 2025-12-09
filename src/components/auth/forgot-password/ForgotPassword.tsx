@@ -1,8 +1,9 @@
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
-import Button from "../../../ui/Button.tsx";
 import {useNavigate} from "react-router-dom";
+import CommonButton from "../../../ui/CommonButton.tsx";
+import AuthText from "../../../ui/AuthText.tsx";
 
 
 export default function ForgotPassword() {
@@ -27,27 +28,30 @@ export default function ForgotPassword() {
 
     return (
         <>
-            <section>
-                <div className="row align-items-center">
-                    <div className="col-12">
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                formik.handleSubmit();
-                                return false;
-                            }}
-                            className={'login'}
-                        >
-                            <h4 className="login_register_title">Parolni tiklash</h4>
-                            <PhoneNumberInput name={'phone'} formik={formik} className={''}/>
-                            <div className="form-group col-lg-12 mt-4 mt-md-5">
-                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={false}
-                                        disabled={!(formik.isValid && formik.dirty)}
-                                        children={'Davom etish'}/>
-                            </div>
-                        </form>
+            <section className="flex items-center justify-center w-full">
+                <div className="w-full max-w-lg animate-fadeIn">
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            formik.handleSubmit();
+                        }}
+                        className="bg-transparent"
+                    >
+                        <AuthText title="Parolni tiklash"/>
+                        <div className="space-y-6">
+                            <PhoneNumberInput name="phone" formik={formik} className=""/>
+                        </div>
 
-                    </div>
+                        <div className="mt-8 w-full">
+                            <CommonButton
+                                type="submit"
+                                children={"Davom etish"}
+                                variant="primary"
+                                isPending={false}
+                                disabled={!(formik.isValid && formik.dirty)}
+                            />
+                        </div>
+                    </form>
                 </div>
             </section>
         </>

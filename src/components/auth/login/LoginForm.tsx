@@ -1,9 +1,10 @@
 import {useCheckPhoneNumber} from "../../../api/auth/useAuth.ts";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import Button from "../../../ui/Button.tsx";
 import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
 import logo from "../../../assets/logo.svg";
+import CommonButton from "../../../ui/CommonButton.tsx";
+import AuthText from "../../../ui/AuthText.tsx";
 
 
 export default function LoginForm() {
@@ -28,28 +29,34 @@ export default function LoginForm() {
 
     return (
         <>
-            <div className='d-flex justify-content-center'>
+            <div className='flex justify-center'>
                 <img src={logo} width={220} alt="logo"/>
             </div>
-            <section>
-                <div className="row align-items-center">
-                    <div className="col-12">
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                formik.handleSubmit();
-                                return false;
-                            }}
-                        >
-                            <p className="login_register_title">Bilimingizni yangi bosqichga olib chiqing!</p>
-                            <PhoneNumberInput name={'phone'} formik={formik} className={''}/>
-                            <div className="form-group col-lg-12 mt-4 mt-md-5">
-                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
-                                        disabled={!(formik.isValid && formik.dirty)}
-                                        children={'Davom etish'}/>
-                            </div>
-                        </form>
-                    </div>
+            <section className="flex items-center justify-center w-full">
+                <div className="w-full max-w-lg animate-fadeIn">
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            formik.handleSubmit();
+                        }}
+                        className="bg-transparent"
+                    >
+                        <AuthText body='Bilimingizni yangi bosqichga olib chiqing!'/>
+
+                        <div className="space-y-6">
+                            <PhoneNumberInput name="phone" formik={formik} className=""/>
+                        </div>
+
+                        <div className="mt-8 w-full">
+                            <CommonButton
+                                type="submit"
+                                children={"Kirish"}
+                                variant="primary"
+                                isPending={isPending}
+                                disabled={!(formik.isValid && formik.dirty)}
+                            />
+                        </div>
+                    </form>
                 </div>
             </section>
         </>

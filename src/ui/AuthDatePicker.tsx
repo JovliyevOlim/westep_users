@@ -23,8 +23,6 @@ export default function AuthDatePicker({
                                            label,
                                            defaultDate,
                                            placeholder,
-                                           className = "",
-                                           value,
                                        }: PropsType) {
     useEffect(() => {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -49,21 +47,18 @@ export default function AuthDatePicker({
     }, [mode, onChange, id, defaultDate]);
 
     return (
-        <div className={`${className} form-group mb-2`}>
-            {label && <label htmlFor={id} className="form-label fw-medium">{label}</label>}
+        <div>
+            {label && <label htmlFor={id}>{label}</label>}
 
-            <div className="position-relative">
+            <div className="relative">
                 <input
                     id={id}
-                    type={'text'}
-                    value={value}
                     placeholder={placeholder}
-                    className={`form-control-input rounded-pill ${
-                        value ? "input-filled" : ""
-                    }`}
+                    className={`w-full h-[48px] md:h-[54px] rounded-full border border-gray-400 bg-transparent text-[16px] md:text-[18px] px-4 md:px-8 py-3 text-lg text-gray-900 placeholder-gray-500 focus:outline-none  focus:border-brand-500`}
                 />
 
-                <span className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary">
+                <span
+                    className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-6 top-1/2 dark:text-gray-400">
           <img src={dateIcon} alt={label}/>
         </span>
             </div>

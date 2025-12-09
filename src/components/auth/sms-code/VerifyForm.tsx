@@ -1,9 +1,10 @@
 import {useOtpPhoneNumber, useVerifyCode} from "../../../api/auth/useAuth.ts";
 import 'react-phone-number-input/style.css';
-import Button from "../../../ui/Button.tsx";
 import {useEffect,useState} from "react";
 import moment from "moment";
 import {formatUzPhone} from "../../../utils/utils.ts";
+import CommonButton from "../../../ui/CommonButton.tsx";
+import AuthText from "../../../ui/AuthText.tsx";
 
 
 export default function VerifyForm() {
@@ -76,71 +77,76 @@ export default function VerifyForm() {
 
     return (
         <>
-            <section>
-                <div className="row align-items-center">
-                    <div className="col-12">
-                            <h1 className={'text-center login_register_h1'}>Raqamni tasdiqlash</h1>
-                            <p className='login_register_title'>Parol <strong
-                                className={'fw-bolder'}> {formatUzPhone(form?.phoneNumber)}</strong> raqamga yuborildi
-                            </p>
-                            <div className="row justify-content-center">
-                                <div className='col-12 d-flex justify-content-between'>
-                                    {otp.map((digit, index) => (
-                                        <input
-                                            type="number"
-                                            inputMode="numeric"
-                                            pattern="[0-9]*"
-                                            autoComplete="one-time-code"
-                                            className={`otp-input ${error ? 'border-danger text-danger' : ''}`}
-                                            maxLength={1}
-                                            id={`digit${index}-input`}
-                                            value={digit}
-                                            onChange={(e) => moveToNext(index, e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Backspace") {
-                                                    handleBackspace(index, e.currentTarget.value);
-                                                }
-                                            }}
-                                            onInput={(e) => {
-                                                // faqat bitta raqam qoldiradi
-                                                const v = e.currentTarget.value.replace(/\D/g, "");
-                                                e.currentTarget.value = v.slice(0, 1);
-                                            }}
-                                            key={`digit${index}-input`}
-                                        />
-                                    ))}
-                                </div>
+            <section className="flex items-center justify-center w-full">
+                <div className="w-full max-w-lg animate-fadeIn">
+                    <div>
+                        <AuthText title='Raqamni tasdiqlash' />
+                        <p className="text-lg text-gray-900  text-center mb-4">Parol <strong> {formatUzPhone(form?.phoneNumber)}</strong> raqamga yuborildi
+                        </p>
+                        <div className="flex justify-center">
+                            <div className='flex justify-between w-full'>
+                                {otp.map((digit, index) => (
+                                    <input
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        autoComplete="one-time-code"
+                                        type="number"
+                                        className={`otp-input border ${error ? 'border-red-500 text-red-500' : 'border-gray-400 text-black'}`}
+                                        maxLength={1}
+                                        id={`digit${index}-input`}
+                                        value={digit}
+                                        onChange={(e) => moveToNext(index, e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Backspace") {
+                                                handleBackspace(index, e.currentTarget.value);
+                                            }
+                                        }}
+                                        onInput={(e) => {
+                                            // Faqat bir raqamli qiymat qoldirish
+                                            const value = e.currentTarget.value;
+                                            if (value.length > 1) {
+                                                e.currentTarget.value = value[0]; // Faqat birinchi raqamni qoldiradi
+                                            }
+                                        }}
+                                        key={`digit${index}-input`}
+                                    />
+                                ))}
                             </div>
-                            <div className="row mt-3 mb-2 justify-content-center">
-                                <div className={'col-12 d-flex justify-content-between'}>
-                                    <p className={'m-0 fs-5 text-secondary'}>{formatTime(remainingTime)}</p>
-                                    {
-                                        remainingTime === 0
-                                        &&
-                                        <p onClick={() => {
-                                            mutate({
-                                                phoneNumber: form.phoneNumber,
-                                                type: otpType
-                                            })
-                                            setRemainingTime(180)
-                                        }} className="fs-5 text-secondary cursor-pointer">Qaytadan yuborish</p>
-                                    }
+                        </div>
+                        <div className="mt-3 mb-2 justify-center">
+                            <div className={'flex justify-between'}>
+                                <p className={'m-0 text-xl font-light text-gray-400'}>{formatTime(remainingTime)}</p>
+                                {
+                                    remainingTime === 0
+                                    &&
+                                    <p onClick={() => {
+                                        mutate({
+                                            phoneNumber: form.phoneNumber,
+                                            type: otpType
+                                        })
+                                        setRemainingTime(180)
+                                    }} className="text-xl text-gray-400 font-light cursor-pointer">Qaytadan yuborish</p>
+                                }
 
-                                </div>
                             </div>
-                            <div className="form-group mt-4">
-                                <Button onClick={() => {
+                        </div>
+                        <div className="mt-10">
+                            <CommonButton
+                                type="button"
+                                children={"Davom etish"}
+                                variant="primary"
+                                isPending={isPending}
+                                onClick={() => {
                                     verifyCode({
                                         phoneNumber: form.phoneNumber,
                                         type: otpType,
                                         code: otp.join(''),
                                     })
-                                }} type={'button'} height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
-                                        children={'Davom etish'}/>
-                            </div>
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
-            </section>
-        </>
+            </section>        </>
     );
 }

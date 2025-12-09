@@ -6,7 +6,7 @@ import {useSidebar} from "../../SidebarContext.tsx";
 
 export const links = [
     {path: "/", title: "Asosiy", icon: Home},
-    {path: "/lessons", title: "Darslar", icon: Lesson},
+    {path: "/courseDetails", title: "Darslar", icon: Lesson},
     {path: "/cart", title: "Keyin ko'rish", icon: BookMark},
     {path: "/shop", title: "Xaridlar", icon: ShoppingCart}
 ]

@@ -1,33 +1,34 @@
 import UserDropDown from "./UserDropDown.tsx";
-import {useSidebar} from "../SidebarContext.tsx";
 import logo from "../../assets/logo.svg";
 import HeaderNavMenu from "./HeaderNavMenu.tsx";
 
 
 export default function HeaderOne() {
 
-    const {toggleMobileSidebar} = useSidebar()
     return (
         <>
-            <header id="navigation">
-                <div className="row align-items-center justify-content-between">
-                    <div className={'d-block d-md-none col-2 d-flex align-items-center justify-content-start'}>
-                        <i onClick={toggleMobileSidebar} style={{width: '44px', height: '44px'}}
-                           className="ti-align-justify d-block d-flex align-items-center justify-content-center"></i>
-                    </div>
-                    <div className="col-2 col-lg-3 d-flex">
-                        <div className="d-flex justify-content-center align-items-center">
-                            <img src={logo} alt="Logo" width={120}/>
+            <header id="navigation" className="w-full hidden lg:block  z-99999">
+                <div className="flex items-center justify-between">
+
+                    {/* Logo */}
+                    <div className="w-1/6 lg:w-1/4 flex">
+                        <div className="flex items-center justify-center">
+                            <img src={logo} alt="Logo" className="w-[120px]" />
                         </div>
                     </div>
-                    <div className="col-8 col-lg-6 p-0 d-none d-md-flex justify-content-center">
-                        <HeaderNavMenu/>
+
+                    {/* Navigation Menu */}
+                    <div className="hidden md:flex w-4/6 lg:w-1/2 justify-center p-0">
+                        <HeaderNavMenu />
                     </div>
-                    <div className="col-2 col-lg-3 justify-content-end d-flex">
-                        <div className="d-flex gap-3">
-                            <UserDropDown/>
+
+                    {/* Right side (User dropdown) */}
+                    <div className="w-1/6 lg:w-1/4 flex justify-end">
+                        <div className="flex gap-3">
+                            <UserDropDown />
                         </div>
                     </div>
+
                 </div>
             </header>
         </>

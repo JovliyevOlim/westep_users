@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from 'react';
-import {ListGroup} from "react-bootstrap";
 import {NavLink, useLocation} from "react-router-dom";
 import {useSidebar} from "../SidebarContext.tsx";
 import {links} from "../DefaultLayout/sidebar";
@@ -37,44 +36,48 @@ function HeaderNavMenu() {
     }, [active]);
 
     return (
-        <ListGroup horizontal ref={containerRef}
+        <div
+            ref={containerRef}
+            className="relative flex gap-2 overflow-x-auto whitespace-nowrap"
         >
 
+            {/* Indicator */}
             <div
+                className="absolute bg-blue-500 rounded-md"
                 style={{
                     height: "34px",
                     transition: "transform .25s ease, width .25s ease",
-                    ...indicatorStyle
+                    ...indicatorStyle,
                 }}
-                className="bg-indicator"
             ></div>
-            {links.map(({path, title}: {
-                            path: string;
-                            title: string;
-                        },
-                        index: number) => (
-                <ListGroup.Item key={index}>
+
+            {/* Links */}
+            {links.map(({ path, title }, index) => (
+                <div key={index} className="relative z-10 px-2">
                     <NavLink
                         to={path}
                         onClick={() => {
-                            setActive(index)
-                            if (isMobileOpen && isExpanded) {
-                                toggleMobileSidebar()
-                            }
+                            setActive(index);
+                            if (isMobileOpen && isExpanded) toggleMobileSidebar();
                         }}
-                        className={({isActive}) =>
-                            ` ${
+                        className={({ isActive }) =>
+                            `
+            block px-3 py-2 rounded-md text-sm font-medium
+            transition-colors duration-200
+            ${
                                 isActive
-                                    ? 'active'
-                                    : ''
-                            }`
+                                    ? "text-blue-600 font-semibold"
+                                    : "text-gray-600 hover:text-black"
+                            }
+          `
                         }
                     >
                         {title}
                     </NavLink>
-                </ListGroup.Item>
+                </div>
             ))}
-        </ListGroup>
+
+        </div>
 
     );
 }

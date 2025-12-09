@@ -26,7 +26,7 @@
     color: #000000;
     border-radius: 100px;
     background-color: transparent;
-    border: 1px solid var(--bs-secondary);
+    border: 1px solid theme('colors.gray.400');
     font-size: 18px;
     height: 54px;
     outline: 0;
@@ -36,7 +36,7 @@
 }
 
 .PhoneInput--focus {
-    border-color: var(--bs-primary);
+    border-color: theme('colors.primary.500');
     background: transparent;
     outline: 0;
 }
@@ -155,7 +155,7 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 76px;
     height: 70px;
     background-color: transparent;
-    border: 1px solid var(--bs-secondary);
+    border: 1px solid  theme('colors.gray.400') ;
     border-radius: 20px;
     color: #000000;
     font-size: 18px;

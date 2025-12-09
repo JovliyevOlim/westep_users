@@ -2,8 +2,9 @@ import {useOtpPhoneNumber} from "../../../api/auth/useAuth.ts";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useLocation} from "react-router-dom";
-import Button from "../../../ui/Button.tsx";
 import InputField from "../../../ui/InputField.tsx";
+import CommonButton from "../../../ui/CommonButton.tsx";
+import AuthText from "../../../ui/AuthText.tsx";
 
 
 export default function ResetPassword() {
@@ -41,31 +42,38 @@ export default function ResetPassword() {
 
     return (
         <>
-            <section>
-                <div className="row align-items-center">
-                    <div className="col-12">
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                formik.handleSubmit();
-                                return false;
-                            }}
-                            className={'login'}
-                        >
-                            <h4 className="login_register_title">Yangi Parol o'rnatish</h4>
-                            <InputField name="password" label="" placeholder={'Yangi parol'} type="password"
-                                        key='passwords' formik={formik}/>
-                            <InputField name="confirmPassword" label="" placeholder={'Parol tasdig’i'}
-                                        type="password"
-                                        key='password' formik={formik}/>
-                            <div className="form-group col-lg-12 mt-4">
-                                <Button height={{desktop: '54px', mobile: '48px'}} isPending={isPending}
-                                        disabled={!(formik.isValid && formik.dirty)}
-                                        children={'Davom etish'}/>
-                            </div>
-                        </form>
+            <section className="flex items-center justify-center w-full">
+                <div className="w-full max-w-lg animate-fadeIn">
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            formik.handleSubmit();
+                            return false;
+                        }}
+                        className="bg-transparent"
+                    >
+                        <AuthText  title="Yangi Parol o'rnatish"/>
+                        <div className="grid grid-cols-1 mt-2 gap-3">
+                            <InputField
+                                name="password" label="" placeholder={'Yangi parol'} type="password"
+                                key='passwords' formik={formik}
+                            />
+                            <InputField
+                                name="confirmPassword" label="" placeholder={'Parol tasdig’i'} type="password"
+                                key='password' formik={formik}
+                            />
+                        </div>
 
-                    </div>
+                        <div className="mt-8 w-full">
+                            <CommonButton
+                                type="submit"
+                                children={"Davom etish"}
+                                variant="primary"
+                                isPending={isPending}
+                                disabled={!(formik.isValid && formik.dirty)}
+                            />
+                        </div>
+                    </form>
                 </div>
             </section>
         </>

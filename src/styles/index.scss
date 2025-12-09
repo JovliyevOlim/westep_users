@@ -1,23 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "css/variables";
 @import '@vidstack/react/player/styles/default/theme.css';
 @import '@vidstack/react/player/styles/default/layouts/video.css';
-@import "swiper/css/bundle";
-@import "bootstrap/scss/bootstrap";
+//@import "bootstrap/scss/bootstrap";
 
 /* @import "/assets/css/animate.css"; */
-@import "css/animate.css";
-@import "css/boxicons.min.css";
-@import "css/slicknav.css";
-@import "css/flexslider.css";
-@import "css/gijgo.min.css";
-@import "css/line-awesome.css";
-@import "css/magnific-popup.css";
-@import "css/niceselect.css";
-@import "css/preloader.css";
-@import "css/YouTubePopUp.css";
-@import "css/YTPlayer.css";
-@import "css/slick.css";
-@import "css/boxicons.min.css";
 @import "css/sidebar.css";
 @import "css/input.css";
 @import "css/button.css";
@@ -29,7 +19,7 @@
 @import "css/lists";
 @import "css/lessons";
 @import "css/flatpickr";
-@import "css/jquery-simple-mobilemenu.css";
+@import "css/mainPage";
 
 @import "../assets/fonts/themify-icons.css";
 @import "../assets/fonts/fontawesome/fontawesome.css";

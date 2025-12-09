@@ -2,7 +2,7 @@ import {Navigate} from 'react-router-dom';
 import {lazy} from "react";
 import MainPage from "../pages/MainPage.tsx";
 import Logout from "../components/auth/Logout.tsx";
-import LessonPage from "../pages/LessonPage.tsx";
+import CoursePage from "../pages/CoursePage.tsx";
 import Success from "../components/auth/Success.tsx";
 
 const HomeOne = lazy(() => import("../components/homes/home"));
@@ -32,8 +32,7 @@ const Register = lazy(() => import("../components/auth/register"));
 const authProtectedRoutes = [
     {path: "/", element: <MainPage/>, title: "Home"},
     {path: "/users", element: <Users/>, title: "Users"},
-    {path: "/lessons", element: <LessonPage/>, title: "Lessons"},
-    {path: "/lessons/*", element: <LessonPage/>, title: "Lessons"},
+    {path: "/courses/:id/*", element: <CoursePage/>, title: "Lessons"},
     {path: "/statistic", element: <Statistic/>, title: "Statistics"},
 
     {path: "/home-1", element: <HomeOne/>},

@@ -1,4 +1,3 @@
-import dateIcon from "../assets/icon/date.svg"
 import eye from "../assets/icon/eye.svg"
 import eyeSlash from "../assets/icon/eye-slash.svg"
 import {useState} from "react";
@@ -31,14 +30,17 @@ const InputField = <T extends Record<string, any>>({
     const [changeType, setChangeType] = useState<string>(type);
 
     return (
-        <div className={`${className} form-group mb-2`}>
+        <div className={`${className}  w-full`}>
             {label && (
-                <label htmlFor={name as string} className="form-label fw-medium">
+                <label
+                    htmlFor={name as string}
+                    className="block text-base font-medium text-gray-200 mb-2"
+                >
                     {label}
                 </label>
             )}
 
-            <div className="position-relative">
+            <div className="relative w-full block">
                 <input
                     type={changeType}
                     id={name as string}
@@ -47,33 +49,39 @@ const InputField = <T extends Record<string, any>>({
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     placeholder={placeholder}
-                    className={`form-control-input rounded-pill ${
-                        formik.values[name] ? "input-filled" : ""
-                    }`}
+                    className={`w-full h-[48px] md:h-[54px] rounded-full border border-gray-400 bg-transparent text-[16px] md:text-[18px] px-4 md:px-8 py-3 text-lg text-gray-900 placeholder-gray-500 focus:outline-none  focus:border-brand-500`}
                     {...rest}
                 />
-                {(type === "date" || icon) && (
-                    <span
-                        className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary"
-                        style={{pointerEvents: "none"}}
-                    >
-            {icon || <img src={dateIcon} width={24} height={24} alt="date_icon"/>}
-          </span>
-                )}
-                {(type === "password" || icon) && (
-                    <span
-                        className="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 text-secondary"
-                    >
-            {type === "password" && changeType === "text" &&
-                <img onClick={() => setChangeType('password')} src={eye} width={24} height={24} alt="date_icon"/>}
-                        {type === "password" && changeType === "password" &&
-                            <img onClick={() => setChangeType('text')} src={eyeSlash} width={24} height={24}
-                                 alt="date_icon"/>}
+
+
+
+                {type === "password" && (
+                    <span className="absolute top-1/2 right-5 -translate-y-1/2 text-gray-500 cursor-pointer">
+            {changeType === "text" ? (
+                <img
+                    onClick={() => setChangeType("password")}
+                    src={eye}
+                    width={22}
+                    height={22}
+                    alt="hide_password"
+                />
+            ) : (
+                <img
+                    onClick={() => setChangeType("text")}
+                    src={eyeSlash}
+                    width={22}
+                    height={22}
+                    alt="show_password"
+                />
+            )}
           </span>
                 )}
             </div>
+
             {formik.errors[name] && formik.touched[name] ? (
-                <p className={'text-start d-flex text-danger m-0 ps-4'}>{formik.errors[name] as string}</p>
+                <p className="text-sm text-red-500 mt-2 ml-3">
+                    {formik.errors[name] as string}
+                </p>
             ) : null}
         </div>
     );

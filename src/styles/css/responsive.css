@@ -14,9 +14,7 @@
 	position: absolute;
 }
 @media only screen and (max-width:1400px) { 
-	#navigation::after{
-		width: 35%;
-	}
+
 	#navigation #main-menu .menu-item-has-children {
 		margin-right: 19px;
 	}

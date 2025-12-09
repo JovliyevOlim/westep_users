@@ -3,7 +3,6 @@ import {ReactComponent as MagicStart} from "./magic-star.svg?react";
 import {ReactComponent as ArrowRight} from "./arrow-right.svg?react";
 import {ReactComponent as BookMark} from "./bookmark.svg?react";
 import {ReactComponent as ShoppingCart} from "./shopping-cart.svg?react";
-import {ReactComponent as Home} from "./home.svg?react";
 import {ReactComponent as Lesson} from "./lesson.svg?react";
 import {ReactComponent as TickCircle} from "./tick-circle.svg?react";
 import {ReactComponent as Play} from "./play.svg?react";
@@ -20,6 +19,13 @@ import {ReactComponent as Replay} from "./replay.svg?react";
 import {ReactComponent as Star} from "./star.svg?react";
 import {ReactComponent as SuccessIcon} from "./success.svg?react";
 import {ReactComponent as FlagUz} from "./flag.svg?react";
+import {ReactComponent as EditIcon} from "./edit.svg?react";
+import {ReactComponent as CheckLineIcon} from "./check-line.svg?react";
+import {ReactComponent as Home} from "./home.svg?react";
+import {ReactComponent as Search} from "./search.svg?react";
+import {ReactComponent as Shop} from "./shop.svg?react";
+import {ReactComponent as Message} from "./message.svg?react";
+import {ReactComponent as Profile} from "./profile.svg?react";
 
 export {
     Book,
@@ -27,7 +33,6 @@ export {
     ArrowRight,
     BookMark,
     ShoppingCart,
-    Home,
     Lesson,
     TickCircle,
     Play,
@@ -39,5 +44,5 @@ export {
     RotateRight,
     VolumeLow,
     Mute,
-    Pause, Replay, Star,SuccessIcon,FlagUz
+    Pause, Replay, Star, SuccessIcon, FlagUz, EditIcon, CheckLineIcon, Home, Search, Shop, Message, Profile
 }

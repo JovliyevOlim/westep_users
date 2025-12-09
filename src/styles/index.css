@@ -1,17 +1,260 @@
-/* Error: Can't find stylesheet to import.
- *   ,
- * 4 | @import "swiper/css/bundle";
- *   |         ^^^^^^^^^^^^^^^^^^^
- *   '
- *   index.scss 4:9  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 4 \2502  @import \"swiper/css/bundle\";\d\a   \2502          ^^^^^^^^^^^^^^^^^^^\a   \2575 \a   index.scss 4:9  root stylesheet";
+@import '@vidstack/react/player/styles/default/theme.css';
+@import '@vidstack/react/player/styles/default/layouts/video.css';
+@import "css/sidebar.css";
+@import "css/input.css";
+@import "css/button.css";
+@import "css/slick-theme.css";
+@import "css/slicknav.css";
+@import "../assets/fonts/themify-icons.css";
+@import "../assets/fonts/fontawesome/fontawesome.css";
+@import "css/style.css";
+@import "css/responsive.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* @import "/assets/css/animate.css"; */
+.auth-back {
+  background-image: url("/images/back_auth (1).jpg");
+  background-size: cover;
+  background-position: center 40%;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
 }
+.auth-back .auth-glass {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  background: rgba(202, 227, 255, 0.1019607843);
+  border: 1px solid rgba(202, 227, 255, 0.1);
+  box-shadow: 0 8px 30px rgba(202, 227, 255, 0.5);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  backdrop-filter: blur(8px) saturate(120%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-back .auth-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  filter: blur(6px);
+  opacity: 0.9;
+  z-index: -1;
+  pointer-events: none;
+}
+.auth-back .auth-glass .login_register_h1 {
+  text-align: center;
+  text-transform: capitalize;
+  color: #000000;
+  margin-top: 10px;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 100%;
+}
+@media (max-width: 768px) {
+  .auth-back .auth-glass .login_register_h1 {
+    font-size: 34px;
+  }
+}
+@media (max-width: 425px) {
+  .auth-back .auth-glass .login_register_h1 {
+    font-size: 28px;
+  }
+}
+.auth-back .auth-glass .login_register_title {
+  margin-bottom: 30px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #000000;
+  margin-top: 15px;
+  font-size: 18px;
+  line-height: 100%;
+  font-weight: 400;
+}
+@media (max-width: 768px) {
+  .auth-back {
+    background-repeat: no-repeat, no-repeat;
+    background-size: contain, contain;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url("/images/back_auth_top.jpg"), url("/images/back_auth_bottom.jpg");
+    background-position: top center, top center, bottom center;
+    padding: 0rem;
+  }
+  .auth-back .auth-glass {
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(202, 227, 255, 0.4);
+    -webkit-backdrop-filter: blur(3px) saturate(110%);
+    backdrop-filter: blur(2px) saturate(110%);
+  }
+  .auth-back .auth-glass::before {
+    filter: blur(4px);
+    opacity: 0.85;
+  }
+}
+
+.phone-wrapper {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  transform: translateY(-10px);
+}
+
+.phone-wrapper.open {
+  max-height: 200px; /* input balandligi */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dashboard-card {
+  border-radius: 18px;
+  padding: 16px 26px;
+  height: 100%;
+}
+.dashboard-card .icon {
+  border-radius: 16px;
+  padding: 10px;
+  background: #EFF6FF;
+}
+.dashboard-card .icon svg {
+  width: 24px;
+  height: 24px;
+}
+@media (max-width: 768px) {
+  .dashboard-card {
+    padding: 10px 16px;
+  }
+  .dashboard-card p {
+    font-size: 14px;
+  }
+  .dashboard-card span {
+    font-size: 12px;
+  }
+}
+
+.list-group {
+  width: 100%;
+  border-radius: 20px;
+  background: #F7FBFF;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.list-group .bg-indicator {
+  position: absolute;
+  height: 34px;
+  border-radius: 20px;
+  background: var(--bs-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.list-group .list-group-item {
+  position: relative;
+  display: flex;
+  width: 25%;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+.list-group .list-group-item a {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 17px;
+  color: var(--bs-secondary) !important;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.list-group .list-group-item a.active {
+  color: #fff !important;
+}
+@media (max-width: 1024px) {
+  .list-group .list-group-item a {
+    font-size: 12px;
+  }
+}
+
+.flatpickr-wrapper {
+  width: 100%;
+}
+
+.flatpickr-input {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+
+.flatpickr-calendar {
+  z-index: 999999 !important;
+}
+
+.mainPage {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+}
+.mainPage .mainPage-bar {
+  width: 375px;
+  box-shadow: 0px 0.95px 3.8px 0px rgba(0, 0, 0, 0.1);
+  height: 300px;
+}
+.mainPage .mainPage-content {
+  width: calc(100% - 375px);
+}
+
+:root {
+  --bs-breakpoint-xl: 1360px;
+}
+
+.container,
+.container-xl {
+  max-width: 1360px;
+}
+
+/* Yoki barcha containerlar uchun */
+@media (min-width: 1200px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1360px;
+  }
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* gorizontal scrollbarni oldini oladi */
+}
+
+/* 2. Barcha elementlarning box-sizing ni to'g'rilang */
+* {
+  box-sizing: border-box;
+}
+
+/* 3. Container sozlamalari */
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 100%;
+}
+
+main {
+  overflow-y: scroll;
+  max-height: calc(100vh - 100px);
+}
+
+/*# sourceMappingURL=index.css.map */

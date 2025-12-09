@@ -4,10 +4,9 @@ const AuthLayout: React.FC<{ children: ReactNode }> = ({children}) => {
     return (
         <div className='auth-back'>
             <div className='auth-glass'>
-                <div className="container d-flex align-items-center justify-content-center p-0">
-                    <div className={'col-12 co-md-8 col-lg-8 col-xl-6'}>
-                        {children}
-                    </div>
+
+                <div className='w-full md:w-4/5 lg:w-3/5 mx-auto'>
+                    {children}
                 </div>
             </div>
         </div>

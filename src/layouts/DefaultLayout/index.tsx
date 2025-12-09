@@ -1,18 +1,21 @@
 import React, {ReactNode} from 'react';
 import Header from "../headers/HeaderOne.tsx";
 import {SidebarProvider} from "../SidebarContext.tsx";
+import MobileNavigation from "./MobileNavigation.tsx";
+
 
 const DefaultLayout: React.FC<{ children: ReactNode }> = ({children}) => {
     return (
         <SidebarProvider>
-            <div className='debug-container container vh-100 overflow-y-scroll d-flex' style={{maxWidth:'1600px'}}>
-                {/*<Sidebar/>*/}
+            <div>
                 <div className={'showSidebar'}>
                     <Header/>
                     <main className={''}>
                         {children}
                     </main>
-                    {/*<FooterOne/>*/}
+                    {
+                        location.pathname === "/" && <MobileNavigation/>
+                    }
                 </div>
 
             </div>
