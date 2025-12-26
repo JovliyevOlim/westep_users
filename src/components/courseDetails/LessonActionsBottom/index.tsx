@@ -1,5 +1,4 @@
 import {NavLink, Route, useLocation, Routes, Navigate} from "react-router-dom";
-import {useSidebar} from "../../../layouts/SidebarContext.tsx";
 import {useEffect, useRef} from "react";
 import Questions from "./Questions.tsx";
 import Files from "./Files.tsx";
@@ -13,7 +12,6 @@ export const links = [
 
 function Index() {
 
-    const {isMobileOpen, toggleMobileSidebar, isExpanded} = useSidebar();
     const location = useLocation();
 
     const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -42,11 +40,6 @@ function Index() {
                                     }) => (
                             <NavLink
                                 to={path}
-                                onClick={() => {
-                                    if (isMobileOpen && isExpanded) {
-                                        toggleMobileSidebar()
-                                    }
-                                }}
                                 className={({isActive}) =>
                                     `p-3 rounded-3xl ${
                                         isActive

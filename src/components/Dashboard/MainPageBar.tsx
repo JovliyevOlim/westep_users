@@ -53,7 +53,7 @@ function MainPageBar() {
                                 <div
                                     className={`bg-primary-500 h-[10px]  ${item.percent === 100 ? 'rounded-full' : "rounded-l-lg "}`}
                                     style={{
-                                        width: `${10 * index}%`
+                                        width: `${5 * index}%`
                                     }}
                                 >
                                 </div>

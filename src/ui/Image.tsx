@@ -1,28 +1,16 @@
-import {useEffect, useState} from "react";
-import {useGetFileById} from "../api/file/useFile.ts";
-
+import {baseUrlImage} from "../api/apiClient.ts";
 
 interface Props {
-    id: string | null,
+    imageUrl: string | null,
 }
 
-function Image({id}: Props) {
+function Image({imageUrl}: Props) {
 
-
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const {data} = useGetFileById(id as string);
-
-    useEffect(() => {
-        if (data) {
-            const blob = new Blob([data], {type: data.type || "image/svg+xml"});
-            setPreviewUrl(URL.createObjectURL(blob));
-        }
-    }, [data]);
 
     return (
         <div className="w-full h-[180px] relative">
             {
-                previewUrl && <img
+                imageUrl && <img
                     style={{
                         width: "100%",
                         height: "100%",
@@ -30,8 +18,8 @@ function Image({id}: Props) {
                         objectPosition: 'center'
                     }}
                     loading='lazy'
-                    src={previewUrl}
-                    alt={id as string}
+                    src={baseUrlImage + imageUrl}
+                    alt={imageUrl as string}
                 />
             }
         </div>);

@@ -1,10 +1,8 @@
 import {useEffect, useRef, useState} from 'react';
 import {NavLink, useLocation} from "react-router-dom";
-import {useSidebar} from "../SidebarContext.tsx";
 import {links} from "../DefaultLayout/sidebar";
 
 function HeaderNavMenu() {
-    const {isMobileOpen, toggleMobileSidebar, isExpanded} = useSidebar();
     const location = useLocation();
 
     const [active, setActive] = useState(0);
@@ -58,7 +56,6 @@ function HeaderNavMenu() {
                         to={path}
                         onClick={() => {
                             setActive(index);
-                            if (isMobileOpen && isExpanded) toggleMobileSidebar();
                         }}
                         className={({ isActive }) =>
                             `

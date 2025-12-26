@@ -24,10 +24,10 @@ export const getAllStudentCoursesById = async (id: string | undefined) => {
     }
 };
 
-export const setStudentCourse = async (body: { studentId: string, courseId: string }) => {
+export const setStudentCourse = async (body: { studentId: string, courseId: string | null, moduleList: string[] }) => {
     try {
-        await apiClient.post("/student-course", body);
-        return body.studentId;
+        const data = await apiClient.post("/student-course", body);
+        return data.data;
     } catch (error) {
         const err = error as AxiosError<{ message: string }>;
         const message = err.response?.data?.message;

@@ -3,6 +3,7 @@ import {Course} from "../../types/types.ts";
 import Spinner from "../../ui/Spinner.tsx";
 import {useUser} from "../../api/auth/useAuth.ts";
 import {useSetStudentCourseById} from "../../api/courses/useCourse.ts";
+import {Link} from "react-router-dom";
 
 interface CourseCard {
     course: Course;
@@ -18,6 +19,7 @@ function CourseCard({course}: CourseCard) {
         mutate({
             studentId: user.id,
             courseId: id,
+            moduleList:[],
         })
     }
 
@@ -25,7 +27,7 @@ function CourseCard({course}: CourseCard) {
         <>
             <div className={'border border-blue-200 rounded-3xl overflow-hidden h-full flex flex-col'}>
                 <div className="w-full h-[180px]">
-                    <Image id={course.attachmentId}/>
+                    <Image imageUrl={course.attachmentUrl}/>
                 </div>
                 <div className={'p-4 flex flex-col justify-between flex-1'}>
                     <div>
@@ -34,12 +36,24 @@ function CourseCard({course}: CourseCard) {
                             <p className={'text-xs font-light break-all'}>{course?.description}</p>
                         </div>
                     </div>
-                    <button
-                        onClick={() => handleCourse(course.id)}
-                        className={'w-full h-[40px] mt-3 bg-blue-50 text-blue-400 border border-blue-400 rounded-full p-1 text-center'}>
-                        {isPending && <Spinner/>}
-                        Boshlash
-                    </button>
+                    {
+                        course.price > 0 ?
+                            <Link to={`/roadmap/${course.id}`}>
+                                <button
+                                    className={'w-full h-[40px] mt-3 bg-blue-50 text-blue-400 border border-blue-400 rounded-full p-1 text-center'}>
+                                    Sotib Olish
+                                </button>
+                            </Link>
+                            :
+                            <button
+                                onClick={() => handleCourse(course.id)}
+                                className={'w-full h-[40px] mt-3 bg-blue-50 text-blue-400 border border-blue-400 rounded-full p-1 text-center'}>
+                                {isPending && <Spinner/>}
+                                Boshlash
+                            </button>
+                    }
+
+
                 </div>
             </div>
         </>

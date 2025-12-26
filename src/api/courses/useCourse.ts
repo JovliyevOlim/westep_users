@@ -2,6 +2,7 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {getAllCourses, getAllStudentCoursesById, getCourseById, setStudentCourse} from "./courseApi.ts";
 import {getItem} from "../../utils/utils.ts";
 import {useNavigate} from "react-router-dom";
+import {usePaymeCreate} from "../payme/usePayme.ts";
 
 export const useGetCourses = () =>
     useQuery({
@@ -32,6 +33,19 @@ export const useSetStudentCourseById = () => {
         mutationFn: setStudentCourse,
         onSuccess: async (id) => {
             navigate(`/course/${id}`);
+        },
+        onError: (error) => {
+            alert(error);
+        },
+    });
+};
+
+export const useSetStudentCourseByIdForPayment = () => {
+    const {mutate} = usePaymeCreate()
+    return useMutation({
+        mutationFn: setStudentCourse,
+        onSuccess: async (id) => {
+            mutate(id);
         },
         onError: (error) => {
             alert(error);

@@ -23,7 +23,7 @@ const PhoneNumberInput = <T extends Record<string, any>>({
             {label && (
                 <label
                     htmlFor={name as string}
-                    className="block text-base font-medium text-gray-200 mb-2"
+                    className="text-sm text-gray-400 font-semibold"
                 >
                     {label}
                 </label>

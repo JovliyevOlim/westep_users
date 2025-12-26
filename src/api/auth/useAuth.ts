@@ -112,6 +112,7 @@ export const useVerifyCode = () => {
                     password:form.password,
                     gender:form.gender,
                     phone:form.phoneNumber,
+                    phoneNumber:form.phoneNumber,
                 })
             }
             else{

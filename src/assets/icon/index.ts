@@ -26,6 +26,12 @@ import {ReactComponent as Search} from "./search.svg?react";
 import {ReactComponent as Shop} from "./shop.svg?react";
 import {ReactComponent as Message} from "./message.svg?react";
 import {ReactComponent as Profile} from "./profile.svg?react";
+import {ReactComponent as HomeBg} from "./home_bg.svg?react";
+import {ReactComponent as SearchBg} from "./search-bg.svg?react";
+import {ReactComponent as ShopBg} from "./shopping-cart_bg.svg?react";
+import {ReactComponent as MessageBg} from "./message_bg.svg?react";
+import {ReactComponent as ProfileBg} from "./user_bg.svg?react";
+import {ReactComponent as ArrowLeftIcon} from "./arrow-left.svg?react";
 
 export {
     Book,
@@ -44,5 +50,22 @@ export {
     RotateRight,
     VolumeLow,
     Mute,
-    Pause, Replay, Star, SuccessIcon, FlagUz, EditIcon, CheckLineIcon, Home, Search, Shop, Message, Profile
+    Pause,
+    Replay,
+    Star,
+    SuccessIcon,
+    FlagUz,
+    EditIcon,
+    CheckLineIcon,
+    Home,
+    Search,
+    Shop,
+    Message,
+    Profile,
+    HomeBg,
+    SearchBg,
+    ShopBg,
+    MessageBg,
+    ProfileBg,
+    ArrowLeftIcon,
 }

@@ -11,6 +11,7 @@ export interface User {
     gender: string,
     password: string,
     phone: string
+    phoneNumber: string
 }
 
 export interface Course extends Common {
@@ -19,14 +20,15 @@ export interface Course extends Common {
     isPublished: boolean,
     publishedAt: string,
     businessId: string
-    attachmentId: string | null
+    attachmentUrl: string | null
+    price: number
 }
 
 export interface StudentCourse extends Common {
     courseId: string,
     courseName: string,
     studentId: boolean,
-    attachmentId: string,
+    attachmentUrl: string,
     percent: number,
 }
 
@@ -36,6 +38,7 @@ export interface Module extends Common {
     courseId: string
     orderIndex: number | null,
     active?: boolean,
+    price: number,
 }
 
 export interface Lesson extends Common {

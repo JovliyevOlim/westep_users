@@ -1,5 +1,5 @@
 import {
-    MediaPlayer, MediaProvider, Poster
+    MediaPlayer, MediaPlayerInstance, MediaProvider, Poster, useStore
 } from '@vidstack/react';
 import {DefaultVideoLayout} from '@vidstack/react/player/layouts/default';
 import {
@@ -16,6 +16,7 @@ import {
 import {SeekButton} from "@vidstack/react";
 
 import type {DefaultLayoutIcons} from '@vidstack/react/player/layouts/default';
+import {useEffect, useRef} from "react";
 
 // Icon should be: `() => ReactNode`
 const None = () => null;
@@ -118,13 +119,26 @@ const VideoPlayer = ({videoUrl}: { videoUrl: string }) => {
         return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "";
     };
 
-// ishlatish:
+
     const thumbnail = getYoutubeThumbnail(videoUrl)
 
-    console.log(thumbnail)
+
+    const ref = useRef<MediaPlayerInstance>(null),
+        {currentTime, realCurrentTime, ended} = useStore(MediaPlayerInstance, ref);
+
+
+    useEffect(() => {
+        if (ended) {
+            console.log("ended");
+        }
+        console.log(currentTime, 'currentTime');
+        console.log(realCurrentTime, 'realCurrentTime');
+    }, [realCurrentTime, currentTime,ended]);
+
+
     return (
-        <MediaPlayer
-            title="Sprite Fight" src={videoUrl} poster={thumbnail}>
+        <MediaPlayer ref={ref}
+                     title="Sprite Fight" src={videoUrl} poster={thumbnail}>
             <MediaProvider>
                 <Poster className="vds-poster"/>
                 <SeekButton className="vds-button" seconds={10}>

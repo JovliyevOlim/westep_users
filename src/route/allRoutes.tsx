@@ -4,6 +4,8 @@ import MainPage from "../pages/MainPage.tsx";
 import Logout from "../components/auth/Logout.tsx";
 import CoursePage from "../pages/CoursePage.tsx";
 import Success from "../components/auth/Success.tsx";
+import Profile from "../pages/ProfilePage.tsx";
+import RoadMapCoursePage from "../pages/RoadMapCoursePage.tsx";
 
 const HomeOne = lazy(() => import("../components/homes/home"));
 const HomeTwo = lazy(() => import("../components/homes/home-2"));
@@ -20,8 +22,6 @@ const Instructors = lazy(() => import("../components/instructors"));
 const Contact = lazy(() => import("../components/contact"));
 const Login = lazy(() => import("../components/auth/login"));
 const Error = lazy(() => import("../components/error"));
-const Users = lazy(() => import("../components/users"));
-const Statistic = lazy(() => import("../components/statistic"));
 const Password = lazy(() => import("../components/auth/password"));
 const ForgotPassword = lazy(() => import("../components/auth/forgot-password"));
 const VerifyCode = lazy(() => import("../components/auth/sms-code"));
@@ -31,9 +31,9 @@ const Register = lazy(() => import("../components/auth/register"));
 
 const authProtectedRoutes = [
     {path: "/", element: <MainPage/>, title: "Home"},
-    {path: "/users", element: <Users/>, title: "Users"},
     {path: "/courses/:id/*", element: <CoursePage/>, title: "Lessons"},
-    {path: "/statistic", element: <Statistic/>, title: "Statistics"},
+    {path: "/roadmap/:id", element: <RoadMapCoursePage/>, title: "RoadMapCourse"},
+    {path: "/profile", element: <Profile/>, title: "Profile"},
 
     {path: "/home-1", element: <HomeOne/>},
     {path: "/home-2", element: <HomeTwo/>, title: "Home 2"},

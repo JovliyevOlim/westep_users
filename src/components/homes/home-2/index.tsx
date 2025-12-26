@@ -1,5 +1,3 @@
-
- 
 import HeroHomeTwo from './HeroHomeTwo'
 import BrandHomeTwo from './BrandHomeTwo' 
 import FeatureHomeOne from '../home/FeatureHomeOne'
@@ -13,7 +11,6 @@ import FaqHomeTwo from './FaqHomeTwo'
 import ReviewHomeOne from '../home/ReviewHomeOne'
 import BlogHomeOne from '../home/BlogHomeOne'
 import CtaHomeTwo from './CtaHomeTwo' 
-import HeaderTwo from '../../../layouts/headers/HeaderTwo'
 import FooterOne from '../../../layouts/footers/FooterOne'
 import ScrollToTop from '../../common/ScrollToTop'
 import ScrollTop from '../../common/ScrollTop'
@@ -21,7 +18,6 @@ import ScrollTop from '../../common/ScrollTop'
 export default function HomeTwo() {
   return (
     <>
-      <HeaderTwo />
       <HeroHomeTwo />
       <BrandHomeTwo /> 
       <FeatureHomeOne style_2={true} />

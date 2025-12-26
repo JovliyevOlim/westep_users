@@ -8,6 +8,7 @@ function Index() {
 
     const params = useParams();
     const {data} = useGetModuleById(params.id);
+    // const {data:progress} = useGetStudentCourseProgress(params.id)
 
 
     return (

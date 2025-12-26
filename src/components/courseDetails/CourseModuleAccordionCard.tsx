@@ -43,7 +43,7 @@ function CourseModuleAccordionCard({modules, setModal}: { modules: Module[], set
     useEffect(() => {
         if (data) {
             const isActiveModule = data.find((item: Module) => item.active);
-            navigate(`${openIndex}/${isActiveModule.id}`);
+            navigate(`${openIndex}/${isActiveModule?.id}`);
         }
     }, [data]);
 
@@ -77,34 +77,44 @@ function CourseModuleAccordionCard({modules, setModal}: { modules: Module[], set
                         {
                             isPending ? <div className={'flex justify-center p-3'}><Spinner/></div> :
                                 <div className="p-4 pe-0 flex flex-col gap-5">
-                                    {data.map((item: Lesson, idx: number) => (
-                                        <Link
-                                            to={isMobile ? `/courses/${params.id}/${openIndex}/${item.id}` : `${openIndex}/${item.id}`}
-                                            onClick={() => setModal && setModal(false)}
-                                            key={idx}
-                                        >
-                                            <div
+                                    {data.length > 0 ? data.map((item: Lesson, idx: number) => (
+                                            <Link
+                                                to={isMobile ? `/courses/${params.id}/${openIndex}/${item.id}` : `${openIndex}/${item.id}`}
+                                                onClick={() => {
+                                                    if (isMobile) {
+                                                        if (setModal) {
+                                                            setModal(false);
+                                                        }
+                                                    }
+                                                }}
                                                 key={idx}
-                                                className={`
+                                            >
+                                                <div
+                                                    key={idx}
+                                                    className={`
                     flex items-center gap-4 p-2 
                     ${getItemClasses(item, "bg-transparent text-gray-900 hover:bg-primary-100 cursor-pointer", "text-primary-500 bg-primary-100 border-l-2 border-primary-500", "text-gray-400")}    `}
-                                            >
-                                                <TickCircle width={24} height={24}
-                                                            className={`bg-transparent ${getItemClasses(item, "text-primary-500", "ms-[-2px]", "bg-gray-50 border-gray-200")}`}
-                                                />
+                                                >
+                                                    <TickCircle width={24} height={24}
+                                                                className={`bg-transparent ${getItemClasses(item, "text-primary-500", "ms-[-2px]", "bg-gray-50 border-gray-200")}`}
+                                                    />
 
-                                                <div className="flex flex-col justify-between w-full gap-1">
-                                                    <p className="text-md font-medium m-0 p-0 leading-none break-all w-full">
-                                                        {item.name}
-                                                    </p>
-                                                    <p className="text-md font-medium m-0 p-0 leading-none">
-                                                        {item.estimatedDuration} min
-                                                    </p>
+                                                    <div className="flex flex-col justify-between w-full gap-1">
+                                                        <p className="text-md font-medium m-0 p-0 leading-none break-all w-full">
+                                                            {item.name}
+                                                        </p>
+                                                        <p className="text-md font-medium m-0 p-0 leading-none">
+                                                            {item.estimatedDuration} min
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Link>
+                                            </Link>
 
-                                    ))}
+                                        ))
+                                        : <p className="text-md text-black font-medium text-center w-full">
+                                            Hozircha dars yo'q !
+                                        </p>
+                                    }
                                 </div>
                         }
                     </div>

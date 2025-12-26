@@ -18,7 +18,7 @@ function StudentCourseCard({course}: props) {
         <>
             <div className={'border border-blue-200 rounded-3xl overflow-hidden h-full flex flex-col'}>
                 <div className="w-full h-[180px]">
-                    <Image id={course?.attachmentId}/>
+                    <Image imageUrl={course?.attachmentUrl}/>
                 </div>
                 <div className={'p-4 flex flex-col justify-between flex-1'}>
                     <div>

@@ -4,14 +4,22 @@ export default {
         "./src/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
+        container: {
+            center: true,
+            screens: {
+                sm: '640px',
+                md: '768px',
+                lg: '1024px',
+                xl: '1280px',
+                '2xl': '1600px',
+            },
+        },
         extend: {
+            screens: {
+                '2xl': '1600px',
+            },
             fontFamily: {
                 outfit: ['Outfit', 'sans-serif'],
-            },
-            screens: {
-                '2xsm': '375px',
-                'xsm': '425px',
-                '3xl': '2000px',
             },
             fontSize: {
                 'title-2xl': ['72px', '90px'],
