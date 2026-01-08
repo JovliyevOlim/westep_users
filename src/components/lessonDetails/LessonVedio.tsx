@@ -17,6 +17,8 @@ import {SeekButton} from "@vidstack/react";
 
 import type {DefaultLayoutIcons} from '@vidstack/react/player/layouts/default';
 import {useEffect, useRef} from "react";
+import {useUpdateLessonProgress} from "../../api/lessonProgress/useLessonProgress.ts";
+import {useParams} from "react-router-dom";
 
 // Icon should be: `() => ReactNode`
 const None = () => null;
@@ -101,7 +103,13 @@ const customIcons: Partial<DefaultLayoutIcons> = {
 };
 
 
-const VideoPlayer = ({videoUrl}: { videoUrl: string }) => {
+const VideoPlayer = ({videoUrl,setEnded}: { videoUrl: string,setEnded:(end:boolean)=>void }) => {
+
+
+    const {mutate} = useUpdateLessonProgress()
+    const params = useParams()
+
+
     const getYoutubeThumbnail = (srcLink: string) => {
         let videoId = "";
         try {
@@ -124,16 +132,31 @@ const VideoPlayer = ({videoUrl}: { videoUrl: string }) => {
 
 
     const ref = useRef<MediaPlayerInstance>(null),
-        {currentTime, realCurrentTime, ended} = useStore(MediaPlayerInstance, ref);
-
+        {currentTime, ended} = useStore(MediaPlayerInstance, ref);
 
     useEffect(() => {
         if (ended) {
-            console.log("ended");
+            mutate({
+                studentCourseId: params.id,
+                currentSecond: currentTime,
+                lessonId: params.lessonId
+            });
+            setEnded(true);
+        } else {
+            setEnded(false);
+            const interval = setInterval(() => {
+                mutate({
+                    studentCourseId: params.id,
+                    currentSecond: currentTime,
+                    lessonId: params.lessonId
+                });
+            }, 15000);
+
+            return () => clearInterval(interval);
         }
-        console.log(currentTime, 'currentTime');
-        console.log(realCurrentTime, 'realCurrentTime');
-    }, [realCurrentTime, currentTime,ended]);
+    }, [ended, params.id, params.lessonId]);
+
+    console.log(currentTime,'currentTime');
 
 
     return (

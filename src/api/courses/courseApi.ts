@@ -24,6 +24,9 @@ export const getAllStudentCoursesById = async (id: string | undefined) => {
     }
 };
 
+
+
+
 export const setStudentCourse = async (body: { studentId: string, courseId: string | null, moduleList: string[] }) => {
     try {
         const data = await apiClient.post("/student-course", body);

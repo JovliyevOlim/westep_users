@@ -4,10 +4,22 @@ import LessonActionsBottom from "../courseDetails/LessonActionsBottom";
 import {useGetLessonById} from "../../api/lesson/useLesson.ts";
 import {useParams} from "react-router-dom";
 import LessonMobileNavigationBar from "./LessonMobileNavigationBar.tsx";
+import {ArrowRightLineIcon} from "../../assets/icon";
+import {useGetLessonsProgress} from "../../api/lessonProgress/useLessonProgress.ts";
+import {useState} from "react";
 
 function LessonActions() {
 
     const params = useParams();
+    const [ended,setEnded] = useState<boolean>(true);
+    const {data:lessonProgress} = useGetLessonsProgress({
+        studentCourseId:params.id,
+        lessonId:params.lessonId,
+        ended:ended
+    })
+
+
+    console.log(lessonProgress,'lessonProgress');
     const {data} = useGetLessonById(params.lessonId || null);
 
 
@@ -15,8 +27,8 @@ function LessonActions() {
         <div className="h-dvh w-full lg:flex-1 lg:p-10">
             {
                 data ?
-                <div className={'lg:p-8 border border-blue-300 lg:rounded-[16px]'}>
-                    <LessonVedio videoUrl={data?.vedioUrl || ""}/>
+                <div className={'lg:p-8 pb-0 border border-blue-300 lg:rounded-[16px]'}>
+                    <LessonVedio videoUrl={data?.vedioUrl || ""} setEnded={setEnded}/>
                     <div className={'px-4 lg:p-0'}>
                         <p className={'text-lg lg:text-2xl text-gray-900 mt-5 font-medium'}>{data.name}</p>
                         <p className={'text-sm text-gray-400  font-light'}>{data.description}</p>
@@ -24,6 +36,12 @@ function LessonActions() {
                         <LessonRating/>
                         <hr className="bg-blue-100 my-6 h-px border-0 hidden lg:block"/>
                         <LessonActionsBottom/>
+                        <div className={'sticky bottom-0 left-0 w-full flex justify-end py-3 bg-white'}>
+                            <button className={'h-[52px] flex gap-2 items-center border-2 border-primary-500 text-primary-500 rounded-full text-lg font-semibold p-4'}>
+                                Keyingi darsga o'tish
+                                <ArrowRightLineIcon width={24} height={24}/>
+                            </button>
+                        </div>
                     </div>
                 </div>:
                     <div className={'flex items-center justify-center h-dvh lg:h-[400px]'}>
@@ -34,6 +52,7 @@ function LessonActions() {
 
             }
             <LessonMobileNavigationBar/>
+
         </div>
 
     );

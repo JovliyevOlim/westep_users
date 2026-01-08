@@ -3,7 +3,7 @@ import {getStudentCourseProgress, changeStudentCourseProgress} from "./studentPr
 import {getItem} from "../../utils/utils.ts";
 import {useToast} from "../../hooks/useToast.tsx";
 
-export const useGetStudentCourseProgress = (id: string | null) =>
+export const useGetStudentCourseProgress = (id: string | undefined) =>
     useQuery({
         queryKey: ["studentCourseId", id],
         queryFn: async () => {

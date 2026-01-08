@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getModulesById} from "./moduleApi.ts";
+import {getAllStudentCoursesModuleById, getModulesById} from "./moduleApi.ts";
 import {getItem} from "../../utils/utils.ts";
 
 
@@ -16,3 +16,14 @@ export const useGetModuleById = (id: string | undefined) =>
     });
 
 
+export const useGetStudentCourseModulesById = (id: string | undefined) =>
+    useQuery({
+        queryKey: ["studentCourseModule", id],
+        queryFn: async () => {
+            const token = getItem<string>('accessToken');
+            if (!token) throw new Error("No token");
+            return await getAllStudentCoursesModuleById(id);
+        },
+        enabled: !!id,
+        retry: false,
+    });

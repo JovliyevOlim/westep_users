@@ -31,3 +31,21 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "dist/*"
           target: "/var/www/westep_users"
+          strip_components: 1 # dist papkasini o'zini emas, ichidagi fayllarni tarqatadi
+
+      - name: Send Telegram Notification
+        if: always() # Deploy muvaffaqiyatli bo'lsa ham, xato bo'lsa ham xabar boradi
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            ${{ job.status == 'success' && '🚀 **Yangi Deploy!**' || '❌ **Deployda Xatolik!**' }}
+            
+            **Loyiha:** `${{ github.repository }}`
+            **Commit:** `${{ github.event.head_commit.message }}`
+            **Muallif:** @${{ github.actor }}
+            **Status:** ${{ job.status == 'success' && '✅ Muvaffaqiyatli' || '⚠️ Xato yuz berdi' }}
+            
+            [O'zgarishlarni ko'rish](https://github.com/${{ github.repository }}/commit/${{ github.sha }})

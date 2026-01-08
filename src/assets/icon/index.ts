@@ -32,6 +32,7 @@ import {ReactComponent as ShopBg} from "./shopping-cart_bg.svg?react";
 import {ReactComponent as MessageBg} from "./message_bg.svg?react";
 import {ReactComponent as ProfileBg} from "./user_bg.svg?react";
 import {ReactComponent as ArrowLeftIcon} from "./arrow-left.svg?react";
+import {ReactComponent as ArrowRightLineIcon} from "./arrow-right-line.svg?react";
 
 export {
     Book,
@@ -68,4 +69,5 @@ export {
     MessageBg,
     ProfileBg,
     ArrowLeftIcon,
+    ArrowRightLineIcon
 }

@@ -6,7 +6,7 @@ import {Lesson} from "../../types/types.ts";
 
 export const getStudentCourseProgress = async (studentCourseId: string | undefined) => {
     try {
-        const {data} = await apiClient.get("/progress/" + studentCourseId);
+        const {data} = await apiClient.get("/student-course-progress/student-courses/" + studentCourseId+"/progress");
         const newData = data.map((item: Lesson, index: number) => {
             if (index == 0) {
                 return {...item, active: true};

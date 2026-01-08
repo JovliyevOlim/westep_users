@@ -19,3 +19,14 @@ export const getModulesById = async (id: string | undefined) => {
         throw new Error(message);
     }
 };
+
+export const getAllStudentCoursesModuleById = async (id: string | undefined) => {
+    try {
+        const {data} = await apiClient.get("/student-course/students/me/student-courses/" + id + "/modules");
+        return data;
+    } catch (error) {
+        const err = error as AxiosError<{ message: string }>;
+        const message = err.response?.data?.message;
+        throw new Error(message);
+    }
+};

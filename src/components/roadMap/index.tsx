@@ -15,7 +15,7 @@ function Index() {
     console.log(selected)
 
     return (
-        <div className='flex'>
+        <div className='lg:flex gap-10 p-10'>
             {
                 data && data.length > 0 && <Modules modules={data} selected={selected} setSelected={setSelected}/>
             }

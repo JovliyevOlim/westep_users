@@ -5,6 +5,8 @@ import {useGetLessons} from "../../api/lesson/useLesson.ts";
 import Spinner from "../../ui/Spinner.tsx";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useMobile} from "../../hooks/useMobile.ts";
+import {useGetStudentCourseProgress} from "../../api/studentProgressCourse/useStudentProgressCourse.ts";
+import {useStartLessonProgress} from "../../api/lessonProgress/useLessonProgress.ts";
 
 
 function CourseModuleAccordionCard({modules, setModal}: { modules: Module[], setModal?: (modal: boolean) => void }) {
@@ -12,6 +14,9 @@ function CourseModuleAccordionCard({modules, setModal}: { modules: Module[], set
     const [openIndex, setOpenIndex] = useState<string | null>(null);
     const navigate = useNavigate();
     const params = useParams();
+    const {mutate} = useStartLessonProgress()
+    const {data: progress} = useGetStudentCourseProgress(params.id)
+    console.log(progress,'progress');
     const isMobile = useMobile()
     const {data, isPending} = useGetLessons(openIndex)
     const toggle = (index: string) => {
@@ -20,7 +25,7 @@ function CourseModuleAccordionCard({modules, setModal}: { modules: Module[], set
 
 
     useEffect(() => {
-        if (modules) {
+        if (progress) {
             const isActiveModule = modules.find((item: Module) => item.active);
             setOpenIndex(isActiveModule?.id || null);
         }
@@ -41,7 +46,7 @@ function CourseModuleAccordionCard({modules, setModal}: { modules: Module[], set
 
 
     useEffect(() => {
-        if (data) {
+        if (progress) {
             const isActiveModule = data.find((item: Module) => item.active);
             navigate(`${openIndex}/${isActiveModule?.id}`);
         }
@@ -81,6 +86,10 @@ function CourseModuleAccordionCard({modules, setModal}: { modules: Module[], set
                                             <Link
                                                 to={isMobile ? `/courses/${params.id}/${openIndex}/${item.id}` : `${openIndex}/${item.id}`}
                                                 onClick={() => {
+                                                    mutate({
+                                                        studentCourseId:params.id,
+                                                        lessonId:item.id
+                                                    })
                                                     if (isMobile) {
                                                         if (setModal) {
                                                             setModal(false);

@@ -1,5 +1,6 @@
 import React from "react"
 import {Module} from "../../types/types.ts";
+import {FaCircleCheck} from "react-icons/fa6";
 
 
 interface Props {
@@ -15,42 +16,58 @@ function Modules({modules, setSelected, selected}: Props) {
         let newList: Module[] = selected ? [...selected] : []
         if (e.target.checked) {
             newList.push(item)
-        }
-        else {
+        } else {
             if (selected) {
-                console.log(selected.filter((module: Module) => module.id === item.id))
                 newList = selected.filter((module: Module) => module.id !== item.id)
             }
         }
-        console.log(newList)
         setSelected(newList)
     }
 
+    function isSelectedModuleList(id: string) {
+        return selected?.some((item) => item.id === id)
+    }
+
     return (
-        <div className={'flex-1 p-4'}>
-            <h1 className="text-2xl font-extrabold uppercase leading-tight">
+        <div className={'flex-1 p-4 border border-gray-300 rounded-3xl'}>
+            <h1 className="text-xl font-semibold  leading-tight p-3">
                 Kursni xarid qilish
             </h1>
 
-            {/* Divider */}
-            <div className="my-8 h-[2px] w-full bg-black"/>
 
             {/* Course block */}
             <div className="space-y-8">
-                {/* Modules */}
-                <div className="space-y-6">
+                <div>
                     {
 
-                        modules.map((item:Module, i) => (
-                            <div key={i} className="flex items-center gap-8">
-                                <input
-                                    onChange={(e) => handleChange(e, item)}
-                                    type="checkbox"
-                                    className="mt-1 h-6 w-6 accent-primary-500"
-                                />
+                        modules.map((item: Module, i) => (
+                            <div key={i}
+                                 className={`flex items-center justify-between p-3 gap-8 ${isSelectedModuleList(item.id) && 'bg-success-100'}`}>
+
+                                <div className={'flex items-center gap-8'}>
+                                    <div>
+                                        <label htmlFor={item.id}>
+                                            {
+                                                isSelectedModuleList(item.id) ?
+                                                    <FaCircleCheck size={24} color="#1BB66E"/>
+                                                    : <FaCircleCheck size={24} color="#ACB5C5"/>
+
+                                            }
+                                        </label>
+                                        <input
+                                            id={item.id}
+                                            onChange={(e) => handleChange(e, item)}
+                                            type="checkbox"
+                                            className="mt-1 h-6 w-6 hidden accent-primary-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="text-xl">{item.name}</p>
+                                    </div>
+                                </div>
+
                                 <div>
-                                    <p className="text-xl">{item.name}</p>
-                                    <p className="text-2xl font-extrabold">
+                                    <p className="text-xl">
                                         {item.price.toLocaleString().replace(',', '.')} so'm
                                     </p>
                                 </div>
