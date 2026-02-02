@@ -192,27 +192,15 @@ const VideoPlayer = ({videoUrl, setEnded, startTime}: {
             <DefaultVideoLayout
                 icons={customIcons as DefaultLayoutIcons}
                 slots={{
-                    beforeControlSpacer: (
-                        <>
-                            <SeekButton className="vds-button" seconds={-10}>
-                                <RotateLeft width={28} height={28}/>
-                            </SeekButton>
-                            <SeekButton className="vds-button" seconds={10}>
-                                <RotateRight width={28} height={28}/>
-                            </SeekButton>
-                        </>
-                    )
+                    smallLayout: {
+                        seekBackwardButton: <SeekButton seconds={-5}/>,
+                        seekForwardButton: <SeekButton seconds={5}/>
+                    },
+                    largeLayout: {
+                        seekBackwardButton: <SeekButton seconds={-5}/>,
+                        seekForwardButton: <SeekButton seconds={5}/>
+                    }
                 }}
-                // slots={{
-                //     smallLayout: {
-                //         seekBackwardButton: <SeekButton seconds={-5}/>,
-                //         seekForwardButton: <SeekButton seconds={5}/>
-                //     },
-                //     largeLayout: {
-                //         seekBackwardButton: <SeekButton seconds={-5}/>,
-                //         seekForwardButton: <SeekButton seconds={5}/>
-                //     }
-                // }}
             />
         </MediaPlayer>
     );

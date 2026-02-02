@@ -1,11 +1,13 @@
 import CourseModuleAccordionCard from "../CourseModuleAccordionCard.tsx";
 import {useParams} from "react-router-dom";
-import {useGetStudentCourseModulesById} from "../../../api/module/useModule.ts";
+import {useGetModuleById, useGetStudentCourseModulesById} from "../../../api/module/useModule.ts";
 
 function LessonMobileBarModal({show, handleClose}: { show: boolean, handleClose: (modal: boolean) => void }) {
 
     const params = useParams();
     const {data} = useGetStudentCourseModulesById(params.id);
+    const {data: modules} = useGetModuleById(params.courseId);
+
 
     return (
         <>
@@ -17,7 +19,7 @@ function LessonMobileBarModal({show, handleClose}: { show: boolean, handleClose:
                         {/* Body */}
                         <div className="p-0">
                             <div className="h-[80%]">
-                                <CourseModuleAccordionCard modules={data} setModal={handleClose}/>
+                                <CourseModuleAccordionCard modules={data} setModal={handleClose} allModules={modules}/>
                             </div>
                         </div>
 

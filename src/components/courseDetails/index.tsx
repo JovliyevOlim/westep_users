@@ -1,7 +1,7 @@
 import CourseModuleBar from "./CourseModuleBar.tsx";
-import {useLocation, useParams} from "react-router-dom";
 import LessonDetails from "../lessonDetails";
 import {useGetModuleById, useGetStudentCourseModulesById} from "../../api/module/useModule.ts";
+import {useParams} from "react-router-dom";
 
 function Index() {
 

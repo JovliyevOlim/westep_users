@@ -24,7 +24,7 @@ function LessonActions() {
         ended: ended
     })
 
-    const {data: lessons} = useGetLessons(params.moduleId);
+    const {data: lessons} = useGetLessons(params?.moduleId || null);
 
 
     const {data} = useGetLessonById(params.lessonId || null);
