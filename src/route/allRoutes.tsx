@@ -1,12 +1,13 @@
-import {Navigate} from 'react-router-dom';
-import {lazy} from "react";
-import MainPage from "../pages/MainPage.tsx";
-import Logout from "../components/auth/Logout.tsx";
-import CoursePage from "../pages/CoursePage.tsx";
-import Success from "../components/auth/Success.tsx";
-import Profile from "../pages/ProfilePage.tsx";
-import RoadMapCoursePage from "../pages/RoadMapCoursePage.tsx";
+import { Navigate } from 'react-router-dom';
+import { lazy } from "react";
 
+
+const MainPage = lazy(() => import("../pages/MainPage.tsx"));
+const Logout = lazy(() => import("../components/auth/Logout.tsx"));
+const CoursePage = lazy(() => import("../pages/CoursePage.tsx"));
+const Success = lazy(() => import("../components/auth/Success.tsx"));
+const Profile = lazy(() => import("../pages/ProfilePage.tsx"));
+const RoadMapCoursePage = lazy(() => import("../pages/RoadMapCoursePage.tsx"));
 const HomeOne = lazy(() => import("../components/homes/home"));
 const HomeTwo = lazy(() => import("../components/homes/home-2"));
 const About = lazy(() => import("../components/about"));
@@ -30,43 +31,43 @@ const CreatePassword = lazy(() => import("../components/auth/createPassword"));
 const Register = lazy(() => import("../components/auth/register"));
 
 const authProtectedRoutes = [
-    {path: "/", element: <MainPage/>, title: "Home"},
-    {path: "/courses/:id/*", element: <CoursePage/>, title: "Lessons"},
-    {path: "/roadmap/:id", element: <RoadMapCoursePage/>, title: "RoadMapCourse"},
-    {path: "/profile", element: <Profile/>, title: "Profile"},
+    { path: "/", element: <MainPage />, title: "Home" },
+    { path: "/courses/:courseId/:id/*", element: <CoursePage />, title: "Lessons" },
+    { path: "/roadmap/:id", element: <RoadMapCoursePage />, title: "RoadMapCourse" },
+    { path: "/profile", element: <Profile />, title: "Profile" },
 
-    {path: "/home-1", element: <HomeOne/>},
-    {path: "/home-2", element: <HomeTwo/>, title: "Home 2"},
-    {path: "/about", element: <About/>, title: "About"},
-    {path: "/courses", element: <Courses/>, title: "Courses"},
-    {path: "/courses-2", element: <CoursesTwo/>, title: "Courses 2"},
-    {path: "/course-details", element: <CourseDetails/>, title: "Course Details"},
-    {path: "/grid-blog", element: <GridBlog/>, title: "Grid Blog"},
-    {path: "/standard-blog", element: <StandardBlog/>, title: "Standard Blog"},
-    {path: "/blog-details", element: <BlogDetails/>, title: "Blog Details"},
-    {path: "/cart", element: <Cart/>, title: "Cart"},
-    {path: "/checkout", element: <Checkout/>, title: "Checkout"},
-    {path: "/instructors", element: <Instructors/>, title: "Instructors"},
-    {path: "/contact", element: <Contact/>, title: "Contact"},
-    {path: "*", element: <Error/>},
+    { path: "/home-1", element: <HomeOne /> },
+    { path: "/home-2", element: <HomeTwo />, title: "Home 2" },
+    { path: "/about", element: <About />, title: "About" },
+    { path: "/courses", element: <Courses />, title: "Courses" },
+    { path: "/courses-2", element: <CoursesTwo />, title: "Courses 2" },
+    { path: "/course-details", element: <CourseDetails />, title: "Course Details" },
+    { path: "/grid-blog", element: <GridBlog />, title: "Grid Blog" },
+    { path: "/standard-blog", element: <StandardBlog />, title: "Standard Blog" },
+    { path: "/blog-details", element: <BlogDetails />, title: "Blog Details" },
+    { path: "/cart", element: <Cart />, title: "Cart" },
+    { path: "/checkout", element: <Checkout />, title: "Checkout" },
+    { path: "/instructors", element: <Instructors />, title: "Instructors" },
+    { path: "/contact", element: <Contact />, title: "Contact" },
+    { path: "*", element: <Error /> },
     {
         path: '/',
         exact: true,
-        component: <Navigate to="/"/>,
+        component: <Navigate to="/" />,
     },
-    {path: '*', component: <Navigate to="/"/>},
+    { path: '*', component: <Navigate to="/" /> },
 ];
 
 const publicRoutes = [
-    {path: "/login", element: <Login/>},
-    {path: "/register", element: <Register/>},
-    {path: "/password", element: <Password/>},
-    {path: "/forgot-password", element: <ForgotPassword/>},
-    {path: "/verify-code", element: <VerifyCode/>},
-    {path: "/reset-password", element: <ResetPassword/>},
-    {path: "/create-password", element: <CreatePassword/>},
-    {path: "/success", element: <Success/>},
-    {path: "/logout", element: <Logout/>},
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register /> },
+    { path: "/password", element: <Password /> },
+    { path: "/forgot-password", element: <ForgotPassword /> },
+    { path: "/verify-code", element: <VerifyCode /> },
+    { path: "/reset-password", element: <ResetPassword /> },
+    { path: "/create-password", element: <CreatePassword /> },
+    { path: "/success", element: <Success /> },
+    { path: "/logout", element: <Logout /> },
 ];
 
-export {authProtectedRoutes, publicRoutes};
+export { authProtectedRoutes, publicRoutes };

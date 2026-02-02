@@ -1,8 +1,8 @@
 import React from 'react';
-import {Routes, Route} from 'react-router-dom';
+import { Routes, Route, Outlet } from 'react-router-dom';
 
 //routes
-import {authProtectedRoutes, publicRoutes} from './allRoutes';
+import { authProtectedRoutes, publicRoutes } from './allRoutes';
 import AuthProtected from "./AuthProtected.tsx";
 import DefaultLayout from "../layouts/DefaultLayout";
 import AuthLayout from "../layouts/AuthLayout";
@@ -12,28 +12,34 @@ const Index = () => {
     return (
         <React.Fragment>
             <Routes>
-                {publicRoutes.map((route, idx) => (
-                    <Route path={route.path} element={
-                        <AuthLayout>
-                            {route.element}
-                        </AuthLayout>
-                    } key={idx}/>
-                ))}
-                {authProtectedRoutes.map((route, idx) => (
-                    <Route
-                        path={route.path}
-                        element={
-                            <AuthProtected>
-                                {/*<ProtectedRoute allowedRoles={route?.permission}>*/}
-                                <DefaultLayout>
-                                    {route.element}
-                                </DefaultLayout>
-                                {/*</ProtectedRoute>*/}
-                            </AuthProtected>
-                        }
-                        key={idx}
-                    />
-                ))}
+                <Route element={
+                    <AuthLayout>
+                        <Outlet />
+                    </AuthLayout>
+                }>
+                    {publicRoutes.map((route, idx) => (
+                        <Route
+                            path={route.path}
+                            element={route.element}
+                            key={idx}
+                        />
+                    ))}
+                </Route>
+                <Route element={
+                    <AuthProtected>
+                        <DefaultLayout>
+                            <Outlet />
+                        </DefaultLayout>
+                    </AuthProtected>
+                }>
+                    {authProtectedRoutes.map((route, idx) => (
+                        <Route
+                            path={route.path}
+                            element={route.element}
+                            key={idx}
+                        />
+                    ))}
+                </Route>
             </Routes>
         </React.Fragment>
     );

@@ -6,7 +6,8 @@ export const usePaymeCreate = () => {
     return useMutation({
         mutationFn: paymeCreate,
         onSuccess: async (data) => {
-            window.open(data, "_self")
+            console.log(data);
+            window.open(data, "_blank")
         },
         onError: (error) => {
             alert(error);

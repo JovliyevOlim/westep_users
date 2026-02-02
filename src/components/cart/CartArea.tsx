@@ -1,8 +1,53 @@
 import { Link } from "react-router-dom";
+import CartItem from "./CartItem";
+import { useState } from "react";
 
- 
+// Mock Data (keyinchalik API dan keladi)
+const INITIAL_CART_ITEMS = [
+  {
+    id: 1,
+    image: "assets/img/courses/1.jpg",
+    title: "Financial Security Thinking",
+    price: 80.00,
+    quantity: 1,
+  },
+  {
+    id: 2,
+    image: "assets/img/courses/2.jpg",
+    title: "Financial Security Thinking",
+    price: 80.00,
+    quantity: 2,
+  },
+  {
+    id: 3,
+    image: "assets/img/courses/3.jpg",
+    title: "Financial Security Thinking",
+    price: 80.00,
+    quantity: 4,
+  }
+];
 
 export default function CartArea() {
+  const [items, setItems] = useState(INITIAL_CART_ITEMS);
+
+  const handleRemove = (id: number) => {
+    setItems(items.filter(item => item.id !== id));
+  };
+
+  const handleUpdateQuantity = (id: number, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    setItems(items.map(item =>
+      item.id === id ? { ...item, quantity: newQuantity } : item
+    ));
+  };
+
+  const calculateSubtotal = () => {
+    return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  const subtotal = calculateSubtotal();
+  const total = subtotal; // Hozircha total = subtotal (shipping yo'q)
+
   return (
     <>
       <div className="shopping-cart section-padding">
@@ -21,120 +66,26 @@ export default function CartArea() {
                   </tr>
                 </thead>
                 <tbody>
-
-                  <tr>
-                    <td>
-                      <Link to="/course-details" className="pthumb">
-                        <img src="assets/img/courses/1.jpg" alt="img" />
-                      </Link>
-
-                      <div className="product-name">
-                        <Link to="/course-details">
-                          Financial Security Thinking
-                        </Link>
-                      </div>
-                    </td>
-
-                    <td className="price" data-title="Price"><span>$80.00 </span></td>
-
-                    <td className="qty" data-title="Qty">
-                      <div className="input-group">
-                        <div className="button minus">
-                          <button type="button" className="btn btn-primary btn-number" disabled data-type="minus" data-field="quant[1]">
-                            <i className="ti-minus"></i>
-                          </button>
-                        </div>
-                        <input type="text" name="quant[1]" className="input-number" data-min="1" data-max="100" defaultValue="1" />
-                        <div className="button plus">
-                          <button type="button" className="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
-                            <i className="ti-plus"></i>
-                          </button>
-                        </div>
-                      </div>
-
-                    </td>
-
-                    <td className="total-amount"><span>$220.88</span></td>
-                    <td className="action"><a href="#"><i className="ti-trash remove-icon"></i></a></td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <Link to="/course-details" className="pthumb">
-                        <img src="assets/img/courses/2.jpg" alt="img" />
-                      </Link>
-
-                      <div className="product-name">
-                        <Link to="/course-details">
-                          Financial Security Thinking
-                        </Link>
-                      </div>
-                    </td>
-
-                    <td className="price" data-title="Price"><span>$80.00 </span></td>
-
-                    <td className="qty" data-title="Qty">
-                      <div className="input-group">
-                        <div className="button minus">
-                          <button type="button" className="btn btn-primary btn-number" disabled data-type="minus" data-field="quant[2]">
-                            <i className="ti-minus"></i>
-                          </button>
-                        </div>
-                        <input type="text" name="quant[2]" className="input-number" data-min="1" data-max="100" defaultValue="2" />
-                        <div className="button plus">
-                          <button type="button" className="btn btn-primary btn-number" data-type="plus" data-field="quant[2]">
-                            <i className="ti-plus"></i>
-                          </button>
-                        </div>
-                      </div>
-
-                    </td>
-
-                    <td className="total-amount"><span>$100.88</span></td>
-                    <td className="action"><a href="#"><i className="ti-trash remove-icon"></i></a></td>
-                  </tr>
-
-                  <tr>
-                    <td>
-                      <Link to="/course-details" className="pthumb">
-                        <img src="assets/img/courses/3.jpg" alt="img" />
-                      </Link>
-
-                      <div className="product-name">
-                        <Link to="/course-details">
-                          Financial Security Thinking
-                        </Link>
-                      </div>
-                    </td>
-
-                    <td className="price" data-title="Price"><span>$80.00 </span></td>
-
-                    <td className="qty" data-title="Qty">
-                      <div className="input-group">
-                        <div className="button minus">
-                          <button type="button" className="btn btn-primary btn-number" disabled data-type="minus" data-field="quant[4]">
-                            <i className="ti-minus"></i>
-                          </button>
-                        </div>
-                        <input type="text" name="quant[4]" className="input-number" data-min="1" data-max="100" defaultValue="4" />
-                        <div className="button plus">
-                          <button type="button" className="btn btn-primary btn-number" data-type="plus" data-field="quant[4]">
-                            <i className="ti-plus"></i>
-                          </button>
-                        </div>
-                      </div>
-
-                    </td>
-
-                    <td className="total-amount"><span>$150.00</span></td>
-                    <td className="action"><a href="#"><i className="ti-trash remove-icon"></i></a></td>
-                  </tr>
+                  {items.map((item) => (
+                    <CartItem
+                      key={item.id}
+                      id={item.id}
+                      image={item.image}
+                      title={item.title}
+                      price={item.price}
+                      quantity={item.quantity}
+                      total={item.price * item.quantity}
+                      onRemove={handleRemove}
+                      onUpdateQuantity={handleUpdateQuantity}
+                    />
+                  ))}
 
                   <tr>
                     <td colSpan={6} className="actions">
                       <div className="bottom-cart">
                         <div className="coupon">
-                          <input type="text" name="coupon_code" className="input-text" id="coupon_code" defaultValue="" placeholder="Coupon code" /> <button type="submit" className="button" name="apply_coupon" defaultValue="Apply coupon">Apply coupon</button>
+                          <input type="text" name="coupon_code" className="input-text" id="coupon_code" placeholder="Coupon code" />
+                          <button type="submit" className="button" name="apply_coupon">Apply coupon</button>
                         </div>
                         <a href="#" className="btn_border">Update Cart</a>
                       </div>
@@ -153,7 +104,7 @@ export default function CartArea() {
                   <div className="cart-subtotal">
                     <div className="title">Subtotal</div>
                     <div data-title="Subtotal">
-                      <span className="woocommerce-Price-amount amount"><bdi>50.00<span className="woocommerce-Price-currencySymbol">$</span></bdi></span>
+                      <span className="woocommerce-Price-amount amount"><bdi>{subtotal.toFixed(2)}<span className="woocommerce-Price-currencySymbol">$</span></bdi></span>
                     </div>
                   </div>
 
@@ -168,7 +119,7 @@ export default function CartArea() {
 
                   <div className="order-total">
                     <div className="title">Total</div>
-                    <div data-title="Total"><strong><span className="woocommerce-Price-amount amount"><bdi>350.00<span className="woocommerce-Price-currencySymbol">$</span></bdi></span></strong> </div>
+                    <div data-title="Total"><strong><span className="woocommerce-Price-amount amount"><bdi>{total.toFixed(2)}<span className="woocommerce-Price-currencySymbol">$</span></bdi></span></strong> </div>
                   </div>
 
                   <div className="wc-proceed-to-checkout">

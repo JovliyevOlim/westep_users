@@ -1,7 +1,7 @@
 import CourseModuleAccordionCard from "./CourseModuleAccordionCard.tsx";
 import {Module} from "../../types/types.ts";
 
-function CourseModuleBar({modules}: { modules: Module[] }) {
+function CourseModuleBar({modules, allModules}: { modules: Module[], allModules: Module[] }) {
     return (
         <div className="
         hidden lg:block
@@ -17,7 +17,7 @@ function CourseModuleBar({modules}: { modules: Module[] }) {
   duration-300
   ease-in-out
 ">
-            <CourseModuleAccordionCard modules={modules}/>
+            <CourseModuleAccordionCard modules={modules} allModules={allModules}/>
         </div>
     );
 }

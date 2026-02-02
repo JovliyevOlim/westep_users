@@ -45,9 +45,9 @@ export interface Lesson extends Common {
     name: string,
     description?: string,
     moduleId: string,
-    orderIndex: number | null,
+    orderIndex: number,
     estimatedDuration: number | null,
     videoUrl?: string,
-    active?: boolean,
-    done?: boolean,
+    progress?: boolean,
+    completed?: boolean,
 }

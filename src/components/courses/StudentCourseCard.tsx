@@ -11,7 +11,7 @@ function StudentCourseCard({course}: props) {
     const navigate = useNavigate();
 
     function handleCourse(item: StudentCourse) {
-        navigate(`/courses/${item.id}`)
+        navigate(`/courses/${item.courseId}/${item.id}`)
     }
 
     return (

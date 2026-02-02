@@ -16,14 +16,12 @@ import {
 import {SeekButton} from "@vidstack/react";
 
 import type {DefaultLayoutIcons} from '@vidstack/react/player/layouts/default';
-import {useEffect, useRef} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import {useUpdateLessonProgress} from "../../api/lessonProgress/useLessonProgress.ts";
 import {useParams} from "react-router-dom";
 
-// Icon should be: `() => ReactNode`
 const None = () => null;
 
-// All icons are optional, replace only what you want.
 const customIcons: Partial<DefaultLayoutIcons> = {
     AirPlayButton: {
         Default: () => <Play width={28} height={28}/>,
@@ -103,65 +101,88 @@ const customIcons: Partial<DefaultLayoutIcons> = {
 };
 
 
-const VideoPlayer = ({videoUrl,setEnded}: { videoUrl: string,setEnded:(end:boolean)=>void }) => {
+const VideoPlayer = ({videoUrl, setEnded, startTime}: {
+    videoUrl: string,
+    setEnded: (end: boolean) => void,
+    startTime: number
+}) => {
 
 
     const {mutate} = useUpdateLessonProgress()
     const params = useParams()
 
+    const playerRef = useRef<MediaPlayerInstance>(null),
+        {currentTime, ended, started, paused, duration} = useStore(MediaPlayerInstance, playerRef);
 
     const getYoutubeThumbnail = (srcLink: string) => {
         let videoId = "";
         try {
             const url = new URL(srcLink);
             if (url.hostname.includes("youtu.be")) {
-                // short link: youtu.be/VIDEOID
                 videoId = url.pathname.slice(1);
             } else if (url.hostname.includes("youtube.com")) {
                 videoId = url.searchParams.get("v") || "";
             }
         } catch (e) {
-            console.error("Invalid URL");
+            return '';
         }
-
         return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : "";
     };
 
 
     const thumbnail = getYoutubeThumbnail(videoUrl)
 
-
-    const ref = useRef<MediaPlayerInstance>(null),
-        {currentTime, ended} = useStore(MediaPlayerInstance, ref);
-
-    useEffect(() => {
-        if (ended) {
+    const saveProgress = useCallback((seconds: number) => {
+        if (params.id && params.lessonId) {
             mutate({
                 studentCourseId: params.id,
-                currentSecond: currentTime,
+                currentSecond: Math.round(seconds),
                 lessonId: params.lessonId
             });
+        }
+    }, [mutate, params.id, params.lessonId]);
+
+    useEffect(() => {
+        if (playerRef.current && startTime > 0) {
+            playerRef.current.currentTime = startTime;
+        }
+    }, [videoUrl]);
+
+
+    useEffect(() => {
+        const progressPercent = (currentTime / duration) * 100;
+        const isNinetyPercent = progressPercent >= 90;
+        if (ended) {
+            saveProgress(currentTime);
+            setEnded(true);
+        } else if (isNinetyPercent) {
+            saveProgress(duration);
             setEnded(true);
         } else {
             setEnded(false);
+        }
+    }, [ended, currentTime, duration]);
+
+    useEffect(() => {
+        if (started && !paused && !ended) {
             const interval = setInterval(() => {
-                mutate({
-                    studentCourseId: params.id,
-                    currentSecond: currentTime,
-                    lessonId: params.lessonId
-                });
-            }, 15000);
+                saveProgress(playerRef.current?.currentTime || 0);
+            }, 10000);
 
             return () => clearInterval(interval);
         }
-    }, [ended, params.id, params.lessonId]);
+    }, [started, paused, ended, saveProgress]);
 
-    console.log(currentTime,'currentTime');
+    useEffect(() => {
+        if (paused && started && !ended) {
+            saveProgress(currentTime);
+        }
+    }, [paused]);
 
 
     return (
-        <MediaPlayer ref={ref}
-                     title="Sprite Fight" src={videoUrl} poster={thumbnail}>
+        <MediaPlayer ref={playerRef} key={videoUrl}
+                     title="Lesson Video" src={videoUrl} poster={thumbnail} className="vds-player">
             <MediaProvider>
                 <Poster className="vds-poster"/>
                 <SeekButton className="vds-button" seconds={10}>
@@ -171,17 +192,27 @@ const VideoPlayer = ({videoUrl,setEnded}: { videoUrl: string,setEnded:(end:boole
             <DefaultVideoLayout
                 icons={customIcons as DefaultLayoutIcons}
                 slots={{
-                    // Kichik ekran (mobile) uchun
-                    smallLayout: {
-                        seekBackwardButton: <SeekButton seconds={-5}/>,
-                        seekForwardButton: <SeekButton seconds={5}/>
-                    },
-                    // Katta ekran (desktop) uchun
-                    largeLayout: {
-                        seekBackwardButton: <SeekButton seconds={-5}/>,
-                        seekForwardButton: <SeekButton seconds={5}/>
-                    }
+                    beforeControlSpacer: (
+                        <>
+                            <SeekButton className="vds-button" seconds={-10}>
+                                <RotateLeft width={28} height={28}/>
+                            </SeekButton>
+                            <SeekButton className="vds-button" seconds={10}>
+                                <RotateRight width={28} height={28}/>
+                            </SeekButton>
+                        </>
+                    )
                 }}
+                // slots={{
+                //     smallLayout: {
+                //         seekBackwardButton: <SeekButton seconds={-5}/>,
+                //         seekForwardButton: <SeekButton seconds={5}/>
+                //     },
+                //     largeLayout: {
+                //         seekBackwardButton: <SeekButton seconds={-5}/>,
+                //         seekForwardButton: <SeekButton seconds={5}/>
+                //     }
+                // }}
             />
         </MediaPlayer>
     );
