@@ -8,13 +8,13 @@ import OtherCourses from "../components/courses/OtherCourses.tsx";
 export default function MainPage() {
 
     return (
-        <div className={'flex mt-1'}>
-            <div className={'w-[350px] hidden lg:block shadow bg-white p-5 sticky top-0  max-h-screen overflow-y-auto'}>
+        <div className={'flex flex-col lg:flex-row mt-1'}>
+            <div className={'w-full lg:w-[350px] hidden lg:block shadow bg-white p-5 sticky top-0 max-h-screen overflow-y-auto'}>
                 <MainPageBar/>
             </div>
             <div
                 className={`flex-1`}>
-                <div className="grid grid-cols-12 gap-4 md:gap-6 p-3">
+                <div className="grid grid-cols-12 gap-4 md:gap-6 p-2 sm:p-3">
                     <div className="col-span-12">
                         <MainPageStatistic/>
                     </div>

@@ -12,10 +12,9 @@ function Index() {
     const {data} = useGetModuleById(params.id)
 
     const [selected, setSelected] = useState<Module[] | null>(null)
-    console.log(selected)
 
     return (
-        <div className='lg:flex gap-10 p-10'>
+        <div className='flex flex-col lg:flex-row gap-4 lg:gap-10 p-3 md:p-6 lg:p-10'>
             {
                 data && data.length > 0 && <Modules modules={data} selected={selected} setSelected={setSelected}/>
             }

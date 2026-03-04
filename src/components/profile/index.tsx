@@ -3,6 +3,7 @@ import {useUser} from "../../api/auth/useAuth.ts";
 import ProfileBottom from "./ProfileBottom.tsx";
 import {useState} from "react";
 import UpdateProfileUser from "./UpdateProfileUser.tsx";
+import NewProfile from "./NewProfile.tsx";
 
 function Index() {
 
@@ -10,15 +11,16 @@ function Index() {
 
     const [edit, setEdit] = useState<boolean>(false)
 
-    console.log(user)
-
     return (
-        <div>
-            <ProfileHeader user={user} edit={edit} setEdit={setEdit}/>
-            {
-                edit ? <UpdateProfileUser user={user} setEdit={setEdit}/>
-                    : <ProfileBottom user={user}/>
-            }
+        <div className="w-full max-w-[1100px] mx-auto px-2 lg:px-6">
+            <div className="lg:hidden">
+                <ProfileHeader user={user} edit={edit} setEdit={setEdit}/>
+                {edit ? <UpdateProfileUser user={user} setEdit={setEdit}/> : <ProfileBottom user={user}/>}
+            </div>
+
+            <div className="hidden lg:block">
+                {edit ? <UpdateProfileUser user={user} setEdit={setEdit}/> : <NewProfile user={user} setEdit={setEdit}/>}
+            </div>
         </div>
     );
 }

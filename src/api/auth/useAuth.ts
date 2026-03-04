@@ -7,6 +7,8 @@ import {
     logout,
     register,
     sendOtpCode,
+    updateProfile,
+    UpdateProfileBody,
     verifyCode
 } from "./authApi.ts";
 import {useNavigate} from "react-router-dom";
@@ -137,6 +139,22 @@ export const useResetPassword = () => {
         },
         onError: (error) => {
             return error
+        },
+    });
+};
+
+export const useUpdateProfile = () => {
+    const qc = useQueryClient();
+    const toast = useToast();
+
+    return useMutation({
+        mutationFn: (body: UpdateProfileBody) => updateProfile(body),
+        onSuccess: async () => {
+            await qc.invalidateQueries({queryKey: ["currentUser"]});
+            toast.success("Profil yangilandi");
+        },
+        onError: (error) => {
+            toast.error(error.message);
         },
     });
 };

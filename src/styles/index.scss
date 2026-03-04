@@ -46,7 +46,7 @@
   }
 }
 
-html, body {
+html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -62,6 +62,14 @@ html, body {
 .container-fluid {
   padding-left: 0;
   padding-right: 0;
+  max-width: 100%;
+}
+
+img,
+video,
+iframe,
+canvas,
+svg {
   max-width: 100%;
 }
 

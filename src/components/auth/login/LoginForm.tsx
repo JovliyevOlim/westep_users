@@ -2,7 +2,7 @@ import {useCheckPhoneNumber} from "../../../api/auth/useAuth.ts";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
-import logo from "../../../assets/logo.svg";
+import logo from "../../../assets/westep_dark_logo.png";
 import CommonButton from "../../../ui/CommonButton.tsx";
 import AuthText from "../../../ui/AuthText.tsx";
 

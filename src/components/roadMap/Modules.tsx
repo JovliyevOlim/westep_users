@@ -30,21 +30,21 @@ function Modules({modules, setSelected, selected}: Props) {
 
     return (
         <div className={'flex-1 p-4 border border-gray-300 rounded-3xl'}>
-            <h1 className="text-xl font-semibold  leading-tight p-3">
+            <h1 className="text-lg md:text-xl font-semibold leading-tight p-3">
                 Kursni xarid qilish
             </h1>
 
 
             {/* Course block */}
-            <div className="space-y-8">
+            <div className="space-y-4 md:space-y-6">
                 <div>
                     {
 
                         modules.map((item: Module, i) => (
                             <div key={i}
-                                 className={`flex items-center justify-between p-3 gap-8 ${isSelectedModuleList(item.id) && 'bg-success-100'}`}>
+                                 className={`flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 gap-3 sm:gap-6 ${isSelectedModuleList(item.id) && 'bg-success-100'}`}>
 
-                                <div className={'flex items-center gap-8'}>
+                                <div className={'flex items-start sm:items-center gap-3 sm:gap-6 min-w-0'}>
                                     <div>
                                         <label htmlFor={item.id}>
                                             {
@@ -61,13 +61,13 @@ function Modules({modules, setSelected, selected}: Props) {
                                             className="mt-1 h-6 w-6 hidden accent-primary-500"
                                         />
                                     </div>
-                                    <div>
-                                        <p className="text-xl">{item.name}</p>
+                                    <div className="min-w-0">
+                                        <p className="text-base md:text-xl break-words">{item.name}</p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <p className="text-xl">
+                                    <p className="text-base md:text-xl font-medium">
                                         {item.price.toLocaleString().replace(',', '.')} so'm
                                     </p>
                                 </div>

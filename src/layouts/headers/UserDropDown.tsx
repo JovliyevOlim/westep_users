@@ -1,6 +1,5 @@
-import { Menu } from "@headlessui/react";
+import {Menu} from "@headlessui/react";
 import person from "../../assets/icon/person.svg"
-import arrow from "../../assets/icon/arrow-down.svg"
 
 function UserDropDown() {
 
@@ -9,9 +8,7 @@ function UserDropDown() {
         <div className="flex items-center gap-3">
 
             {/* Avatar */}
-            <div className="w-10 h-10 rounded-full overflow-hidden">
-                <img src={person} alt="person" className="w-full h-full object-cover" />
-            </div>
+
 
             {/* Username */}
             {/*<div className="hidden lg:block">*/}
@@ -24,7 +21,9 @@ function UserDropDown() {
             {/* Dropdown */}
             <Menu as="div" className="relative inline-block text-left p-0">
                 <Menu.Button className="bg-transparent border-none outline-none">
-                    <img src={arrow} alt="arrow" className="w-6 h-6" />
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                        <img src={person} alt="person" className="w-full h-full object-cover"/>
+                    </div>
                 </Menu.Button>
 
                 {/* Dropdown Menu */}
@@ -32,7 +31,7 @@ function UserDropDown() {
                     className="absolute right-0 mt-2 w-40 origin-top-right bg-white shadow-lg rounded-md ring-1 ring-black/5 focus:outline-none z-50"
                 >
                     <Menu.Item>
-                        {({ active }) => (
+                        {({active}) => (
                             <a
                                 href="/profile"
                                 className={`block px-4 py-2 text-sm ${
@@ -45,7 +44,7 @@ function UserDropDown() {
                     </Menu.Item>
 
                     <Menu.Item>
-                        {({ active }) => (
+                        {({active}) => (
                             <a
                                 href="/logout"
                                 className={`block px-4 py-2 text-sm ${

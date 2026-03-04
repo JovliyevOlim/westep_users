@@ -3,6 +3,15 @@ import {User} from "../../types/types.ts";
 import {AxiosError} from "axios";
 import {getItem, setItem} from "../../utils/utils.ts";
 
+export interface UpdateProfileBody {
+    phoneNumber: string;
+    firstname: string;
+    lastname: string;
+    birthDate: string;
+    roleName: string;
+    gender: "MALE" | "FEMALE";
+}
+
 export const login = async (body: { phoneNumber: string; password: string }) => {
     try {
         const {data} = await apiClient.post("/auth/login", {}, {
@@ -93,6 +102,17 @@ export const resetPassword = async (body: { phoneNumber: string, password: strin
     } catch (error) {
         const err = error as AxiosError<{ message: string }>;
         const message = err.response?.data?.message;
+        throw new Error(message);
+    }
+};
+
+export const updateProfile = async (body: UpdateProfileBody) => {
+    try {
+        const {data} = await apiClient.put("/user/update", body);
+        return data;
+    } catch (error) {
+        const err = error as AxiosError<{ message?: string; error?: string }>;
+        const message = err.response?.data?.message || err.response?.data?.error || "Profilni yangilashda xatolik";
         throw new Error(message);
     }
 };

@@ -1,10 +1,9 @@
 import UserDropDown from "./UserDropDown.tsx";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/westep_dark_logo.png";
 import {Link} from "react-router-dom";
 
 
 export default function HeaderOne() {
-
     return (
         <>
             <header id="navigation" className="w-full hidden lg:block z-99999">
@@ -13,7 +12,7 @@ export default function HeaderOne() {
                     <div className="w-1/6 lg:w-1/4 flex">
                         <div className="flex items-center justify-center">
                             <Link to={'/'}>
-                                <img src={logo} alt="Logo" className="w-[120px]" />
+                                <img src={logo} alt="Logo" className="w-[120px]"/>
                             </Link>
                         </div>
                     </div>
@@ -24,10 +23,9 @@ export default function HeaderOne() {
 
                     <div className="w-1/6 lg:w-1/4 flex justify-end">
                         <div className="flex gap-3">
-                            <UserDropDown />
+                            <UserDropDown/>
                         </div>
                     </div>
-
                 </div>
             </header>
         </>

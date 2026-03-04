@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import NewInput from "../../ui/NewInput.tsx";
 import Button from "../../ui/Button.tsx";
 import PhoneNumberInput from "../../ui/PhoneNumberInput.tsx";
+import {useUpdateProfile} from "../../api/auth/useAuth.ts";
 
 
 interface Props {
@@ -12,15 +13,26 @@ interface Props {
     setEdit: (edit: boolean) => void;
 }
 
-function UpdateProfileUser({user}: Props) {
+interface UpdateProfileForm {
+    phoneNumber: string;
+    firstname: string;
+    lastname: string;
+    birthDate: string;
+    roleName: string;
+    gender: "MALE" | "FEMALE";
+}
 
+function UpdateProfileUser({user, setEdit}: Props) {
 
-    const [initialValues, setInitialValues] = useState<Omit<User, "phone" | "password">>({
+    const {mutateAsync, isPending} = useUpdateProfile();
+
+    const [initialValues, setInitialValues] = useState<UpdateProfileForm>({
         firstname: "",
         lastname: "",
-        gender: "",
+        gender: "MALE",
         phoneNumber: '',
         birthDate: '',
+        roleName: 'STUDENT',
     });
 
 
@@ -29,9 +41,10 @@ function UpdateProfileUser({user}: Props) {
             setInitialValues({
                 firstname: user.firstname,
                 lastname: user.lastname,
-                gender: user.gender,
+                gender: user.gender === "FEMALE" ? "FEMALE" : "MALE",
                 phoneNumber: user.phoneNumber,
                 birthDate: user.birthDate,
+                roleName: user.roleName || "STUDENT",
             })
         }
     }, [user]);
@@ -44,11 +57,12 @@ function UpdateProfileUser({user}: Props) {
                 .required("Ismni kiriting!"),
             lastname: Yup.string()
                 .required("Familiyani kiriting!"),
+            phoneNumber: Yup.string()
+                .required("Telefon raqamni kiriting!"),
         }),
-        onSubmit: async () => {
-            // await addModule({...formik.values,orderIndex:modulesLength+1});
-            // formik.resetForm();
-            // setOpen(false);
+        onSubmit: async (values) => {
+            await mutateAsync(values);
+            setEdit(false);
         },
     });
 
@@ -83,9 +97,8 @@ function UpdateProfileUser({user}: Props) {
                         className={'flex items-center justify-center gap-2 bg-blue-600 text-md text-white w-full p-[8px] rounded-full'}
                         type="submit"
                         variant="primary"
-                        // size={'sm'}
-                        // isPending={isAdding}
-                        // disabled={isAdding}
+                        isPending={isPending}
+                        disabled={isPending}
                     >
                         Saqlash
                     </Button>
