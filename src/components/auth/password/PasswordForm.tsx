@@ -6,7 +6,6 @@ import { Link, useLocation } from "react-router-dom";
 import InputField from "../../../ui/InputField.tsx";
 import CommonButton from "../../../ui/CommonButton.tsx";
 import AuthText from "../../../ui/AuthText.tsx";
-import PasswordRequirements from "../../../ui/PasswordRequirements.tsx";
 import DeviceLimitModal from "./DeviceLimitModal.tsx";
 
 
@@ -73,7 +72,6 @@ export default function PasswordForm() {
                                 type="password"
                                 name="password"
                             />
-                            <PasswordRequirements password={formik.values.password} />
                         </div>
 
                         <div className="mt-8 w-full">
