@@ -25,8 +25,6 @@ export interface Course extends Common {
     name: string,
     description: string,
     buyCourseUrl?: string | null,
-    attributionCode?: string | null,
-    sourceType?: string | null,
     shortDescription?: string,
     fullDescription?: string,
     isPublished: boolean,
@@ -37,9 +35,8 @@ export interface Course extends Common {
     trailerVideoUrl?: string | null
     purchased?: boolean
     studentsCount?: number
-    free?: boolean
-    price: number
     level?: string | null
+    targetAgeGroups?: string[]
     languageId?: string | null
     languageName?: string | null
     languageCode?: string | null
@@ -72,7 +69,8 @@ export interface Module extends Common {
     courseId: string
     orderIndex: number | null,
     active?: boolean,
-    price: number,
+    requiresSubscription?: boolean,
+    unlocked?: boolean,
 }
 
 export interface Lesson extends Common {
@@ -100,10 +98,9 @@ export interface CourseDetailLesson {
 export interface CourseDetailModule {
     moduleId: string,
     moduleName: string,
-    purchased?: boolean,
-    isPurchased?: boolean,
+    requiresSubscription?: boolean,
+    unlocked?: boolean,
     lessonsCount: number,
     totalDuration: number,
-    price: number,
     lessons: CourseDetailLesson[],
 }

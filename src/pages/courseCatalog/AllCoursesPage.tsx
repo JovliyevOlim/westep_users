@@ -19,11 +19,6 @@ function imageUrl(path?: string | null) {
     return path ? `${baseUrlImage}${path}` : "";
 }
 
-function formatPrice(price?: number) {
-    if (!price || price === 0) return "Bepul";
-    return `${price.toLocaleString("uz-UZ")} so'm`;
-}
-
 function courseCategory(course: Course) {
     return [course.primaryCategory?.name, course.subcategory?.name].filter(Boolean).join(" / ");
 }
@@ -33,12 +28,24 @@ interface Category {
     label: string;
 }
 
-type SortOption = "newest" | "popular" | "price-asc" | "price-desc";
+type SortOption = "newest" | "popular";
 
 const categories: Category[] = [
     { id: "all", label: "Barcha Kurslar" },
-    { id: "premium", label: "Premium" },
-    { id: "free", label: "Bepul Darslar" }
+    { id: "enrolled", label: "Yozilganlarim" }
+];
+
+const AGE_LABELS: Record<string, string> = {
+    KIDS_5_8: "5–8",
+    JUNIOR_9_12: "9–12",
+    TEEN_13_17: "13–17",
+};
+
+const ageFilters: Category[] = [
+    { id: "all", label: "Barcha yoshlar" },
+    { id: "KIDS_5_8", label: "5–8 yosh" },
+    { id: "JUNIOR_9_12", label: "9–12 yosh" },
+    { id: "TEEN_13_17", label: "13–17 yosh" },
 ];
 
 export default function AllCoursesPage() {
@@ -46,6 +53,7 @@ export default function AllCoursesPage() {
     const { data: allCourses = [], isPending } = useGetCourses();
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("all");
+    const [ageFilter, setAgeFilter] = useState("all");
     const [sortBy, setSortBy] = useState<SortOption>("newest");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -58,19 +66,18 @@ export default function AllCoursesPage() {
             const description = course.description || course.shortDescription || "";
             const matchesSearch = course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                                  description.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesCategory = activeCategory === "all" || 
-                                   (activeCategory === "premium" && course.price > 0) || 
-                                   (activeCategory === "free" && course.price === 0);
-            return matchesSearch && matchesCategory;
+            const matchesCategory = activeCategory === "all" ||
+                                   (activeCategory === "enrolled" && course.purchased);
+            const matchesAge = ageFilter === "all" ||
+                                   (course.targetAgeGroups || []).includes(ageFilter);
+            return matchesSearch && matchesCategory && matchesAge;
         });
 
         return filtered.sort((a, b) => {
-            if (sortBy === "price-asc") return a.price - b.price;
-            if (sortBy === "price-desc") return b.price - a.price;
             if (sortBy === "popular") return (b.studentsCount || 0) - (a.studentsCount || 0);
             return 0;
         });
-    }, [allCourses, searchQuery, activeCategory, sortBy]);
+    }, [allCourses, searchQuery, activeCategory, ageFilter, sortBy]);
 
     const handleCourseClick = (course: Course) => {
         navigate(getCoursePurchaseUrl(course));
@@ -152,6 +159,28 @@ export default function AllCoursesPage() {
                             <div className="h-px bg-slate-100 dark:bg-slate-800" />
 
                             <div>
+                                <h3 className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-slate-400">Yosh guruhi</h3>
+                                <div className="space-y-2">
+                                    {ageFilters.map((age) => (
+                                        <button
+                                            key={age.id}
+                                            onClick={() => setAgeFilter(age.id)}
+                                            className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-all ${
+                                                ageFilter === age.id
+                                                ? "bg-slate-900 text-white dark:bg-blue-600 shadow-lg shadow-slate-900/10 dark:shadow-blue-500/20"
+                                                : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-400"
+                                            }`}
+                                        >
+                                            {age.label}
+                                            {ageFilter === age.id && <ChevronRight className="h-3 w-3" />}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="h-px bg-slate-100 dark:bg-slate-800" />
+
+                            <div>
                                 <h3 className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-slate-400">Tartiblash</h3>
                                 <select 
                                     value={sortBy}
@@ -160,8 +189,6 @@ export default function AllCoursesPage() {
                                 >
                                     <option value="newest">Yangi qo'shilganlar</option>
                                     <option value="popular">Eng mashhurlar</option>
-                                    <option value="price-asc">Avval arzonlari</option>
-                                    <option value="price-desc">Avval qimmatlari</option>
                                 </select>
                             </div>
 
@@ -236,7 +263,7 @@ export default function AllCoursesPage() {
                                                     )}
                                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
                                                     <div className="absolute left-3 top-3 rounded-xl bg-white/90 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-widest text-blue-600 backdrop-blur-md dark:bg-slate-900/90 sm:left-4 sm:top-4 sm:px-3 sm:text-[9px]">
-                                                        {course.price > 0 ? "Premium" : "Bepul"}
+                                                        {course.purchased ? "Yozilgan" : "Kurs"}
                                                     </div>
                                                     {course.languageName && (
                                                         <div className="absolute right-3 top-3 rounded-xl bg-slate-950/80 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-widest text-white backdrop-blur-md sm:right-4 sm:top-4 sm:px-3 sm:text-[9px]">
@@ -264,6 +291,11 @@ export default function AllCoursesPage() {
                                                                 <Clock className="h-3.5 w-3.5 text-blue-600" />
                                                                 <span>{formatCourseDuration(course.totalDuration) || "Kurs"}</span>
                                                             </div>
+                                                            {(course.targetAgeGroups || []).length > 0 && (
+                                                                <span className="rounded-full bg-blue-50 px-2 py-0.5 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300">
+                                                                    {(course.targetAgeGroups || []).map((g) => AGE_LABELS[g] || g).join(", ")} yosh
+                                                                </span>
+                                                            )}
                                                         </div>
                                                         
                                                         <h4 className="line-clamp-2 text-lg font-black uppercase italic leading-tight tracking-tighter text-slate-900 transition-all duration-500 group-hover:text-blue-600 dark:text-white sm:text-xl">
@@ -277,7 +309,7 @@ export default function AllCoursesPage() {
                                                     <div className="space-y-4 pt-2 sm:pt-4">
                                                         <div className="flex items-center justify-between border-t border-slate-50 pt-5 dark:border-slate-800">
                                                             <div className="text-lg font-black italic tracking-tighter text-slate-900 dark:text-white">
-                                                                {formatPrice(course.price)}
+                                                                {course.purchased ? "Davom etish" : "Boshlash"}
                                                             </div>
                                                             <button
                                                                 onClick={() => handleCourseClick(course)}
@@ -351,8 +383,6 @@ export default function AllCoursesPage() {
                                     >
                                         <option value="newest">Yangi qo'shilganlar</option>
                                         <option value="popular">Eng mashhurlar</option>
-                                        <option value="price-asc">Avval arzonlari</option>
-                                        <option value="price-desc">Avval qimmatlari</option>
                                     </select>
                                 </div>
                             </div>
