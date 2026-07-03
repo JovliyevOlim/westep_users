@@ -10,7 +10,6 @@ import {
 } from "./courseApi.ts";
 import {getItem} from "../../utils/utils.ts";
 import {useNavigate} from "react-router-dom";
-import {useCreatePaymentCheckout} from "../payme/usePayme.ts";
 import type { Course } from "../../types/types.ts";
 
 export const useGetCourses = () =>
@@ -24,37 +23,25 @@ export const useGetCourses = () =>
         retry: false,
     });
 
-export const useGetCourseById = ({
-    id,
-    ref,
-}: {
-    id: string | undefined;
-    ref?: string | null;
-}) =>
+export const useGetCourseById = ({id}: { id: string | undefined }) =>
     useQuery({
-        queryKey: ["course-detail", id, ref || null],
+        queryKey: ["course-detail", id],
         queryFn: async () => {
             const token = getItem<string>('accessToken');
             if (!token) throw new Error("No token");
-            return await getCourseById({ id, ref });
+            return await getCourseById({ id });
         },
         enabled: !!id,
         retry: false,
     });
 
-export const useGetStudentCoursePurchaseDetail = ({
-    id,
-    ref,
-}: {
-    id: string | undefined;
-    ref?: string | null;
-}) =>
+export const useGetStudentCoursePurchaseDetail = ({id}: { id: string | undefined }) =>
     useQuery<Course>({
-        queryKey: ["student-course-purchase-detail", id, ref || null],
+        queryKey: ["student-course-purchase-detail", id],
         queryFn: async () => {
             const token = getItem<string>('accessToken');
             if (!token) throw new Error("No token");
-            return await getStudentCoursePurchaseDetail({ id, ref });
+            return await getStudentCoursePurchaseDetail({ id });
         },
         enabled: !!id,
         retry: false,
@@ -72,26 +59,6 @@ export const useSetStudentCourseById = () => {
         },
     });
 };
-
-export const useSetStudentCourseByIdForPayment = () => {
-    const navigate = useNavigate();
-    const {mutate} = useCreatePaymentCheckout()
-    return useMutation({
-        mutationFn: setStudentCourse,
-        onSuccess: async (id, variables) => {
-            if (/^[0-9a-fA-F-]{36}$/.test(id)) {
-                navigate(`/courses/${variables.courseId}/${id}`);
-                return;
-            }
-
-            mutate(id);
-        },
-        onError: (error) => {
-            alert(error);
-        },
-    });
-};
-
 
 export const useGetStudentCourseById = (id: string | undefined) =>
     useQuery({

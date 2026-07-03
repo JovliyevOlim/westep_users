@@ -159,16 +159,10 @@ type RecommendedCourseCard = {
     title: string;
     instructorImage: string;
     instructor: string;
-    price: number;
 };
 
 function imageUrl(path?: string | null) {
     return path ? `${baseUrlImage}${path}` : "";
-}
-
-function formatPrice(price?: number) {
-    if (!price) return "Bepul";
-    return `${price.toLocaleString("uz-UZ")} so'm`;
 }
 
 function formatLastActivityAt(value?: string) {
@@ -359,13 +353,12 @@ export function Dashboard() {
             .map((course, index) => ({
                 id: course.id,
                 image: imageUrl(course.attachmentUrl),
-                category: course.price > 0 ? "Premium" : "Bepul",
+                category: course.primaryCategory?.name || "Kurs",
                 rating: 4.8,
                 totalStudents: 1200 + (index + 1) * 340,
                 title: course.name,
                 instructorImage: imageUrl(course.attachmentUrl),
                 instructor: "Westep Academy",
-                price: course.price,
             }));
     }, [allCourses, studentCourses]);
 
@@ -802,16 +795,6 @@ export function Dashboard() {
                                                         <p className="max-w-[120px] truncate text-xs font-black uppercase italic text-slate-900 dark:text-white sm:text-sm">
                                                             {course.instructor}
                                                         </p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    {course.price > 0 && (
-                                                        <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-red-500 opacity-90 line-through decoration-[2px] dark:text-red-400 sm:text-xs">
-                                                            Premium
-                                                        </p>
-                                                    )}
-                                                    <div className="whitespace-nowrap text-xl font-black italic leading-none tracking-tighter text-slate-900 dark:text-white sm:text-2xl">
-                                                        {formatPrice(course.price)}
                                                     </div>
                                                 </div>
                                             </div>

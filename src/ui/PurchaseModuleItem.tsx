@@ -1,74 +1,58 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Award, Check, Plus, Clock, Play, ChevronDown, ChevronUp } from 'lucide-react';
+import { Award, Lock, Clock, Play, ChevronDown, ChevronUp } from 'lucide-react';
 import { Badge } from './Badge';
-import { PriceDisplay } from './PriceDisplay';
 import { CoursePurchaseModule } from '../components/coursePurchase/types';
 
 interface PurchaseModuleItemProps {
   module: CoursePurchaseModule;
-  isSelected: boolean;
   isExpanded: boolean;
-  onToggle: (id: string, isPurchased: boolean) => void;
   onExpand: (id: string) => void;
-  modulePrice: number;
 }
 
 export const PurchaseModuleItem: React.FC<PurchaseModuleItemProps> = ({
   module,
-  isSelected,
   isExpanded,
-  onToggle,
-  onExpand,
-  modulePrice
+  onExpand
 }) => {
+  const isUnlocked = module.unlocked ?? !module.requiresSubscription;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       className={`group relative rounded-[24px] border transition-all duration-300 overflow-hidden ${
-        module.isPurchased
-          ? 'bg-slate-50 dark:bg-slate-900/40 border-slate-100 dark:border-slate-800 opacity-60'
-          : isSelected
-            ? 'bg-white dark:bg-slate-900 border-blue-500/40 shadow-xl shadow-blue-500/5'
-            : 'bg-white/40 dark:bg-slate-900/40 border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
+        isUnlocked
+          ? 'bg-white dark:bg-slate-900 border-emerald-200 dark:border-emerald-900/40'
+          : 'bg-white/40 dark:bg-slate-900/40 border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
       }`}
     >
-      <div 
-        onClick={() => onToggle(module.id, !!module.isPurchased)}
-        className={`flex items-center gap-5 p-5 ${!module.isPurchased ? 'cursor-pointer' : ''}`}
-      >
+      <div className="flex items-center gap-5 p-5">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 ${
-          module.isPurchased
+          isUnlocked
             ? 'bg-emerald-500 scale-100 shadow-lg shadow-emerald-500/20'
-            : isSelected
-              ? 'bg-blue-600 scale-105 shadow-lg shadow-blue-600/20'
-              : 'bg-slate-100 dark:bg-slate-800'
+            : 'bg-slate-100 dark:bg-slate-800'
         }`}>
-          {module.isPurchased ? (
+          {isUnlocked ? (
             <Award className="w-5 h-5 text-white" />
-          ) : isSelected ? (
-            <Check className="w-5 h-5 text-white stroke-[4px]" />
           ) : (
-            <Plus className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+            <Lock className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" />
           )}
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <h3 className={`text-[16px] font-bold tracking-tight transition-colors ${
-              module.isPurchased ? 'text-slate-500 dark:text-slate-500' : isSelected ? 'text-blue-600 dark:text-blue-400' : 'text-slate-800 dark:text-white'
+              isUnlocked ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-800 dark:text-white'
             }`}>
               {module.title}
             </h3>
             <div className="flex items-center gap-4">
-              {module.isPurchased ? (
-                <Badge variant="emerald">Sotib olingan</Badge>
+              {isUnlocked ? (
+                <Badge variant="emerald">Ochiq</Badge>
               ) : (
-                <span className={`text-[16px] font-bold ${isSelected ? 'text-blue-600' : 'text-slate-400 opacity-60'}`}>
-                  <PriceDisplay price={module.price ?? modulePrice} />
-                </span>
+                <Badge variant="slate">Obuna bilan</Badge>
               )}
-              <button 
+              <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onExpand(module.id);

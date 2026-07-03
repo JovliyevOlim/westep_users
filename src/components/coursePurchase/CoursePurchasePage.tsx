@@ -1,32 +1,18 @@
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { BookOpen, ChevronRight, ShieldCheck } from "lucide-react";
-import { CoursePurchaseCourse, CoursePurchaseModule, PaymentProvider } from "./types";
+import { CoursePurchaseCourse, CoursePurchaseModule } from "./types";
 import { Badge } from "../../ui/Badge";
-import { PriceDisplay } from "../../ui/PriceDisplay";
-import { PaymentMethodCard } from "../../ui/PaymentMethodCard";
 import { PurchaseModuleItem } from "../../ui/PurchaseModuleItem";
-
-export const MODULE_PRICE = 598000;
 
 export type CoursePurchasePageProps = {
   courseId?: string;
   course: CoursePurchaseCourse;
   modules: CoursePurchaseModule[];
-  paymentProviders: PaymentProvider[];
   withHeader?: boolean;
   HeaderComponent?: React.ComponentType;
-  modulePrice?: number;
-  onSubmit?: (payload: {
-    courseId: string;
-    selectedModules: string[];
-    paymentMethod: string;
-    pricing: {
-      totalPrice: number;
-      originalPrice: number;
-      hasBulkDiscount: boolean;
-    };
-  }) => void;
+  onSubmit?: (payload: { courseId: string }) => void;
   isSubmitting?: boolean;
 };
 
@@ -34,56 +20,25 @@ export function CoursePurchasePage({
   courseId,
   course,
   modules: courseModules,
-  paymentProviders: providers,
   withHeader = false,
   HeaderComponent,
-  modulePrice = MODULE_PRICE,
   onSubmit,
   isSubmitting = false,
 }: CoursePurchasePageProps) {
-  const purchaseableModules = useMemo(() => courseModules.filter(m => !m.isPurchased), [courseModules]);
-  const [selectedModules, setSelectedModules] = useState<string[]>(purchaseableModules.map(m => m.id));
-  const [paymentMethod, setPaymentMethod] = useState<string>(
-    providers.find((provider) => !provider.disabled)?.id || providers[0]?.id || 'payme'
-  );
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
 
-  const toggleModule = (id: string, isPurchased: boolean) => {
-    if (isPurchased) return;
-    setSelectedModules(prev =>
-      prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]
-    );
-  };
+  const subscriptionModulesCount = useMemo(
+    () => courseModules.filter((module) => module.requiresSubscription && !module.unlocked).length,
+    [courseModules],
+  );
 
   const toggleExpand = (id: string) => {
     setExpandedModule(expandedModule === id ? null : id);
   };
 
-  const toggleAll = () => {
-    if (selectedModules.length === purchaseableModules.length) {
-      setSelectedModules([]);
-    } else {
-      setSelectedModules(purchaseableModules.map(m => m.id));
-    }
-  };
-
-  const { totalPrice, originalPrice, hasBulkDiscount } = useMemo(() => {
-    const base = selectedModules.reduce((sum, moduleId) => {
-      const module = purchaseableModules.find(item => item.id === moduleId);
-      return sum + (module?.price ?? modulePrice);
-    }, 0);
-
-    return { totalPrice: base, originalPrice: base, hasBulkDiscount: false };
-  }, [selectedModules, purchaseableModules, modulePrice]);
-
   const handleSubmit = () => {
-    if (!selectedModules.length || !onSubmit) return;
-    onSubmit({
-      courseId: courseId || course.id,
-      selectedModules,
-      paymentMethod,
-      pricing: { totalPrice, originalPrice, hasBulkDiscount }
-    });
+    if (!onSubmit) return;
+    onSubmit({ courseId: courseId || course.id });
   };
 
   return (
@@ -114,16 +69,8 @@ export function CoursePurchasePage({
                     <BookOpen className="w-6 h-6 text-blue-600" />
                     O'quv rejasi
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1 font-medium">Sotib olinmagan modullarni belgilang</p>
+                  <p className="text-xs text-slate-400 mt-1 font-medium">Modullar va ularning ochilish shartlari</p>
                 </div>
-                {purchaseableModules.length > 0 && (
-                  <button
-                    onClick={toggleAll}
-                    className="px-5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px] font-bold uppercase tracking-wider hover:bg-slate-50 dark:hover:bg-slate-900 transition-all active:scale-95 text-slate-600 dark:text-slate-300"
-                  >
-                    {selectedModules.length === purchaseableModules.length ? 'Barchasini bekor qilish' : 'Qolganini tanlash'}
-                  </button>
-                )}
               </div>
 
               <div className="grid grid-cols-1 gap-4">
@@ -131,11 +78,8 @@ export function CoursePurchasePage({
                   <PurchaseModuleItem
                     key={module.id}
                     module={module}
-                    isSelected={selectedModules.includes(module.id)}
                     isExpanded={expandedModule === module.id}
-                    onToggle={toggleModule}
                     onExpand={toggleExpand}
-                    modulePrice={modulePrice}
                   />
                 ))}
               </div>
@@ -148,7 +92,7 @@ export function CoursePurchasePage({
 
               <div className="space-y-8 relative z-10">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Hisob-kitob</h3>
+                  <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Kursga yozilish</h3>
                   <Badge variant="blue">
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="w-4 h-4" />
@@ -158,53 +102,41 @@ export function CoursePurchasePage({
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex items-end gap-4 flex-wrap">
-                    <AnimatePresence mode="wait">
-                      <motion.span key={totalPrice} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tighter">
-                        <PriceDisplay price={totalPrice} />
-                      </motion.span>
-                    </AnimatePresence>
-                    {hasBulkDiscount && (
-                      <div className="flex flex-col mb-2">
-                        <PriceDisplay price={originalPrice} isStrikethrough className="text-xl text-slate-300 dark:text-slate-700 font-bold leading-none" />
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-[11px] font-medium text-slate-400 uppercase tracking-[0.1em] leading-relaxed">
-                    {selectedModules.length} ta yangi modul tanlandi.
+                  <p className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tighter">
+                    Yozilish bepul
                   </p>
-                </div>
-              </div>
-
-              <div className="space-y-5 relative z-10 pt-4">
-                <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">To'lov shakli</h4>
-                <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
-                  {providers.map((p) => (
-                    <PaymentMethodCard
-                      key={p.id}
-                      provider={p}
-                      isSelected={paymentMethod === p.id}
-                      onSelect={setPaymentMethod}
-                    />
-                  ))}
+                  <p className="text-[11px] font-medium text-slate-400 uppercase tracking-[0.1em] leading-relaxed">
+                    {subscriptionModulesCount > 0
+                      ? `${subscriptionModulesCount} ta modul obuna orqali ochiladi.`
+                      : "Barcha modullar ochiq."}
+                  </p>
+                  {subscriptionModulesCount > 0 && (
+                    <Link
+                      to="/subscription"
+                      className="inline-flex items-center gap-2 pt-1 text-[11px] font-black uppercase tracking-[0.15em] text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400"
+                    >
+                      Obuna tariflarini ko'rish
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </Link>
+                  )}
                 </div>
               </div>
 
               <div className="pt-6 relative z-10">
                 <motion.button
-                  whileHover={selectedModules.length > 0 ? { scale: 1.01, y: -2 } : {}}
-                  whileTap={selectedModules.length > 0 ? { scale: 0.99 } : {}}
-                  disabled={selectedModules.length === 0 || isSubmitting}
+                  whileHover={!isSubmitting ? { scale: 1.01, y: -2 } : {}}
+                  whileTap={!isSubmitting ? { scale: 0.99 } : {}}
+                  disabled={isSubmitting}
                   onClick={handleSubmit}
-                  className={`w-full group py-6 rounded-[28px] transition-all flex items-center justify-center gap-4 px-8 ${selectedModules.length > 0 && !isSubmitting
+                  className={`w-full group py-6 rounded-[28px] transition-all flex items-center justify-center gap-4 px-8 ${!isSubmitting
                       ? 'bg-blue-600 text-white shadow-[0_24px_48px_-12px_rgba(37,99,235,0.35)] hover:bg-blue-700'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-200 dark:border-slate-700'
                     }`}
                 >
                   <span className="text-[13px] font-bold uppercase tracking-[0.25em]">
-                    {isSubmitting ? "To'lov yaratilmoqda..." : selectedModules.length > 0 ? 'Sotib olish' : 'Modul tanlang'}
+                    {isSubmitting ? "Yuklanmoqda..." : 'Boshlash'}
                   </span>
-                  {selectedModules.length > 0 && !isSubmitting && (
+                  {!isSubmitting && (
                     <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-1.5 transition-transform duration-300">
                       <ChevronRight className="w-4 h-4 text-white" />
                     </div>

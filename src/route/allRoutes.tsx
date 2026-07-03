@@ -37,6 +37,7 @@ const CoursePurchase = lazy(() => import("../pages/coursePurchase/CoursePurchase
 const QuizHistoryPage = lazy(() => import("../pages/quizHistory/QuizHistoryPage.tsx"));
 const NotificationsPage = lazy(() => import("../pages/NotificationsPage.tsx"));
 const HomeworkHistoryPage = lazy(() => import("../pages/homework/HomeworkHistoryPage.tsx"));
+const SubscriptionPage = lazy(() => import("../pages/subscription/SubscriptionPage.tsx"));
 
 const authProtectedRoutes = [
     { path: "/", element: <MainPage />, title: "Home" },
@@ -50,6 +51,7 @@ const authProtectedRoutes = [
     { path: "/course-purchase/:courseId", element: <CoursePurchase />, title: "Course Purchase" },
     { path: "/quiz-history", element: <QuizHistoryPage />, title: "Quiz History" },
     { path: "/homework-history", element: <HomeworkHistoryPage />, title: "Homework History" },
+    { path: "/subscription", element: <SubscriptionPage />, title: "Subscription" },
     { path: "/notifications", element: <NotificationsPage />, title: "Notifications" },
     { path: "/notifications/:notificationId", element: <NotificationsPage />, title: "Notification Detail" },
 

@@ -1,13 +1,6 @@
 import type { Course } from "../types/types.ts";
 import { isSafeInternalRedirect } from "./postAuthRedirect.ts";
 
-function appendRefToUrl(url: string, ref?: string | null) {
-    if (!ref) return url;
-
-    const separator = url.includes("?") ? "&" : "?";
-    return `${url}${separator}ref=${encodeURIComponent(ref)}`;
-}
-
 function getSafeInternalPath(url: string) {
     if (isSafeInternalRedirect(url)) {
         return url;
@@ -30,18 +23,13 @@ function getSafeInternalPath(url: string) {
     }
 }
 
-export function getCoursePurchaseUrl(
-    course: Pick<Course, "id" | "buyCourseUrl"> & { attributionCode?: string | null },
-    ref?: string | null,
-) {
+export function getCoursePurchaseUrl(course: Pick<Course, "id" | "buyCourseUrl">) {
     const safeBuyCourseUrl = course.buyCourseUrl ? getSafeInternalPath(course.buyCourseUrl) : null;
-    const effectiveRef = ref || course.attributionCode || null;
 
     if (safeBuyCourseUrl) {
-        return appendRefToUrl(safeBuyCourseUrl, effectiveRef);
+        return safeBuyCourseUrl;
     }
 
     const encodedCourseId = encodeURIComponent(course.id);
-    const defaultUrl = `/buy-course?courseId=${encodedCourseId}`;
-    return appendRefToUrl(defaultUrl, effectiveRef);
+    return `/buy-course?courseId=${encodedCourseId}`;
 }

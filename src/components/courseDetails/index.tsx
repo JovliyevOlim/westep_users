@@ -11,7 +11,6 @@ import CoursePage from "../coursePlayer/CoursePage.tsx";
 import LessonVedio from "../lessonDetails/LessonVedio.tsx";
 import { useGetLessonTasks } from "../../api/lesson-tasks/useLessonTasks.ts";
 import { useGetRatingSummary } from "../../api/review/useReview.ts";
-import { getCoursePurchaseUrl } from "../../utils/coursePurchase.ts";
 import type {
     Course,
     CourseDetailModule,
@@ -201,7 +200,12 @@ function Index() {
         [course?.modules],
     );
     const unlockedModuleIds = useMemo(
-        () => new Set((studentModules as Module[]).map((module) => module.id)),
+        () =>
+            new Set(
+                (studentModules as Module[])
+                    .filter((module) => module.unlocked ?? !module.requiresSubscription)
+                    .map((module) => module.id),
+            ),
         [studentModules],
     );
 
@@ -294,7 +298,7 @@ function Index() {
             modules: modules.map((module: CourseDetailModule) => ({
                 id: module.moduleId,
                 title: module.moduleName,
-                    isPurchased: module.purchased ?? module.isPurchased ?? unlockedModuleIds.has(module.moduleId),
+                    isPurchased: module.unlocked ?? unlockedModuleIds.has(module.moduleId),
                     lessons: module.lessons.map((lesson) => ({
                         id: lesson.lessonId,
                     title:
@@ -616,9 +620,7 @@ function Index() {
                     },
                 })
             }
-            onNavigateToPurchase={(courseId) =>
-                navigate(getCoursePurchaseUrl(course ?? { id: courseId, buyCourseUrl: null }))
-            }
+            onNavigateToPurchase={() => navigate("/subscription")}
             renderVideoPlayer={({ lesson, lessonId }) => {
                 if (lesson?.type === "PRACTICE") return null;
 

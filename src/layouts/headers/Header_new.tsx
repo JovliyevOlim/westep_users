@@ -50,6 +50,7 @@ export function Header() {
                         {[
                             { to: "/", label: "Asosiy", end: true },
                             { to: "/courses", label: "Kurslar", isCourses: true },
+                            { to: "/subscription", label: "Obuna" },
                         ].map((item) => (
                             <NavLink
                                 key={item.to}

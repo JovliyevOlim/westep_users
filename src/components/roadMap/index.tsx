@@ -1,33 +1,21 @@
-import { useEffect, useMemo, useState, type MouseEvent, type ReactNode } from "react";
+import { useState, type MouseEvent, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
     BookOpen,
-    CheckCircle2,
     ChevronRight,
     Clock3,
     Layers3,
     ShieldCheck,
-    Award, Check, Plus, Clock, Play, ChevronDown, ChevronUp
+    Award, Lock, Clock, Play, ChevronDown, ChevronUp
 } from "lucide-react";
 import { useUser } from "../../api/auth/useAuth.ts";
 import {
     useGetStudentCoursePurchaseDetail,
     useGetStudentCourseById,
     useSetStudentCourseById,
-    useSetStudentCourseByIdForPayment,
 } from "../../api/courses/useCourse.ts";
-import { useGetStudentCourseModulesById } from "../../api/module/useModule.ts";
-import type { CourseDetailLesson, CourseDetailModule, Module, StudentCourse } from "../../types/types.ts";
-import paymeLogo from "../../assets/payment/payme.svg";
-import clickLogo from "../../assets/payment/click.svg";
-import paynetLogo from "../../assets/payment/paynet.svg";
-import uzumBankLogo from "../../assets/payment/uzum-bank.svg";
-import xaznaLogo from "../../assets/payment/xazna.svg";
-import humoUzcardLogo from "../../assets/payment/humo-uzcard.svg";
-import { getPreferredAttributionRef } from "../../utils/attribution.ts";
-
-type PaymentMethod = "payme" | "click" | "uzum" | "xazna" | "humo" | "paynet";
+import type { CourseDetailLesson, CourseDetailModule, StudentCourse } from "../../types/types.ts";
 
 function formatDuration(totalSeconds?: number) {
     if (!totalSeconds) return "0";
@@ -45,22 +33,6 @@ function formatDuration(totalSeconds?: number) {
     }
 
     return ` : ${seconds} `;
-}
-
-function PriceDisplay({
-    price,
-    isStrikethrough,
-    className = "",
-}: {
-    price: number;
-    isStrikethrough?: boolean;
-    className?: string;
-}) {
-    return (
-        <span className={`${isStrikethrough ? "line-through" : ""} ${className}`}>
-            {price.toLocaleString("uz-UZ")} so'm
-        </span>
-    );
 }
 
 function Badge({
@@ -83,72 +55,16 @@ function Badge({
     );
 }
 
-function PaymentMethodCard({
-    id,
-    name,
-    logo,
-    isSelected,
-    onSelect,
-    disabled,
-}: {
-    id: PaymentMethod;
-    name: string;
-    logo?: string;
-    isSelected: boolean;
-    onSelect: (value: PaymentMethod) => void;
-    disabled?: boolean;
-}) {
-    return (
-        <button
-            type="button"
-            onClick={() => !disabled && onSelect(id)}
-            className={`group relative flex min-h-[118px] flex-col items-center justify-center overflow-hidden rounded-[24px] border p-4 text-left transition-all duration-300 ${isSelected
-                ? "border-blue-600 bg-blue-50/60 shadow-[0_16px_40px_-24px_rgba(37,99,235,0.55)] dark:bg-blue-900/10"
-                : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-950 dark:hover:border-slate-700"
-                } ${disabled ? "cursor-not-allowed opacity-60" : "active:scale-[0.98]"}`}
-        >
-            {logo ? (
-                <img
-                    src={logo}
-                    alt={name}
-                    className="h-14 w-full object-contain"
-                />
-            ) : (
-                <span className="text-base font-black uppercase tracking-[0.12em] text-slate-900 dark:text-white">
-                    {name}
-                </span>
-            )}
-            {isSelected && (
-                <motion.div
-                    layoutId="payment-active-roadmap"
-                    className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 shadow-lg"
-                >
-                    <CheckCircle2 className="h-3 w-3 text-white" />
-                </motion.div>
-            )}
-            {disabled && (
-                <div className="absolute bottom-2 right-3 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">
-                    Tez orada
-                </div>
-            )}
-        </button>
-    );
-}
-
-function PurchaseModuleItem({
+function CourseModuleItem({
     module,
-    isSelected,
     isExpanded,
-    onToggle,
     onExpand,
 }: {
     module: CourseDetailModule;
-    isSelected: boolean;
     isExpanded: boolean;
-    onToggle: (id: string) => void;
     onExpand: (event: MouseEvent<HTMLButtonElement>, id: string) => void;
 }) {
-    const isPurchased = module.isPurchased;
+    const isUnlocked = module.unlocked ?? !module.requiresSubscription;
 
     return (
         <motion.div
@@ -156,47 +72,37 @@ function PurchaseModuleItem({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className={`group relative rounded-[24px] border transition-all duration-300 overflow-hidden ${isPurchased ? 'bg-emerald-50/40 dark:bg-emerald-950/10 border-emerald-200 dark:border-emerald-900/40'
-                : isSelected
-                    ? 'bg-white dark:bg-slate-900 border-blue-500/40 shadow-xl shadow-blue-500/5'
-                    : 'bg-white/40 dark:bg-slate-900/40 border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
+            className={`group relative rounded-[24px] border transition-all duration-300 overflow-hidden ${isUnlocked
+                ? 'bg-emerald-50/40 dark:bg-emerald-950/10 border-emerald-200 dark:border-emerald-900/40'
+                : 'bg-white/40 dark:bg-slate-900/40 border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
                 }`}
         >
-            <div
-                onClick={() => onToggle(module.moduleId)}
-                className={`flex items-center gap-5 p-5 ${!isPurchased ? 'cursor-pointer' : ''}`}
-            >
+            <div className="flex items-center gap-5 p-5">
 
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 ${module.isPurchased
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500 ${isUnlocked
                     ? 'bg-emerald-500 scale-100 shadow-lg shadow-emerald-500/20'
-                    : isSelected
-                        ? 'bg-blue-600 scale-105 shadow-lg shadow-blue-600/20'
-                        : 'bg-slate-100 dark:bg-slate-800'
+                    : 'bg-slate-100 dark:bg-slate-800'
                     }`}>
-                    {module.isPurchased ? (
+                    {isUnlocked ? (
                         <Award className="w-5 h-5 text-white" />
-                    ) : isSelected ? (
-                        <Check className="w-5 h-5 text-white stroke-[4px]" />
                     ) : (
-                        <Plus className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                        <Lock className="w-5 h-5 text-slate-400 group-hover:text-slate-600 transition-colors" />
                     )}
                 </div>
 
                 <div className="flex-1">
                     <div className="flex items-center justify-between">
                         <h3
-                            className={`text-[16px] font-bold tracking-tight transition-colors ${isPurchased ? 'text-emerald-700 dark:text-emerald-300' : isSelected ? 'text-blue-600 dark:text-blue-400' : 'text-slate-800 dark:text-white'
+                            className={`text-[16px] font-bold tracking-tight transition-colors ${isUnlocked ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-800 dark:text-white'
                                 }`}
                         >
                             {module.moduleName}
                         </h3>
                         <div className="flex items-center gap-4">
-                            {module.isPurchased ? (
-                                <Badge variant="emerald">Sotib olingan</Badge>
+                            {isUnlocked ? (
+                                <Badge variant="emerald">Ochiq</Badge>
                             ) : (
-                                <span className={`text-[16px] font-bold ${isSelected ? 'text-blue-600' : 'text-slate-400 opacity-60'}`}>
-                                    <PriceDisplay price={module.price} />
-                                </span>
+                                <Badge variant="gray">Obuna bilan</Badge>
                             )}
                             <button
                                 onClick={(e) => onExpand(e, module.moduleId)}
@@ -264,169 +170,39 @@ function LessonRow({
 
 function RoadMap() {
     const navigate = useNavigate();
-    const location = useLocation();
     const params = useParams();
     const [searchParams] = useSearchParams();
     const courseId = params.id || searchParams.get("courseId") || undefined;
-    const ref = searchParams.get("ref");
     const { data: user } = useUser();
     const { data: studentCourses = [] } = useGetStudentCourseById(user?.id);
-    const { data: course, isPending } = useGetStudentCoursePurchaseDetail({ id: courseId, ref });
+    const { data: course, isPending } = useGetStudentCoursePurchaseDetail({ id: courseId });
     const matchedStudentCourse = (studentCourses as StudentCourse[]).find(
         (item) => item.courseId === courseId,
     );
-    const { data: purchasedModules = [] } = useGetStudentCourseModulesById(matchedStudentCourse?.id);
-    const { mutate: purchaseWithPayment, isPending: isPaymentPending } =
-        useSetStudentCourseByIdForPayment();
-    const { mutate: enrollForFree, isPending: isEnrollPending } = useSetStudentCourseById();
-    const effectiveAttributionRef = getPreferredAttributionRef(ref, course?.attributionCode);
+    const { mutate: enroll, isPending: isEnrollPending } = useSetStudentCourseById();
 
-    useEffect(() => {
-        if (!courseId || !course?.attributionCode || course.attributionCode === ref) {
-            return;
-        }
-
-        const nextSearchParams = new URLSearchParams(location.search);
-        nextSearchParams.set("ref", course.attributionCode);
-
-        if (!params.id) {
-            nextSearchParams.set("courseId", courseId);
-        }
-
-        navigate(`${location.pathname}?${nextSearchParams.toString()}`, { replace: true });
-    }, [course?.attributionCode, courseId, location.pathname, location.search, navigate, params.id, ref]);
-
-    const purchasedModuleIds = useMemo(() => {
-        return new Set((purchasedModules as Module[]).map((item) => item.id));
-    }, [purchasedModules]);
-
-    const modules = useMemo(
-        () =>
-            (course?.modules ?? []).map((module) => ({
-                ...module,
-                isPurchased: module.isPurchased ?? purchasedModuleIds.has(module.moduleId),
-            })),
-        [course?.modules, purchasedModuleIds],
-    );
-    const [selectedModules, setSelectedModules] = useState<string[]>([]);
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("payme");
+    const modules = course?.modules ?? [];
     const [expandedModule, setExpandedModule] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!modules.length) {
-            setSelectedModules([]);
-            setExpandedModule(null);
-        }
-    }, [modules]);
+    const subscriptionModulesCount = modules.filter(
+        (module) => module.requiresSubscription && !module.unlocked,
+    ).length;
+    const isEnrolled = Boolean(matchedStudentCourse);
 
-    const selectedModuleObjects = useMemo(
-        () => modules.filter((module) => selectedModules.includes(module.moduleId)),
-        [modules, selectedModules],
-    );
-
-    const unpurchasedModules = useMemo(
-        () => modules.filter((module) => !module.isPurchased),
-        [modules],
-    );
-    const unpurchasedModuleIds = useMemo(
-        () => unpurchasedModules.map((module) => module.moduleId),
-        [unpurchasedModules],
-    );
-
-    const toggleModule = (id: string) => {
-        const module = modules.find((m) => m.moduleId === id);
-        if (module?.isPurchased) return;
-
-        setSelectedModules((prev) =>
-            prev.includes(id) ? prev.filter((moduleId) => moduleId !== id) : [...prev, id],
-        );
-    };
-
-    const toggleAll = () => {
-        if (selectedModules.length === unpurchasedModuleIds.length) {
-            setSelectedModules([]);
-        } else {
-            setSelectedModules(unpurchasedModuleIds);
-        }
-    };
-
-    const { totalPrice, originalPrice, hasBulkDiscount } = useMemo(() => {
-        const base = selectedModuleObjects.reduce((sum, module) => sum + module.price, 0);
-
-        return {
-            totalPrice: base,
-            originalPrice: base,
-            hasBulkDiscount: false,
-        };
-    }, [selectedModuleObjects]);
-
-    const providers: Array<{
-        id: PaymentMethod;
-        name: string;
-        logo?: string;
-        disabled?: boolean;
-    }> = [
-            {
-                id: "humo",
-                name: "Humo / Uzcard",
-                logo: humoUzcardLogo,
-                disabled: true,
-            },
-            {
-                id: "payme",
-                name: "Payme",
-                logo: paymeLogo,
-            },
-            {
-                id: "xazna",
-                name: "Xazna",
-                logo: xaznaLogo,
-                disabled: true,
-            },
-            {
-                id: "uzum",
-                name: "Uzum Bank",
-                logo: uzumBankLogo,
-                disabled: true,
-            },
-            {
-                id: "click",
-                name: "Click",
-                logo: clickLogo,
-                disabled: true,
-            },
-            {
-                id: "paynet",
-                name: "Paynet",
-                logo: paynetLogo,
-                disabled: true,
-            },
-        ];
-
-    const isFreeCourse = totalPrice === 0;
-    const isSubmitting = isPaymentPending || isEnrollPending;
-
-    function handlePurchase() {
-        if (!user?.id || !courseId || !selectedModules.length) {
+    function handleStart() {
+        if (!user?.id || !courseId || isEnrollPending) {
             return;
         }
 
-        const payload = {
+        if (matchedStudentCourse) {
+            navigate(`/courses/${courseId}/${matchedStudentCourse.id}`);
+            return;
+        }
+
+        enroll({
             studentId: user.id,
             courseId,
-            moduleList: selectedModules,
-        };
-
-        if (isFreeCourse) {
-            enrollForFree(payload);
-            return;
-        }
-
-        if (paymentMethod !== "payme") {
-            return;
-        }
-
-        purchaseWithPayment(payload);
+        });
     }
 
     return (
@@ -442,12 +218,12 @@ function RoadMap() {
                             <div className="flex flex-wrap items-center gap-4">
                                 <div className="h-[2px] w-8 rounded-full bg-blue-600" />
                                 <Badge variant="blue">
-                                    {course?.price ? "Premium" : "Bepul"} • Professional Series
+                                    {subscriptionModulesCount > 0 ? "Obuna" : "Bepul"} • Professional Series
                                 </Badge>
                             </div>
 
                             <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
-                                {course?.name || "Kurs xarid qilish"}
+                                {course?.name || "Kursni boshlash"}
                             </h1>
 
                             <p className="max-w-xl text-lg font-medium leading-relaxed text-slate-500 dark:text-slate-400 sm:text-xl">
@@ -503,31 +279,16 @@ function RoadMap() {
                                     </h2>
                                     <p className="mt-1 text-xs font-medium text-slate-400">
                                         Modul, lesson va davomiylik ma'lumotlari backenddan yuklandi
-                                        {effectiveAttributionRef ? ` • Ref: ${effectiveAttributionRef}` : ""}
                                     </p>
                                 </div>
-
-                                {!!unpurchasedModules.length && (
-                                    <button
-                                        onClick={toggleAll}
-                                        className="rounded-xl border border-slate-200 px-5 py-2 text-[11px] font-bold uppercase tracking-wider text-slate-600 transition-all hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-900"
-                                        type="button"
-                                    >
-                                        {selectedModules.length === unpurchasedModules.length
-                                            ? "Barchasini bekor qilish"
-                                            : "Barchasini tanlash"}
-                                    </button>
-                                )}
                             </div>
 
                             <div className="grid grid-cols-1 gap-4">
                                 {modules.map((module) => (
-                                    <PurchaseModuleItem
+                                    <CourseModuleItem
                                         key={module.moduleId}
                                         module={module}
-                                        isSelected={selectedModules.includes(module.moduleId)}
                                         isExpanded={expandedModule === module.moduleId}
-                                        onToggle={toggleModule}
                                         onExpand={(event, id) => {
                                             event.stopPropagation();
                                             setExpandedModule((prev) => (prev === id ? null : id));
@@ -555,7 +316,7 @@ function RoadMap() {
                             <div className="relative z-10 space-y-8">
                                 <div className="flex items-center justify-between">
                                     <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                                        Hisob-kitob
+                                        Kursga yozilish
                                     </h3>
                                     <Badge variant="blue">
                                         <div className="flex items-center gap-2">
@@ -566,100 +327,53 @@ function RoadMap() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <div className="flex flex-wrap items-end gap-4">
-                                        <AnimatePresence mode="wait">
-                                            <motion.span
-                                                key={totalPrice}
-                                                initial={{ opacity: 0, x: -10 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                className="text-3xl font-extrabold tracking-tighter text-slate-900 dark:text-white sm:text-4xl lg:text-5xl"
-                                            >
-                                                <PriceDisplay price={totalPrice} />
-                                            </motion.span>
-                                        </AnimatePresence>
-
-                                        {hasBulkDiscount && (
-                                            <div className="mb-2 flex flex-col">
-                                                <PriceDisplay
-                                                    price={originalPrice}
-                                                    isStrikethrough
-                                                    className="text-xl font-bold leading-none text-slate-300 dark:text-slate-700"
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
+                                    <p className="text-3xl font-extrabold tracking-tighter text-slate-900 dark:text-white sm:text-4xl">
+                                        {isEnrolled ? "Siz yozilgansiz" : "Yozilish bepul"}
+                                    </p>
 
                                     <p className="text-[11px] font-medium uppercase leading-relaxed tracking-[0.1em] text-slate-400">
-                                        {selectedModules.length} ta modul tanlandi.
+                                        {subscriptionModulesCount > 0
+                                            ? `${subscriptionModulesCount} ta modul obuna orqali ochiladi.`
+                                            : "Barcha modullar ochiq."}
                                     </p>
+
+                                    {subscriptionModulesCount > 0 && (
+                                        <Link
+                                            to="/subscription"
+                                            className="inline-flex items-center gap-2 pt-1 text-[11px] font-black uppercase tracking-[0.15em] text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400"
+                                        >
+                                            Obuna tariflarini ko'rish
+                                            <ChevronRight className="h-3.5 w-3.5" />
+                                        </Link>
+                                    )}
                                 </div>
 
                             </div>
 
-                            {!isFreeCourse && (
-                                <div className="relative z-10 space-y-5 pt-6">
-                                    <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                                        To'lov shakli
-                                    </h4>
-                                    <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
-                                        {providers.map((provider) => (
-                                            <PaymentMethodCard
-                                                key={provider.id}
-                                                {...provider}
-                                                isSelected={paymentMethod === provider.id}
-                                                onSelect={setPaymentMethod}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
                             <div className="relative z-10 pt-6">
                                 <motion.button
-                                    whileHover={
-                                        selectedModules.length > 0 &&
-                                            !isSubmitting &&
-                                            (isFreeCourse || paymentMethod === "payme")
-                                            ? { scale: 1.01, y: -2 }
-                                            : {}
-                                    }
-                                    whileTap={
-                                        selectedModules.length > 0 &&
-                                            !isSubmitting &&
-                                            (isFreeCourse || paymentMethod === "payme")
-                                            ? { scale: 0.99 }
-                                            : {}
-                                    }
-                                    disabled={
-                                        selectedModules.length === 0 ||
-                                        isSubmitting ||
-                                        (!isFreeCourse && paymentMethod !== "payme")
-                                    }
-                                    onClick={handlePurchase}
-                                    className={`group flex w-full items-center justify-center gap-4 rounded-[28px] px-8 py-6 transition-all ${selectedModules.length > 0 &&
-                                        !isSubmitting &&
-                                        (isFreeCourse || paymentMethod === "payme")
+                                    whileHover={!isEnrollPending ? { scale: 1.01, y: -2 } : {}}
+                                    whileTap={!isEnrollPending ? { scale: 0.99 } : {}}
+                                    disabled={isEnrollPending || !courseId}
+                                    onClick={handleStart}
+                                    className={`group flex w-full items-center justify-center gap-4 rounded-[28px] px-8 py-6 transition-all ${!isEnrollPending && courseId
                                         ? "bg-blue-600 text-white shadow-[0_24px_48px_-12px_rgba(37,99,235,0.35)] hover:bg-blue-700"
                                         : "cursor-not-allowed border border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-700 dark:bg-slate-800"
                                         }`}
                                     type="button"
                                 >
                                     <span className="text-[13px] font-bold uppercase tracking-[0.25em]">
-                                        {isSubmitting
+                                        {isEnrollPending
                                             ? "Yuklanmoqda..."
-                                            : selectedModules.length > 0
-                                                ? isFreeCourse
-                                                    ? "Boshlash"
-                                                    : "Sotib olish"
-                                                : "Modul tanlang"}
+                                            : isEnrolled
+                                                ? "Davom etish"
+                                                : "Boshlash"}
                                     </span>
-                                    {selectedModules.length > 0 &&
-                                        !isSubmitting &&
-                                        (isFreeCourse || paymentMethod === "payme") && (
-                                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition-transform duration-300 group-hover:translate-x-1.5">
-                                                <ChevronRight className="h-4 w-4 text-white" />
-                                            </div>
-                                        )}
+                                    {!isEnrollPending && courseId && (
+                                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition-transform duration-300 group-hover:translate-x-1.5">
+                                            <ChevronRight className="h-4 w-4 text-white" />
+                                        </div>
+                                    )}
                                 </motion.button>
 
                                 <div className="mt-8 flex items-center justify-center gap-4 opacity-40">

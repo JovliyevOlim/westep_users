@@ -20,7 +20,6 @@ function CourseCard({course}: CourseCard) {
         mutate({
             studentId: user.id,
             courseId: id,
-            moduleList:[],
         })
     }
 
@@ -38,11 +37,11 @@ function CourseCard({course}: CourseCard) {
                         </div>
                     </div>
                     {
-                        course.price > 0 ?
+                        course.purchased ?
                             <Link to={getCoursePurchaseUrl(course)}>
                                 <button
                                     className={'w-full h-[40px] mt-3 bg-blue-50 text-blue-400 border border-blue-400 rounded-full p-1 text-center'}>
-                                    Sotib Olish
+                                    Davom etish
                                 </button>
                             </Link>
                             :

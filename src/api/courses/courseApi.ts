@@ -6,22 +6,6 @@ type CourseDiscoverResponse = {
     courses?: Course[];
 };
 
-type StudentCoursePurchaseDetailResponse = {
-    course: Course;
-    attributionCode?: string | null;
-    sourceType?: string | null;
-};
-
-function normalizeStudentCoursePurchaseDetail(
-    data: StudentCoursePurchaseDetailResponse,
-): Course {
-    return {
-        ...data.course,
-        attributionCode: data.attributionCode ?? data.course.attributionCode ?? null,
-        sourceType: data.sourceType ?? data.course.sourceType ?? null,
-    };
-}
-
 export const getAllCourses = async () => {
     try {
         const {data} = await apiClient.get<CourseDiscoverResponse>("/course/discover", {
@@ -50,7 +34,7 @@ export const getAllStudentCoursesById = async (id: string | undefined) => {
 
 
 
-export const setStudentCourse = async (body: { studentId: string, courseId: string | null, moduleList: string[] }) => {
+export const setStudentCourse = async (body: { studentId: string, courseId: string | null }) => {
     try {
         const data = await apiClient.post("/student-course", body);
         return data.data;
@@ -61,30 +45,14 @@ export const setStudentCourse = async (body: { studentId: string, courseId: stri
     }
 };
 
-export const getCourseById = async ({
-    id,
-    ref,
-}: {
-    id: string | undefined;
-    ref?: string | null;
-}) => {
-    const {data} = await apiClient.get("/course/discover/" + id, {
-        params: ref ? { ref } : undefined,
-    });
+export const getCourseById = async ({id}: { id: string | undefined }) => {
+    const {data} = await apiClient.get("/course/discover/" + id);
     return data;
 };
 
-export const getStudentCoursePurchaseDetail = async ({
-    id,
-    ref,
-}: {
-    id: string | undefined;
-    ref?: string | null;
-}) => {
-    const { data } = await apiClient.get<StudentCoursePurchaseDetailResponse>(`/student/courses/${id}`, {
-        params: ref ? { ref } : undefined,
-    });
-    return normalizeStudentCoursePurchaseDetail(data);
+export const getStudentCoursePurchaseDetail = async ({id}: { id: string | undefined }) => {
+    const {data} = await apiClient.get<Course>(`/student/courses/${id}`);
+    return data;
 };
 
 export const getContinueLearning = async () => {

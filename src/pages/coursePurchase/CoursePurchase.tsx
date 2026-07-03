@@ -1,51 +1,26 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useGetStudentCoursePurchaseDetail, useSetStudentCourseByIdForPayment } from "../../api/courses/useCourse.ts";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useGetStudentCoursePurchaseDetail, useSetStudentCourseById } from "../../api/courses/useCourse.ts";
 import { useUser } from "../../api/auth/useAuth.ts";
 import { CoursePurchasePage } from "../../components/coursePurchase/CoursePurchasePage.tsx";
-import type { 
-    CoursePurchaseCourse, 
-    CoursePurchaseModule, 
-    PaymentProvider 
+import type {
+    CoursePurchaseCourse,
+    CoursePurchaseModule
 } from "../../components/coursePurchase/types.ts";
 import type { CourseDetailLesson, CourseDetailModule } from "../../types/types.ts";
 import { Header } from "../../layouts/headers/Header_new.tsx";
 import { Loader2 } from "lucide-react";
-import paymeLogo from "../../assets/payment/payme.svg";
-import clickLogo from "../../assets/payment/click.svg";
-import paynetLogo from "../../assets/payment/paynet.svg";
-import uzumBankLogo from "../../assets/payment/uzum-bank.svg";
-import xaznaLogo from "../../assets/payment/xazna.svg";
-import humoUzcardLogo from "../../assets/payment/humo-uzcard.svg";
 
 export default function CoursePurchase() {
-    const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
     const [searchParams] = useSearchParams();
     const courseId = params.courseId || searchParams.get("courseId") || undefined;
-    const ref = searchParams.get("ref");
 
     const { data: user, isLoading: isUserLoading } = useUser();
-    const { data: courseData, isLoading: isCourseLoading } = useGetStudentCoursePurchaseDetail({ id: courseId, ref });
-    
-    // Purchase mutation
-    const { mutate: setStudentCourse, isPending: isPurchasePending } = useSetStudentCourseByIdForPayment();
+    const { data: courseData, isLoading: isCourseLoading } = useGetStudentCoursePurchaseDetail({ id: courseId });
 
-    useEffect(() => {
-        if (!courseId || !courseData?.attributionCode || courseData.attributionCode === ref) {
-            return;
-        }
-
-        const nextSearchParams = new URLSearchParams(location.search);
-        nextSearchParams.set("ref", courseData.attributionCode);
-
-        if (!params.courseId) {
-            nextSearchParams.set("courseId", courseId);
-        }
-
-        navigate(`${location.pathname}?${nextSearchParams.toString()}`, { replace: true });
-    }, [courseData?.attributionCode, courseId, location.pathname, location.search, navigate, params.courseId, ref]);
+    // Enroll mutation
+    const { mutate: setStudentCourse, isPending: isEnrollPending } = useSetStudentCourseById();
 
     if (isCourseLoading || isUserLoading) {
         return (
@@ -67,8 +42,8 @@ export default function CoursePurchase() {
                         Kurs topilmadi
                     </h2>
                     <p className="text-slate-500 mt-2">Bunday kurs mavjud emas yoki o'chirilgan.</p>
-                    <button 
-                        onClick={() => navigate("/courses")} 
+                    <button
+                        onClick={() => navigate("/courses")}
                         className="mt-6 px-8 py-3 bg-blue-600 text-white rounded-xl font-bold"
                     >
                         Kurslarga qaytish
@@ -83,15 +58,14 @@ export default function CoursePurchase() {
         id: courseData.id,
         title: courseData.name,
         category: [courseData.primaryCategory?.name, courseData.subcategory?.name].filter(Boolean).join(" / ") || courseData.languageName || "Kurs",
-        price: courseData.price
     };
 
     // Map Backend Modules to CoursePurchaseModule
     const mappedModules: CoursePurchaseModule[] = (courseData.modules || []).map((mod: CourseDetailModule) => ({
         id: mod.moduleId,
         title: mod.moduleName,
-        price: mod.price,
-        isPurchased: mod.purchased ?? mod.isPurchased,
+        requiresSubscription: mod.requiresSubscription,
+        unlocked: mod.unlocked,
         lessons: (mod.lessons || []).map((lesson: CourseDetailLesson) => ({
             id: lesson.lessonId,
             title: lesson.lessonName,
@@ -99,62 +73,12 @@ export default function CoursePurchase() {
         }))
     }));
 
-    const paymentProviders: PaymentProvider[] = [
-        {
-            id: "humo",
-            name: "Humo / Uzcard",
-            color: "from-slate-900 to-slate-700",
-            logo: humoUzcardLogo,
-            disabled: true,
-        },
-        {
-            id: "payme",
-            name: "Payme",
-            color: "from-cyan-500 to-sky-500",
-            logo: paymeLogo,
-        },
-        {
-            id: "xazna",
-            name: "Xazna",
-            color: "from-emerald-500 to-green-500",
-            logo: xaznaLogo,
-            disabled: true,
-        },
-        {
-            id: "uzum",
-            name: "Uzum Bank",
-            color: "from-violet-600 to-fuchsia-600",
-            logo: uzumBankLogo,
-            disabled: true,
-        },
-        {
-            id: "click",
-            name: "Click",
-            color: "from-blue-600 to-sky-500",
-            logo: clickLogo,
-            disabled: true,
-        },
-        {
-            id: "paynet",
-            name: "Paynet",
-            color: "from-emerald-500 to-lime-500",
-            logo: paynetLogo,
-            disabled: true,
-        },
-    ];
-
-    const handleSubmitPurchase = (payload: {
-        courseId: string;
-        selectedModules: string[];
-        paymentMethod: string;
-    }) => {
+    const handleSubmitPurchase = (payload: { courseId: string }) => {
         if (!user?.id) return;
-        
-        // Ensure moduleList contains the IDs correctly mapped back
+
         setStudentCourse({
             studentId: user.id,
             courseId: payload.courseId,
-            moduleList: payload.selectedModules
         });
     };
 
@@ -163,12 +87,10 @@ export default function CoursePurchase() {
             courseId={courseId}
             course={mappedCourse}
             modules={mappedModules}
-            paymentProviders={paymentProviders}
             withHeader={true}
             HeaderComponent={Header}
             onSubmit={handleSubmitPurchase}
-            modulePrice={courseData.price || 598000}
-            isSubmitting={isPurchasePending}
+            isSubmitting={isEnrollPending}
         />
     );
 }
