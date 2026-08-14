@@ -85,7 +85,10 @@ apiClient.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        const requestUrl = originalRequest?.url ?? "";
+        const isTelegramAuth = requestUrl.includes("/auth/telegram");
+
+        if (error.response?.status === 401 && !originalRequest._retry && !isTelegramAuth) {
             originalRequest._retry = true;
 
             const refreshToken = getItem<string>("refreshToken");
