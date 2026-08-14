@@ -118,6 +118,43 @@ export const login = async (body: LoginBody) => {
     }
 };
 
+export interface TelegramLoginBody {
+    idToken: string;
+    deviceId?: string;
+    deviceName?: string;
+    replaceSessionId?: string;
+}
+
+export const loginWithTelegram = async (body: TelegramLoginBody) => {
+    try {
+        const resolvedDeviceId = body.deviceId || getOrCreateDeviceId();
+        const resolvedDeviceName = body.deviceName || getCurrentDeviceName();
+        const { data } = await apiClient.post<LoginResponse>("/auth/telegram", {
+            idToken: body.idToken,
+            deviceId: resolvedDeviceId,
+            deviceName: resolvedDeviceName,
+            replaceSessionId: body.replaceSessionId,
+        });
+        setItem<string>("accessToken", data.accessToken);
+        setItem<string>("refreshToken", data.refreshToken);
+        return data;
+    } catch (error) {
+        const err = error as AxiosError<ApiErrorResponse<DeviceLimitExceededDetails | null>>;
+        if (err.response?.status === 409 && err.response.data?.details) {
+            throw new DeviceLimitExceededError(
+                err.response.data.message || "Maksimal qurilma limiti to'ldi",
+                err.response.data.details,
+            );
+        }
+        const message =
+            err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.message ||
+            "Kirishda xatolik yuz berdi";
+        throw new Error(message);
+    }
+};
+
 export const revokeDeviceForLogin = async (
     body: RevokeDeviceForLoginBody,
 ) => {

@@ -38,6 +38,7 @@ const QuizHistoryPage = lazy(() => import("../pages/quizHistory/QuizHistoryPage.
 const NotificationsPage = lazy(() => import("../pages/NotificationsPage.tsx"));
 const HomeworkHistoryPage = lazy(() => import("../pages/homework/HomeworkHistoryPage.tsx"));
 const SubscriptionPage = lazy(() => import("../pages/subscription/SubscriptionPage.tsx"));
+const TelegramBridgePage = lazy(() => import("../pages/auth/TelegramBridgePage.tsx"));
 
 const authProtectedRoutes = [
     { path: "/", element: <MainPage />, title: "Home" },
@@ -80,6 +81,7 @@ const authProtectedRoutes = [
 
 const publicRoutes = [
     { path: "/login", element: <Login /> },
+    { path: "/auth/telegram/bridge", element: <TelegramBridgePage /> },
     { path: "/register", element: <Register /> },
     { path: "/password", element: <Password /> },
     { path: "/forgot-password", element: <ForgotPassword /> },

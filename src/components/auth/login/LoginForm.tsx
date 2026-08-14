@@ -7,6 +7,7 @@ import PhoneNumberInput from "../../../ui/PhoneNumberInput.tsx";
 import CommonButton from "../../../ui/CommonButton.tsx";
 import AuthText from "../../../ui/AuthText.tsx";
 import AuthBrand from "../AuthBrand.tsx";
+import TelegramLoginButton from "../telegram/TelegramLoginButton.tsx";
 import {clearPostAuthRedirect, setPostAuthRedirect} from "../../../utils/postAuthRedirect.ts";
 
 
@@ -71,6 +72,14 @@ export default function LoginForm() {
                             />
                         </div>
                     </form>
+                    <div className="mt-6 flex items-center gap-3">
+                      <div className="h-px flex-1 bg-slate-200" />
+                      <span className="text-sm text-slate-400">Yoki</span>
+                      <div className="h-px flex-1 bg-slate-200" />
+                    </div>
+                    <div className="mt-6">
+                      <TelegramLoginButton />
+                    </div>
                 </div>
             </section>
         </>

@@ -6,6 +6,7 @@ import {
     resetPassword,
     getCurrentUser,
     login,
+    loginWithTelegram,
     logout,
     register,
     revokeDeviceForLogin,
@@ -43,6 +44,33 @@ export const useLogin = () => {
     const toast = useToast();
     return useMutation({
         mutationFn: login,
+        onSuccess: async () => {
+            const user = await getCurrentUser();
+            qc.setQueryData(["currentUser"], user);
+            const redirectPath = getPostAuthRedirect();
+            if (redirectPath) {
+                clearPostAuthRedirect();
+                navigate(redirectPath);
+            } else {
+                navigate("/");
+            }
+            sessionStorage.removeItem("form");
+        },
+        onError: (error) => {
+            if (isDeviceLimitExceededError(error)) {
+                return;
+            }
+            toast.error(error.message);
+        },
+    });
+};
+
+export const useTelegramLogin = () => {
+    const navigate = useNavigate();
+    const qc = useQueryClient();
+    const toast = useToast();
+    return useMutation({
+        mutationFn: loginWithTelegram,
         onSuccess: async () => {
             const user = await getCurrentUser();
             qc.setQueryData(["currentUser"], user);
