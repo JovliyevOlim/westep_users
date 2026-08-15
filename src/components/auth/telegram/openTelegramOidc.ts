@@ -38,13 +38,12 @@ export function openTelegramOidcPopup(clientId: number): Promise<string> {
             if (settled) return;
             settled = true;
             window.removeEventListener("message", onMessage);
-            window.clearInterval(closeTimer);
+            window.clearTimeout(closeTimer);
             fn();
         };
 
         const onMessage = (event: MessageEvent) => {
             if (event.origin !== OIDC_ORIGIN) return;
-            if (event.source !== popup) return;
 
             let data: {event?: string; result?: string; error?: string} | null = null;
             try {
@@ -65,10 +64,11 @@ export function openTelegramOidcPopup(clientId: number): Promise<string> {
 
         window.addEventListener("message", onMessage);
 
-        const closeTimer = window.setInterval(() => {
-            if (!popup.closed) return;
-            finish(() => reject(new Error("Telegram orqali kirish bekor qilindi")));
-        }, 300);
+        // Do not cancel the moment the popup looks closed — confirming in the
+        // Telegram app often backgrounds/closes the popup before postMessage.
+        const closeTimer = window.setTimeout(() => {
+            finish(() => reject(new Error("Telegram orqali kirish vaqti tugadi. Qaytadan urinib ko'ring")));
+        }, 180000);
 
         popup.focus();
     });
