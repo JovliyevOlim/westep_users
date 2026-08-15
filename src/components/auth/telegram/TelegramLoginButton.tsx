@@ -5,13 +5,11 @@ import {
     isDeviceLimitExceededError,
 } from "../../../api/auth/authApi.ts";
 import {useTelegramLogin} from "../../../api/auth/useAuth.ts";
-import {useToast} from "../../../hooks/useToast.tsx";
 import CommonButton from "../../../ui/CommonButton.tsx";
 import DeviceLimitModal from "../password/DeviceLimitModal.tsx";
-import {openTelegramOidcPopup} from "./openTelegramOidc.ts";
+import {startTelegramLoginRedirect} from "./openTelegramOidc.ts";
 
 const TELEGRAM_LOGIN_SCRIPT_SRC = "https://telegram.org/js/telegram-login.js";
-const TELEGRAM_CANCELLED_MESSAGE = "Telegram orqali kirish bekor qilindi";
 const TELEGRAM_UNCONFIGURED_TITLE = "Telegram orqali kirish sozlanmagan";
 
 export type TelegramAuthResult = {
@@ -136,7 +134,6 @@ export function loadTelegramLoginScript(): Promise<void> {
 }
 
 export default function TelegramLoginButton() {
-    const toast = useToast();
     const {mutateAsync, isPending} = useTelegramLogin();
     const clientId = getTelegramClientId();
     const isConfigured = clientId !== null;
@@ -179,12 +176,7 @@ export default function TelegramLoginButton() {
     const handleClick = async () => {
         if (!clientId) return;
 
-        try {
-            const nextIdToken = await openTelegramOidcPopup(clientId);
-            await submitTelegramLogin(nextIdToken);
-        } catch (error) {
-            toast.error(error instanceof Error ? error.message : TELEGRAM_CANCELLED_MESSAGE);
-        }
+        startTelegramLoginRedirect(clientId);
     };
 
     const handleContinue = async (sessionId: string) => {

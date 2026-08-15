@@ -23,6 +23,7 @@ const Checkout = lazy(() => import("../components/checkout"));
 const Instructors = lazy(() => import("../components/instructors"));
 const Contact = lazy(() => import("../components/contact"));
 const Login = lazy(() => import("../components/auth/login"));
+const TelegramCallback = lazy(() => import("../pages/auth/TelegramCallbackPage.tsx"));
 const Error = lazy(() => import("../components/error"));
 const Password = lazy(() => import("../components/auth/password"));
 const ForgotPassword = lazy(() => import("../components/auth/forgot-password"));
@@ -82,6 +83,7 @@ const authProtectedRoutes = [
 const publicRoutes = [
     { path: "/login", element: <Login /> },
     { path: "/auth/telegram/bridge", element: <TelegramBridgePage /> },
+    { path: "/auth/telegram/callback", element: <TelegramCallback /> },
     { path: "/register", element: <Register /> },
     { path: "/password", element: <Password /> },
     { path: "/forgot-password", element: <ForgotPassword /> },
