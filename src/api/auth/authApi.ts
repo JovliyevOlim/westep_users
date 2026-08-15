@@ -125,6 +125,53 @@ export interface TelegramLoginBody {
     replaceSessionId?: string;
 }
 
+export interface TelegramWidgetLoginBody {
+    id: number;
+    firstName?: string;
+    lastName?: string;
+    username?: string;
+    authDate: number;
+    hash: string;
+    deviceId?: string;
+    deviceName?: string;
+    replaceSessionId?: string;
+}
+
+export const loginWithTelegramWidget = async (body: TelegramWidgetLoginBody) => {
+    try {
+        const resolvedDeviceId = body.deviceId || getOrCreateDeviceId();
+        const resolvedDeviceName = body.deviceName || getCurrentDeviceName();
+        const { data } = await apiClient.post<LoginResponse>("/auth/telegram/widget", {
+            id: body.id,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            username: body.username,
+            authDate: body.authDate,
+            hash: body.hash,
+            deviceId: resolvedDeviceId,
+            deviceName: resolvedDeviceName,
+            replaceSessionId: body.replaceSessionId,
+        });
+        setItem<string>("accessToken", data.accessToken);
+        setItem<string>("refreshToken", data.refreshToken);
+        return data;
+    } catch (error) {
+        const err = error as AxiosError<ApiErrorResponse<DeviceLimitExceededDetails | null>>;
+        if (err.response?.status === 409 && err.response.data?.details) {
+            throw new DeviceLimitExceededError(
+                err.response.data.message || "Maksimal qurilma limiti to'ldi",
+                err.response.data.details,
+            );
+        }
+        const message =
+            err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.message ||
+            "Kirishda xatolik yuz berdi";
+        throw new Error(message);
+    }
+};
+
 export const loginWithTelegram = async (body: TelegramLoginBody) => {
     try {
         const resolvedDeviceId = body.deviceId || getOrCreateDeviceId();
