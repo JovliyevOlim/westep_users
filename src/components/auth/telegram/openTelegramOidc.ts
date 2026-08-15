@@ -87,13 +87,40 @@ export function readTelegramWidgetAuthFromLocation(): TelegramWidgetAuth | null 
     }
 }
 
+function decodeUriRepeatedly(value: string): string {
+    let current = value;
+    for (let i = 0; i < 3; i += 1) {
+        try {
+            const decoded = decodeURIComponent(current);
+            if (decoded === current) {
+                return current;
+            }
+            current = decoded;
+        } catch {
+            return current;
+        }
+    }
+    return current;
+}
+
+function extractPackedFromText(source: string): string | null {
+    const decoded = decodeUriRepeatedly(source);
+    const match = decoded.match(/(?:^|[?#&])tgAuthResult=([^&]+)/);
+    return match?.[1] ?? null;
+}
+
 function packedAuthResult(): string | null {
     const hash = window.location.hash.startsWith("#")
         ? window.location.hash.slice(1)
         : window.location.hash;
     const hashParams = new URLSearchParams(hash);
     const queryParams = new URLSearchParams(window.location.search);
-    const packed = hashParams.get("tgAuthResult") || queryParams.get("tgAuthResult");
+    const next = queryParams.get("next") ?? "";
+    const packed =
+        hashParams.get("tgAuthResult") ||
+        queryParams.get("tgAuthResult") ||
+        extractPackedFromText(next) ||
+        extractPackedFromText(window.location.href);
     if (!packed) {
         return null;
     }

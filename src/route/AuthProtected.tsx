@@ -10,6 +10,9 @@ const AuthProtected = ({children}: { children: React.ReactNode }) => {
     if (isLoading) return <Preloader/>;
 
     if (isError || !user) {
+        if (location.hash.includes("tgAuthResult")) {
+            return <Navigate to={`/login${location.hash}`} replace />;
+        }
         const next = `${location.pathname}${location.search}${location.hash}`;
         return <Navigate to={`/login?next=${encodeURIComponent(next)}`} replace />;
     }

@@ -36,7 +36,7 @@ export default function LoginForm() {
         void loginTelegramWidget(widgetAuth).finally(() => {
             window.history.replaceState(null, "", "/login");
         });
-    }, [location.hash, loginTelegramWidget]);
+    }, [location.hash, location.search, loginTelegramWidget]);
 
     const formik = useFormik({
         initialValues: {
