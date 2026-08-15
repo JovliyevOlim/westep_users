@@ -1,13 +1,18 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {FaTelegramPlane} from "react-icons/fa";
+import {useLocation} from "react-router-dom";
 import {
     type DeviceLimitExceededDetails,
     isDeviceLimitExceededError,
 } from "../../../api/auth/authApi.ts";
-import {useTelegramLogin} from "../../../api/auth/useAuth.ts";
+import {useTelegramWidgetLogin} from "../../../api/auth/useAuth.ts";
 import CommonButton from "../../../ui/CommonButton.tsx";
 import DeviceLimitModal from "../password/DeviceLimitModal.tsx";
-import {startTelegramLoginRedirect} from "./openTelegramOidc.ts";
+import {
+    readTelegramWidgetAuthFromLocation,
+    startTelegramLoginRedirect,
+    type TelegramWidgetAuth,
+} from "./openTelegramOidc.ts";
 
 const TELEGRAM_LOGIN_SCRIPT_SRC = "https://telegram.org/js/telegram-login.js";
 const TELEGRAM_UNCONFIGURED_TITLE = "Telegram orqali kirish sozlanmagan";
@@ -134,28 +139,32 @@ export function loadTelegramLoginScript(): Promise<void> {
 }
 
 export default function TelegramLoginButton() {
-    const {mutateAsync, isPending} = useTelegramLogin();
+    const location = useLocation();
+    const {mutateAsync, isPending} = useTelegramWidgetLogin();
     const clientId = getTelegramClientId();
     const isConfigured = clientId !== null;
-    const [idToken, setIdToken] = useState<string | null>(null);
+    const [pendingWidgetAuth, setPendingWidgetAuth] = useState<TelegramWidgetAuth | null>(null);
     const [deviceLimitDetails, setDeviceLimitDetails] = useState<DeviceLimitExceededDetails | null>(null);
     const [deviceActionError, setDeviceActionError] = useState("");
     const [deletingSessionId, setDeletingSessionId] = useState<string | null>(null);
+    const consumedKeyRef = useRef<string | null>(null);
 
     const closeDeviceLimitModal = () => {
-        setIdToken(null);
+        setPendingWidgetAuth(null);
         setDeviceLimitDetails(null);
         setDeviceActionError("");
         setDeletingSessionId(null);
     };
 
-    const submitTelegramLogin = async (nextIdToken: string, replaceSessionId?: string) => {
+    const submitWidgetLogin = async (auth: TelegramWidgetAuth, replaceSessionId?: string) => {
         try {
-            await mutateAsync({idToken: nextIdToken, replaceSessionId});
+            await mutateAsync({...auth, replaceSessionId});
             closeDeviceLimitModal();
+            window.history.replaceState(null, "", "/login");
         } catch (error) {
+            window.history.replaceState(null, "", "/login");
             if (isDeviceLimitExceededError(error)) {
-                setIdToken(nextIdToken);
+                setPendingWidgetAuth(auth);
                 setDeviceLimitDetails(error.details);
                 if (replaceSessionId) {
                     setDeviceActionError(error.message);
@@ -173,6 +182,19 @@ export default function TelegramLoginButton() {
         }
     };
 
+    useEffect(() => {
+        const widgetAuth = readTelegramWidgetAuthFromLocation();
+        if (!widgetAuth) {
+            return;
+        }
+        const key = `${widgetAuth.id}:${widgetAuth.authDate}:${widgetAuth.hash}`;
+        if (consumedKeyRef.current === key) {
+            return;
+        }
+        consumedKeyRef.current = key;
+        void submitWidgetLogin(widgetAuth);
+    }, [location.hash, location.search]);
+
     const handleClick = async () => {
         if (!clientId) return;
 
@@ -180,13 +202,13 @@ export default function TelegramLoginButton() {
     };
 
     const handleContinue = async (sessionId: string) => {
-        if (!idToken) return;
+        if (!pendingWidgetAuth) return;
 
         setDeletingSessionId(sessionId);
         setDeviceActionError("");
 
         try {
-            await submitTelegramLogin(idToken, sessionId);
+            await submitWidgetLogin(pendingWidgetAuth, sessionId);
         } finally {
             setDeletingSessionId(null);
         }

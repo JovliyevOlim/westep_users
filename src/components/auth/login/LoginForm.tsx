@@ -1,4 +1,4 @@
-import {useCheckPhoneNumber, useTelegramWidgetLogin} from "../../../api/auth/useAuth.ts";
+import {useCheckPhoneNumber} from "../../../api/auth/useAuth.ts";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useEffect} from "react";
@@ -8,14 +8,12 @@ import CommonButton from "../../../ui/CommonButton.tsx";
 import AuthText from "../../../ui/AuthText.tsx";
 import AuthBrand from "../AuthBrand.tsx";
 import TelegramLoginButton from "../telegram/TelegramLoginButton.tsx";
-import {readTelegramWidgetAuthFromLocation} from "../telegram/openTelegramOidc.ts";
 import {clearPostAuthRedirect, setPostAuthRedirect} from "../../../utils/postAuthRedirect.ts";
 
 
 export default function LoginForm() {
     const location = useLocation();
     const {mutateAsync, isPending} = useCheckPhoneNumber();
-    const {mutateAsync: loginTelegramWidget} = useTelegramWidgetLogin();
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -27,16 +25,6 @@ export default function LoginForm() {
             clearPostAuthRedirect();
         }
     }, [location.pathname, location.search]);
-
-    useEffect(() => {
-        const widgetAuth = readTelegramWidgetAuthFromLocation();
-        if (!widgetAuth) {
-            return;
-        }
-        void loginTelegramWidget(widgetAuth).finally(() => {
-            window.history.replaceState(null, "", "/login");
-        });
-    }, [location.hash, location.search, loginTelegramWidget]);
 
     const formik = useFormik({
         initialValues: {
