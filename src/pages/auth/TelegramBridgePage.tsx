@@ -1,9 +1,7 @@
 import {useState} from "react";
 import {useSearchParams} from "react-router-dom";
-import {
-    getTelegramClientId,
-    loadTelegramLoginScript,
-} from "../../components/auth/telegram/TelegramLoginButton.tsx";
+import {getTelegramClientId} from "../../components/auth/telegram/TelegramLoginButton.tsx";
+import {openTelegramOidcPopup} from "../../components/auth/telegram/openTelegramOidc.ts";
 import CommonButton from "../../ui/CommonButton.tsx";
 
 const DEFAULT_TELEGRAM_REDIRECT = "westep://auth/telegram";
@@ -55,21 +53,8 @@ export default function TelegramBridgePage() {
         setError("");
 
         try {
-            await loadTelegramLoginScript();
-            const auth = window.Telegram?.Login?.auth;
-            if (!auth) {
-                cancel();
-                return;
-            }
-
-            auth({client_id: clientId, scope: ["profile", "phone"]}, (result) => {
-                if (!result || result.error || !result.id_token) {
-                    cancel();
-                    return;
-                }
-
-                finish(appendQueryParam(redirect, "id_token", result.id_token));
-            });
+            const idToken = await openTelegramOidcPopup(clientId);
+            finish(appendQueryParam(redirect, "id_token", idToken));
         } catch {
             cancel();
         } finally {

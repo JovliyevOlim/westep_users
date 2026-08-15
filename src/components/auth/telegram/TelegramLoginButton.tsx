@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {FaTelegramPlane} from "react-icons/fa";
 import {
     type DeviceLimitExceededDetails,
@@ -8,6 +8,7 @@ import {useTelegramLogin} from "../../../api/auth/useAuth.ts";
 import {useToast} from "../../../hooks/useToast.tsx";
 import CommonButton from "../../../ui/CommonButton.tsx";
 import DeviceLimitModal from "../password/DeviceLimitModal.tsx";
+import {openTelegramOidcPopup} from "./openTelegramOidc.ts";
 
 const TELEGRAM_LOGIN_SCRIPT_SRC = "https://telegram.org/js/telegram-login.js";
 const TELEGRAM_CANCELLED_MESSAGE = "Telegram orqali kirish bekor qilindi";
@@ -175,35 +176,15 @@ export default function TelegramLoginButton() {
         }
     };
 
-    useEffect(() => {
-        if (!isConfigured) return;
-        void loadTelegramLoginScript().catch(() => undefined);
-    }, [isConfigured]);
-
     const handleClick = async () => {
         if (!clientId) return;
 
         try {
-            await loadTelegramLoginScript();
-        } catch {
-            toast.error("Telegram login skripti yuklanmadi");
-            return;
+            const nextIdToken = await openTelegramOidcPopup(clientId);
+            await submitTelegramLogin(nextIdToken);
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : TELEGRAM_CANCELLED_MESSAGE);
         }
-
-        const auth = window.Telegram?.Login?.auth;
-        if (!auth) {
-            toast.error("Telegram login skripti yuklanmadi");
-            return;
-        }
-
-        auth({client_id: clientId, scope: ["profile", "phone"]}, (result) => {
-            if (!result || result.error || !result.id_token) {
-                toast.error(TELEGRAM_CANCELLED_MESSAGE);
-                return;
-            }
-
-            void submitTelegramLogin(result.id_token);
-        });
     };
 
     const handleContinue = async (sessionId: string) => {
