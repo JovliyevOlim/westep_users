@@ -1,9 +1,8 @@
 name: Frontend CI/CD
 
-# academy.westep.uz endi Expo web (westep-RNative) dan deploy qilinadi.
-# Vite build avto-overwrite qilmasin.
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   deploy:

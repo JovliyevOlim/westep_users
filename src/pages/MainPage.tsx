@@ -703,13 +703,13 @@ export function Dashboard() {
                                 </span>
                             </div>
                             <h2 className="text-3xl font-black uppercase italic leading-none tracking-tighter text-slate-900 dark:text-white sm:text-5xl">
-                                Kurs <span className="text-blue-600">xarid qilish</span>
+                                Kurslarni <span className="text-blue-600">boshlash</span>
                             </h2>
                             <p className="text-sm font-bold italic tracking-tight text-slate-400 dark:text-slate-500 sm:text-base">
-                                O'z sohangizning eng yuqori cho'qqisiga chiqing
+                                Yozilish bepul. Darslar obuna orqali ochiladi.
                             </p>
                         </div>
-                        <Link to="/courses?source=purchase" className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 shadow-xl shadow-slate-200/50 transition-all duration-500 hover:bg-slate-900 hover:text-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:shadow-none dark:hover:bg-blue-600 sm:text-xs">
+                        <Link to="/courses" className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 shadow-xl shadow-slate-200/50 transition-all duration-500 hover:bg-slate-900 hover:text-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:shadow-none dark:hover:bg-blue-600 sm:text-xs">
                             Barcha kurslar
                             <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </Link>

@@ -7,7 +7,6 @@ const Logout = lazy(() => import("../components/auth/Logout.tsx"));
 const CoursePage = lazy(() => import("../pages/CoursePage.tsx"));
 const Success = lazy(() => import("../components/auth/Success.tsx"));
 const Profile = lazy(() => import("../pages/ProfilePage.tsx"));
-const RoadMapCoursePage = lazy(() => import("../pages/RoadMapCoursePage.tsx"));
 const HomeOne = lazy(() => import("../components/homes/home"));
 const HomeTwo = lazy(() => import("../components/homes/home-2"));
 const About = lazy(() => import("../components/about"));
@@ -18,8 +17,6 @@ const CourseDetails = lazy(() => import("../components/course-details"));
 const GridBlog = lazy(() => import("../components/grid-blog"));
 const StandardBlog = lazy(() => import("../components/standard-blog"));
 const BlogDetails = lazy(() => import("../components/blog-details"));
-const Cart = lazy(() => import("../components/cart"));
-const Checkout = lazy(() => import("../components/checkout"));
 const Instructors = lazy(() => import("../components/instructors"));
 const Contact = lazy(() => import("../components/contact"));
 const Login = lazy(() => import("../components/auth/login"));
@@ -44,8 +41,8 @@ const TelegramBridgePage = lazy(() => import("../pages/auth/TelegramBridgePage.t
 const authProtectedRoutes = [
     { path: "/", element: <MainPage />, title: "Home" },
     { path: "/courses/:courseId/:id/*", element: <CoursePage />, title: "Lessons" },
-    { path: "/buy-course", element: <RoadMapCoursePage />, title: "CoursePurchaseEntry" },
-    { path: "/buy-course/:id", element: <RoadMapCoursePage />, title: "CoursePurchaseEntry" },
+    { path: "/buy-course", element: <CoursePurchase />, title: "CoursePurchaseEntry" },
+    { path: "/buy-course/:id", element: <CoursePurchase />, title: "CoursePurchaseEntry" },
     { path: "/profile", element: <Profile />, title: "Profile" },
     { path: "/test/:testId", element: <TestMode />, title: "Test Mode" },
     { path: "/test-history", element: <TestHistory />, title: "Test History" },
@@ -67,8 +64,8 @@ const authProtectedRoutes = [
     { path: "/grid-blog", element: <GridBlog />, title: "Grid Blog" },
     { path: "/standard-blog", element: <StandardBlog />, title: "Standard Blog" },
     { path: "/blog-details", element: <BlogDetails />, title: "Blog Details" },
-    { path: "/cart", element: <Cart />, title: "Cart" },
-    { path: "/checkout", element: <Checkout />, title: "Checkout" },
+    { path: "/cart", element: <Navigate to="/subscription" replace />, title: "Cart" },
+    { path: "/checkout", element: <Navigate to="/subscription" replace />, title: "Checkout" },
     { path: "/instructors", element: <Instructors />, title: "Instructors" },
     { path: "/contact", element: <Contact />, title: "Contact" },
     { path: "*", element: <Error /> },

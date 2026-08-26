@@ -14,7 +14,7 @@ export default function CoursePurchase() {
     const navigate = useNavigate();
     const params = useParams();
     const [searchParams] = useSearchParams();
-    const courseId = params.courseId || searchParams.get("courseId") || undefined;
+    const courseId = params.courseId || params.id || searchParams.get("courseId") || undefined;
 
     const { data: user, isLoading: isUserLoading } = useUser();
     const { data: courseData, isLoading: isCourseLoading } = useGetStudentCoursePurchaseDetail({ id: courseId });

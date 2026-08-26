@@ -7,8 +7,8 @@ import WestepLogo from "../../../ui/WestepLogo.tsx";
 export const links = [
     {path: "/", title: "Asosiy", icon: Home},
     {path: "/courseDetails", title: "Darslar", icon: Lesson},
-    {path: "/cart", title: "Keyin ko'rish", icon: BookMark},
-    {path: "/shop", title: "Xaridlar", icon: ShoppingCart}
+    {path: "/my-courses", title: "Mening kurslarim", icon: BookMark},
+    {path: "/subscription", title: "Obuna", icon: ShoppingCart}
 ]
 
 const Sidebar = () => {

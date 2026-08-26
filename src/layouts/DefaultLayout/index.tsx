@@ -24,6 +24,7 @@ const DefaultLayout: React.FC<{ children: ReactNode }> = ({children}) => {
             pathname.startsWith("/notifications") ||
             pathname.startsWith("/buy-course") ||
             pathname.startsWith("/course-purchase") ||
+            pathname === "/subscription" ||
             pathname === "/test-history" ||
             pathname === "/quiz-history" ||
             pathname === "/homework-history"
