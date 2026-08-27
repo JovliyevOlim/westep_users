@@ -1,3 +1,4 @@
+import {Briefcase} from "lucide-react";
 import {Home, Search, Shop, Message, Profile, HomeBg, ShopBg, SearchBg, MessageBg, ProfileBg} from "../../assets/icon";
 import {Link, useLocation} from "react-router-dom";
 
@@ -23,6 +24,13 @@ const icons: MobileNavItem[] = [
         ariaLabel: "Kurslar",
         defaultIcon: <Search width={24} height={24}/>,
         activeIcon: <SearchBg width={24} height={24} className='text-primary-500'/>
+    },
+    {
+        path: "/kasblar",
+        matches: ["/kasblar"],
+        ariaLabel: "Kasblar",
+        defaultIcon: <Briefcase width={22} height={22} />,
+        activeIcon: <Briefcase width={22} height={22} className="text-blue-600" />,
     },
     {
         path: "/my-courses",

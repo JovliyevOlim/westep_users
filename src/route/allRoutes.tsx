@@ -36,6 +36,11 @@ const QuizHistoryPage = lazy(() => import("../pages/quizHistory/QuizHistoryPage.
 const NotificationsPage = lazy(() => import("../pages/NotificationsPage.tsx"));
 const HomeworkHistoryPage = lazy(() => import("../pages/homework/HomeworkHistoryPage.tsx"));
 const SubscriptionPage = lazy(() => import("../pages/subscription/SubscriptionPage.tsx"));
+const KasblarPage = lazy(() => import("../pages/kasblar/KasblarPage.tsx"));
+const KasbDetailPage = lazy(() => import("../pages/kasblar/KasbDetailPage.tsx"));
+const MeningKasblarPage = lazy(() => import("../pages/kasblar/MeningKasblarPage.tsx"));
+const QiziqishTestPage = lazy(() => import("../pages/kasblar/QiziqishTestPage.tsx"));
+const RoadmapPage = lazy(() => import("../pages/kasblar/RoadmapPage.tsx"));
 const TelegramBridgePage = lazy(() => import("../pages/auth/TelegramBridgePage.tsx"));
 
 const authProtectedRoutes = [
@@ -51,6 +56,11 @@ const authProtectedRoutes = [
     { path: "/quiz-history", element: <QuizHistoryPage />, title: "Quiz History" },
     { path: "/homework-history", element: <HomeworkHistoryPage />, title: "Homework History" },
     { path: "/subscription", element: <SubscriptionPage />, title: "Subscription" },
+    { path: "/kasblar", element: <KasblarPage />, title: "Kasblar" },
+    { path: "/kasblar/test", element: <QiziqishTestPage />, title: "Qiziqish testi" },
+    { path: "/kasblar/mening", element: <MeningKasblarPage />, title: "Mening kasblarim" },
+    { path: "/kasblar/roadmap", element: <RoadmapPage />, title: "Yo'l xaritasi" },
+    { path: "/kasblar/:slug", element: <KasbDetailPage />, title: "Kasb" },
     { path: "/notifications", element: <NotificationsPage />, title: "Notifications" },
     { path: "/notifications/:notificationId", element: <NotificationsPage />, title: "Notification Detail" },
 
