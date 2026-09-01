@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     BadgeCheck,
@@ -27,7 +27,12 @@ import {
     requestPaymeCardCode,
     verifyPaymeCard,
 } from "../../api/subscription/paymeCardClient.ts";
-import type { Subscription, SubscriptionPlan } from "../../api/subscription/subscriptionApi.ts";
+import type { BillingInterval, Subscription, SubscriptionPlan } from "../../api/subscription/subscriptionApi.ts";
+import { getPlanMarketing } from "./planMarketing.ts";
+
+function yearlyPriceOf(plan: SubscriptionPlan) {
+    return plan.yearlyPrice && plan.yearlyPrice > 0 ? plan.yearlyPrice : plan.monthlyPrice * 10;
+}
 
 function formatPrice(price?: number | null) {
     if (!price) return "0 so'm";
@@ -237,11 +242,19 @@ export default function SubscriptionPage() {
     const { mutate: removeCard, isPending: isRemovePending } = useRemoveMyCard();
 
     const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+    const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
+    const billingInterval: BillingInterval = cycle === "yearly" ? "YEARLY" : "MONTHLY";
 
     const sortedPlans = useMemo(
         () => [...plans].sort((a, b) => (a.tier ?? 0) - (b.tier ?? 0)),
         [plans],
     );
+
+    useEffect(() => {
+        if (subscription?.billingInterval === "YEARLY") {
+            setCycle("yearly");
+        }
+    }, [subscription?.billingInterval]);
 
     const hasActiveCard = card?.status === "ACTIVE";
     const canChangePlan = subscription?.status === "ACTIVE" || subscription?.status === "PAST_DUE";
@@ -264,7 +277,7 @@ export default function SubscriptionPage() {
             return;
         }
 
-        subscribe(plan.id, {
+        subscribe({ planId: plan.id, billingInterval }, {
             onSuccess: () => toast.success("Obuna faollashdi", plan.name),
             onError,
         });
@@ -300,23 +313,23 @@ export default function SubscriptionPage() {
                         <Badge variant="blue">
                             <span className="flex items-center gap-2">
                                 <Sparkles className="h-3.5 w-3.5" />
-                                Premium Access
+                                Tariflar
                             </span>
                         </Badge>
                     </div>
                     <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-                        Obuna orqali barcha modullarni oching
+                        Obuna. Start'da 3 ta kurs ochiladi.
                     </h1>
                     <p className="max-w-2xl text-lg font-medium leading-relaxed text-slate-500 dark:text-slate-400">
-                        Bitta obuna — platformadagi barcha premium modullarga to'liq kirish. To'lov har oy saqlangan kartadan avtomatik yechiladi.
+                        Ilovada bepul darslar bor. 7 kunlik sinov hozircha yo'q. Yillikda 10 oylik to'lov — 12 oy ochiladi.
                     </p>
                 </motion.div>
 
                 <div className="mt-12 grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
                     <div className="space-y-6 lg:col-span-7">
                         {isPlansPending ? (
-                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                                {[...Array(2)].map((_, i) => (
+                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                                {[...Array(3)].map((_, i) => (
                                     <div key={i} className="h-80 animate-pulse rounded-[32px] border border-slate-100 bg-white dark:border-slate-800 dark:bg-slate-900" />
                                 ))}
                             </div>
@@ -325,76 +338,154 @@ export default function SubscriptionPage() {
                                 Hozircha obuna tariflari mavjud emas.
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                                {sortedPlans.map((plan) => {
-                                    const isCurrentPlan = subscription?.plan?.id === plan.id && canChangePlan;
+                            <div className="space-y-6">
+                                <div className="flex rounded-2xl border border-slate-200 bg-white p-1 dark:border-slate-800 dark:bg-slate-900">
+                                    <button
+                                        type="button"
+                                        onClick={() => setCycle("monthly")}
+                                        className={`flex-1 rounded-xl py-3 text-sm font-bold transition-all ${cycle === "monthly"
+                                            ? "bg-blue-600 text-white shadow-sm"
+                                            : "text-slate-500 hover:text-slate-800 dark:text-slate-400"
+                                            }`}
+                                    >
+                                        Oylik
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setCycle("yearly")}
+                                        className={`flex-1 rounded-xl py-3 text-sm font-bold transition-all ${cycle === "yearly"
+                                            ? "bg-blue-600 text-white shadow-sm"
+                                            : "text-slate-500 hover:text-slate-800 dark:text-slate-400"
+                                            }`}
+                                    >
+                                        Yillik · 2 oy bepul
+                                    </button>
+                                </div>
+                                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                                    {sortedPlans.map((plan) => {
+                                        const isCurrentPlan = subscription?.plan?.id === plan.id && canChangePlan;
+                                        const marketing = getPlanMarketing(plan);
+                                        const featured = Boolean(marketing?.popular);
+                                        const displayName = marketing?.name ?? plan.name;
+                                        const displayNote = marketing?.note ?? plan.description;
+                                        const features = marketing?.features?.length
+                                            ? marketing.features
+                                            : (plan.features ?? []).map((label) => ({ label, included: true }));
 
-                                    return (
-                                        <motion.div
-                                            key={plan.id}
-                                            initial={{ opacity: 0, y: 15 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className={`relative flex flex-col justify-between overflow-hidden rounded-[32px] border p-8 transition-all ${isCurrentPlan
-                                                ? "border-blue-500/50 bg-white shadow-xl shadow-blue-500/10 dark:bg-slate-900"
-                                                : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
-                                                }`}
-                                        >
-                                            <div className="space-y-5">
-                                                <div className="flex items-center justify-between">
-                                                    <h3 className="text-lg font-black uppercase italic tracking-tight text-slate-900 dark:text-white">
-                                                        {plan.name}
-                                                    </h3>
-                                                    {isCurrentPlan && <Badge variant="blue">Joriy</Badge>}
-                                                </div>
-
-                                                <div>
-                                                    <p className="text-3xl font-extrabold tracking-tighter text-slate-900 dark:text-white">
-                                                        {formatPrice(plan.monthlyPrice)}
-                                                    </p>
-                                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                                                        har oy
-                                                    </p>
-                                                </div>
-
-                                                {plan.description && (
-                                                    <p className="text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
-                                                        {plan.description}
-                                                    </p>
-                                                )}
-
-                                                {!!plan.features?.length && (
-                                                    <ul className="space-y-2.5">
-                                                        {plan.features.map((feature) => (
-                                                            <li key={feature} className="flex items-start gap-2.5 text-[13px] font-medium text-slate-600 dark:text-slate-300">
-                                                                <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-                                                                {feature}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </div>
-
-                                            <button
-                                                type="button"
-                                                disabled={isCurrentPlan || isPlanActionPending}
-                                                onClick={() => handlePlanAction(plan)}
-                                                className={`mt-8 flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-[11px] font-black uppercase tracking-[0.2em] transition-all ${isCurrentPlan
-                                                    ? "cursor-default border border-blue-200 bg-blue-50 text-blue-600 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
-                                                    : "bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+                                        return (
+                                            <motion.div
+                                                key={plan.id}
+                                                initial={{ opacity: 0, y: 15 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className={`relative flex flex-col justify-between rounded-[32px] border p-8 transition-all ${featured
+                                                    ? "mt-3 overflow-visible border-transparent bg-gradient-to-br from-[#0A5EFA] to-[#0843B8] text-white shadow-xl shadow-blue-500/30"
+                                                    : isCurrentPlan
+                                                        ? "overflow-hidden border-blue-500/50 bg-white shadow-xl shadow-blue-500/10 dark:bg-slate-900"
+                                                        : "overflow-hidden border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700"
                                                     }`}
                                             >
-                                                {isPlanActionPending && !isCurrentPlan && (
-                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                {featured && (
+                                                    <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-slate-900">
+                                                        Mashhur
+                                                    </div>
                                                 )}
-                                                {isCurrentPlan
-                                                    ? "Joriy tarif"
-                                                    : canChangePlan
-                                                        ? "Tarifga o'tish"
-                                                        : "Obuna bo'lish"}
-                                            </button>
-                                        </motion.div>
-                                    );
-                                })}
+                                                {isCurrentPlan && (
+                                                    <div
+                                                        className={`absolute right-5 top-5 z-10 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 ${featured
+                                                            ? "bg-white/18 text-white backdrop-blur-sm"
+                                                            : "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
+                                                            }`}
+                                                    >
+                                                        <span className={`h-1.5 w-1.5 rounded-full ${featured ? "bg-white" : "bg-emerald-500"}`} />
+                                                        <span className="text-[12px] font-semibold leading-none">Joriy</span>
+                                                    </div>
+                                                )}
+                                                <div className="space-y-5">
+                                                    <h3 className={`pr-16 text-lg font-black uppercase italic tracking-tight ${featured ? "text-white" : "text-slate-900 dark:text-white"}`}>
+                                                        {displayName}
+                                                    </h3>
+
+                                                    <div>
+                                                        <p className={`text-3xl font-extrabold tracking-tighter ${featured ? "text-white" : "text-slate-900 dark:text-white"}`}>
+                                                            {formatPrice(cycle === "yearly" ? yearlyPriceOf(plan) : plan.monthlyPrice)}
+                                                        </p>
+                                                        <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${featured ? "text-white/70" : "text-slate-400"}`}>
+                                                            {cycle === "yearly" ? "so'm / yil" : "so'm / oy"}
+                                                        </p>
+                                                        {cycle === "yearly" && (
+                                                            <p className={`mt-2 text-sm font-semibold ${featured ? "text-white/80" : "text-emerald-600 dark:text-emerald-400"}`}>
+                                                                <span className={`mr-2 line-through ${featured ? "text-white/50" : "text-slate-400"}`}>
+                                                                    {formatPrice(plan.monthlyPrice * 12)}
+                                                                </span>
+                                                                10 oylik to'lov — 12 oy ochiladi
+                                                            </p>
+                                                        )}
+                                                    </div>
+
+                                                    {displayNote && (
+                                                        <p className={`text-sm font-medium leading-relaxed ${featured ? "text-white/75" : "text-slate-500 dark:text-slate-400"}`}>
+                                                            {displayNote}
+                                                        </p>
+                                                    )}
+
+                                                    {!!features.length && (
+                                                        <ul className="space-y-2.5">
+                                                            {features.map((feature) => (
+                                                                <li
+                                                                    key={feature.label}
+                                                                    className={`flex items-start gap-2.5 text-[13px] font-medium ${featured
+                                                                        ? feature.included ? "text-white" : "text-white/55"
+                                                                        : feature.included
+                                                                            ? "text-slate-600 dark:text-slate-300"
+                                                                            : "text-slate-400 dark:text-slate-500"
+                                                                        }`}
+                                                                >
+                                                                    {feature.included ? (
+                                                                        <Check className={`mt-0.5 h-4 w-4 shrink-0 ${featured ? "text-white" : "text-emerald-500"}`} />
+                                                                    ) : (
+                                                                        <X className={`mt-0.5 h-4 w-4 shrink-0 ${featured ? "text-white/50" : "text-slate-400"}`} />
+                                                                    )}
+                                                                    {feature.label}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    disabled={isCurrentPlan || isPlanActionPending}
+                                                    onClick={() => handlePlanAction(plan)}
+                                                    className={`mt-8 flex w-full items-center justify-center gap-2 rounded-2xl py-4 transition-all ${isCurrentPlan
+                                                        ? featured
+                                                            ? "cursor-default bg-white/14 text-sm font-semibold text-white"
+                                                            : "cursor-default bg-emerald-50 text-sm font-semibold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300"
+                                                        : featured
+                                                            ? "bg-white text-[11px] font-black uppercase tracking-[0.2em] text-[#0A5EFA] hover:bg-blue-50 disabled:opacity-60"
+                                                            : "bg-blue-600 text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-blue-700 disabled:opacity-60"
+                                                        }`}
+                                                >
+                                                    {isPlanActionPending && !isCurrentPlan && (
+                                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                                    )}
+                                                    {isCurrentPlan ? (
+                                                        <>
+                                                            <Check className="h-4 w-4" />
+                                                            Joriy tarif
+                                                        </>
+                                                    ) : canChangePlan ? (
+                                                        "Tarifga o'tish"
+                                                    ) : (
+                                                        "Obuna bo'lish"
+                                                    )}
+                                                </button>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
+                                <p className="text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
+                                    Start — 3 ta kurs. Standart — ota-ona paneli. Premium — barcha fanlar, kasb yo'li va Telegram hisobot.
+                                </p>
                             </div>
                         )}
                     </div>
@@ -450,7 +541,7 @@ export default function SubscriptionPage() {
                                 </div>
                             ) : (
                                 <p className="text-sm font-medium leading-relaxed text-slate-500 dark:text-slate-400">
-                                    Sizda hozircha faol obuna yo'q. Tarifni tanlab obuna bo'ling — barcha premium modullar ochiladi.
+                                    Sizda hozircha faol obuna yo'q. Start'da 3 ta kurs ochiladi, Standart va Premium'da fanlar ko'proq.
                                 </p>
                             )}
                         </motion.div>

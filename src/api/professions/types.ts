@@ -150,6 +150,10 @@ export interface RoadmapStageViewDto {
     name: string;
     orderIndex: number;
     completed: boolean;
+    current?: boolean;
+    ageFrom?: number | null;
+    ageTo?: number | null;
+    estimatedWeeks?: number | null;
     items: RoadmapItemViewDto[];
 }
 
@@ -161,5 +165,27 @@ export interface StudentRoadmapDto {
     professionTitle: string;
     status: "ACTIVE" | "ARCHIVED" | "COMPLETED";
     overallProgressPercent: number;
+    closeness?: {
+        studentAge: number;
+        targetReadyAge: number;
+        remainingYears: number;
+        currentStageIndex: number;
+        currentStageName: string;
+        stagePercent: number;
+        subjectsPercent: number;
+        skillsPercent: number;
+        experiencePercent: number;
+        stageRemainingMonths: number;
+        fieldKey?: string | null;
+        fieldLabel?: string | null;
+        directionLabel?: string | null;
+        nextAction?: {
+            itemId: string;
+            title: string;
+            itemType: string;
+            courseId?: string | null;
+            estimatedMinutes: number;
+        } | null;
+    } | null;
     stages: RoadmapStageViewDto[];
 }

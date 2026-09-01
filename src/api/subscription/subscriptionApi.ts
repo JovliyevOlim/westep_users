@@ -1,12 +1,15 @@
 import apiClient from "../apiClient.ts";
 import {AxiosError} from "axios";
 
+export type BillingInterval = "MONTHLY" | "YEARLY";
+
 export type SubscriptionPlan = {
     id: string;
     name: string;
     slug?: string;
     tier?: number;
     monthlyPrice: number;
+    yearlyPrice?: number | null;
     description?: string | null;
     features?: string[] | null;
     planActive?: boolean;
@@ -19,6 +22,7 @@ export type Subscription = {
     userId: string;
     plan: SubscriptionPlan;
     status: SubscriptionStatus;
+    billingInterval?: BillingInterval | null;
     currentPeriodStart: string;
     currentPeriodEnd: string;
     autoRenew?: boolean | null;
@@ -62,9 +66,9 @@ export const getMySubscription = async () => {
     }
 };
 
-export const subscribeToPlan = async (planId: string) => {
+export const subscribeToPlan = async (planId: string, billingInterval: BillingInterval = "MONTHLY") => {
     try {
-        const {data} = await apiClient.post<Subscription>("/subscriptions", {planId});
+        const {data} = await apiClient.post<Subscription>("/subscriptions", {planId, billingInterval});
         return data;
     } catch (error) {
         throw toApiError(error);

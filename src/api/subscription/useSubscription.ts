@@ -8,6 +8,7 @@ import {
     removeMyCard,
     saveCardToken,
     subscribeToPlan,
+    type BillingInterval,
 } from "./subscriptionApi.ts";
 import {getItem} from "../../utils/utils.ts";
 
@@ -61,7 +62,8 @@ export const useGetMyCard = () =>
 export const useSubscribeToPlan = () => {
     const invalidate = useInvalidateSubscriptionQueries();
     return useMutation({
-        mutationFn: subscribeToPlan,
+        mutationFn: ({ planId, billingInterval }: { planId: string; billingInterval?: BillingInterval }) =>
+            subscribeToPlan(planId, billingInterval ?? "MONTHLY"),
         onSuccess: invalidate,
     });
 };
