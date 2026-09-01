@@ -66,7 +66,7 @@ export default function MeningKasblarPage() {
                                             Yo'l xaritasi
                                         </Link>
                                     ) : null}
-                                    {item.status === "UNDER_REVIEW" || item.status === "RESELECTING" ? (
+                                    {item.status === "UNDER_REVIEW" || item.status === "CONFIRMED" || item.status === "RESELECTING" ? (
                                         <button
                                             type="button"
                                             disabled={abandonMutation.isPending}
