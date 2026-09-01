@@ -12,8 +12,8 @@ export function buildTelegramAuthUrl(clientId: number, redirectPath = "/login"):
     return `${OIDC_ORIGIN}/auth?${params.toString()}`;
 }
 
-export function startTelegramLoginRedirect(clientId: number): void {
-    window.location.assign(buildTelegramAuthUrl(clientId));
+export function startTelegramLoginRedirect(clientId: number, redirectPath = "/login"): void {
+    window.location.assign(buildTelegramAuthUrl(clientId, redirectPath));
 }
 
 export function readTelegramIdTokenFromLocation(): string | null {
